@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amanah Genomics · Consent-first carrier care</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap">
+<style>
+:root{--bg:#fff;--s:#f8fafc;--ink:#0f172a;--mut:#475569;--ln:#e2e8f0;--g:#1d5e4c;--gx:#fff;--gs:#e3f1ec;--am:#b45309;--amb:#fff4e0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:light}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--ln);z-index:10}
+.hd{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:34px}
+.logo{width:42px;height:42px;border-radius:10px;background:var(--g);color:var(--gx);display:grid;place-items:center;font-size:20px;font-weight:800}
+.brand{display:flex;gap:12px;align-items:center}.brand b{display:block;font-size:19px;line-height:1.1}.brand span{color:var(--mut);font-size:10px}
+nav{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 0;font:600 13px "Plus Jakarta Sans",sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--g);border-color:var(--g)}
+@media(max-width:760px){.hd{flex-wrap:wrap;gap:6px 20px}nav{width:100%}}
+.wrap{max-width:1180px;margin:0 auto;padding:44px 20px 80px}
+.page{display:none}.page.on{display:block}
+.crumb{display:flex;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:14px}.crumb .mono{color:var(--g);font-weight:500}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.03em;margin:16px 0 18px}
+h2{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+.lead{font-size:19px;color:var(--mut);max-width:56ch;margin:0}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+@media(max-width:640px){.feat{grid-template-columns:1fr}}
+.fc{border:1px solid var(--ln);background:var(--s);border-radius:14px;padding:16px}
+.fc b{display:flex;gap:8px;align-items:center}.fc p{margin:6px 0 0;color:var(--mut);font-size:14px}
+.ico{width:22px;height:22px;fill:none;stroke:var(--g);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.art{border-radius:20px;overflow:hidden;position:relative;min-height:360px;background:linear-gradient(150deg,#0b2924,#1d5e4c 60%,#2f8f78);color:#fff}
+.art svg{position:absolute;inset:0;width:100%;height:100%}
+.chip{position:absolute;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px);border-radius:12px;padding:8px 12px;font-size:14px;font-weight:600}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(transparent,rgba(5,20,17,.85))}
+.cap b{display:block;font-size:17px;margin-top:4px}
+.sec{border-top:1px solid var(--ln);padding-top:22px;margin-top:8px}
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.case{border:1px solid var(--ln);border-radius:14px;padding:16px;text-align:start;background:var(--bg);cursor:pointer;font:inherit;color:inherit}
+.case:hover{border-color:var(--g);background:var(--gs)}.case b{display:block}.case span{color:var(--mut);font-size:14px}
+:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+.card{border:1px solid var(--ln);border-radius:16px;padding:20px;background:var(--bg)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+@media(max-width:700px){.g2{grid-template-columns:1fr}}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.row:last-of-type{border:0}
+select{font:inherit;color:var(--ink);background:var(--s);border:1px solid var(--ln);border-radius:8px;padding:6px 10px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 0}
+.tools label,.cons{display:flex;gap:8px;align-items:center;border:1px solid var(--ln);border-radius:99px;padding:6px 14px;font-size:14px;cursor:pointer}
+.cons{border-radius:10px;margin-top:12px}
+button.pri{background:var(--g);color:var(--gx);border:0;border-radius:10px;padding:11px 20px;font:600 15px inherit;cursor:pointer}
+button.pri:disabled{opacity:.4;cursor:not-allowed}
+button.gh{background:none;border:1px solid var(--ln);color:var(--ink);border-radius:10px;padding:9px 16px;font:600 14px inherit;cursor:pointer}
+.res{background:var(--gs);border-radius:12px;padding:14px 16px;margin-top:12px;border-inline-start:5px solid var(--g)}
+.warn{background:var(--amb);color:var(--am);border-radius:12px;padding:12px 16px;margin-top:12px;font-weight:600;border-inline-start:5px solid var(--am)}
+.odds{display:flex;height:36px;border-radius:10px;overflow:hidden;margin-top:12px}
+.odds i{font-style:normal;font-weight:700;display:grid;place-items:center}
+.odds i:nth-child(1){background:#b45309;color:#fff}.odds i:nth-child(2){background:#1d5e4c;color:#fff}.odds i:nth-child(3){background:#cfe3e0;color:#0f172a}
+.odl{display:flex;margin-top:4px;font-size:13px;color:var(--mut)}.odl span{text-align:center}
+.tag{display:inline-block;border:1px solid var(--ln);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;margin-top:12px}
+.pun{display:grid;grid-template-columns:70px repeat(2,1fr);gap:8px;max-width:420px;margin:18px 0}
+.pun>*{display:grid;place-items:center;border-radius:12px;min-height:70px;font-weight:800;font-size:20px;text-align:center}
+.pun b{background:var(--s);min-height:44px;font-size:15px}.pun small{display:block;font-size:12px;font-weight:500}
+.pun .n{background:#cfe3e0;color:#0f172a}.pun .c{background:#1d5e4c;color:#fff}.pun .a{background:#b45309;color:#fff}
+ol.st{list-style:none;margin:14px 0;padding:0}
+ol.st li{display:flex;gap:12px;align-items:center;padding:9px 0;color:var(--mut)}
+ol.st li i{width:26px;height:26px;border-radius:50%;border:2px solid var(--ln);display:grid;place-items:center;font-size:13px;font-style:normal;font-weight:700}
+ol.st li.d{color:var(--ink)}ol.st li.d i{background:var(--g);border-color:var(--g);color:var(--gx)}
+ol.st li.n{color:var(--ink);font-weight:700}ol.st li.n i{border-color:var(--g);color:var(--g)}
+#log{font-size:13px;margin:10px 0 0;padding-inline-start:18px;max-height:260px;overflow:auto}
+footer{border-top:1px solid var(--ln);padding:18px 20px;text-align:center;color:var(--mut);font-size:13px}
+.pv{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-top:18px}@media(max-width:800px){.pv{grid-template-columns:1fr}}
+.pv .pun{max-width:none;margin:16px 0 0;grid-template-columns:90px repeat(2,1fr)}
+.pv .pun>*{min-height:100px;font-size:28px}.pv .pun b{min-height:48px;font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tl{border-radius:14px;padding:16px;background:var(--s);border:1px solid var(--ln);border-top:6px solid var(--c)}
+.tl b{display:block;font-size:34px;font-weight:800;line-height:1}.tl span{color:var(--mut);font-size:13px}
+button.gh.on{background:var(--g);color:var(--gx);border-color:var(--g)}
+.qo{display:block;width:100%;text-align:start;margin-top:8px}
+.qo.ok{border-color:var(--g);background:var(--gs)}.qo.bad{border-color:var(--am);background:var(--amb)}
+pre.sb{white-space:pre-wrap;font:13px/1.6 "JetBrains Mono",ui-monospace,monospace;background:var(--s);border:1px solid var(--ln);border-radius:10px;padding:12px;margin:10px 0}
+.ph{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--ln)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--gs);color:var(--g);display:grid;place-items:center;font-style:normal;font-weight:800}
+.gr{display:grid;grid-template-columns:1fr auto;gap:8px 10px;align-items:center;border:1px solid var(--ln);background:var(--s);border-radius:12px;padding:12px 14px;margin-top:10px}
+.gr select{grid-column:1/-1;background:var(--bg)}
+.small2{font-size:13px;color:var(--mut)}
+.st{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;border-radius:8px;padding:6px 10px;white-space:nowrap}
+.s0{background:#e3f4ea;color:#166534;border:1px solid #bfe3cc}.s1{background:#fff3cf;color:#8a5a00;border:1px solid #f0d98a}.s2{background:#e8eefc;color:#2a4a9a;border:1px solid #c7d4f3}
+#p-match .tools{background:var(--s);border:1px solid var(--ln);border-radius:14px;padding:12px 16px}
+#p-match .tools label{background:var(--bg)}
+.card{box-shadow:0 1px 3px rgba(15,23,42,.06)}
+#prt{display:none}
+@media print{body::before{display:none}body>*:not(#prt){display:none!important}#prt{display:block;padding:24px;color:#000;background:#fff}}
+input[type=range]{accent-color:var(--g);margin-top:4px}
+.liveonly{display:none}body.live .liveonly{display:flex}
+body.live #sbc,body.live #ldg,body.live #adv{display:none}
+html.big body{font-size:19px}html.big .lead{font-size:21px}
+html.hc{--ln:#475569;--mut:#1e293b}html.hc .card,html.hc .fc{border-width:2px}html.hc nav button{color:#0f172a}html.hc nav button.on{color:var(--g)}
+.a11y{display:flex;gap:6px;margin-inline-start:auto}.a11y button{padding:6px 10px}.a11y button[aria-pressed="true"]{background:var(--g);color:var(--gx);border-color:var(--g)}
+</style></head>
+<body>
+<header><div class="hd">
+ <div class="brand"><div class="logo">أ</div><div><b>Amanah Genomics</b><span class="mono">Future Health · Challenge 03</span></div></div>
+ <nav id="nav"><button data-go="overview">Overview</button><button data-go="match">Private match</button><button data-go="punnett">Punnett</button><button data-go="learn">Learn</button><button data-go="risk">Risk curve</button><button data-go="options">Options</button><button data-go="triage">Triage &amp; audit</button><button data-go="pilot">Pilot</button><button data-go="server">Server</button><button data-go="privacy">Privacy</button><button data-go="staff">Staff</button></nav><div class="a11y"><button class="gh" data-a11y="big" aria-pressed="false" aria-label="Larger text">A+</button><button class="gh" data-a11y="hc" aria-pressed="false" aria-label="High contrast">Contrast</button></div>
+</div></header>
+<div class="wrap">
+<section class="page" id="p-overview">
+ <div class="hero"><div>
+  <div class="crumb"><span class="mono">Future Health Digital Innovation Challenge</span><span>·</span><span>Inherited Disease Risk</span></div>
+  <h1>From screening result to informed choice.</h1>
+  <p class="lead">Private carrier matching, plain-language explanations and counselor referral, without stigma.</p><p class="tag" style="margin:0 0 6px">Prepares you for a visit with a genetic counselor or doctor. Does not replace counseling.</p>
+  <div class="feat">
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Private match</b><p>Only shared genes are revealed, and only with both consents.</p></div>
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/></svg>Culturally sensitive</b><p>Non-directive support for every family.</p></div>
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><path d="M6 4c6 3 6 5 0 8s-6 5 0 8M18 4c-6 3-6 5 0 8s6 5 0 8"/></svg>Traceable care</b><p>Result to counselor to testing, all logged.</p></div>
+  </div></div>
+  <div class="art">
+   <svg viewBox="0 0 400 360" fill="none" stroke-linecap="round" aria-hidden="true"><path d="M150 0C300 60 300 110 150 170S0 290 250 360" stroke="#e8c36a" stroke-width="5" opacity=".8"/><path d="M250 0C100 60 100 110 250 170S400 290 150 360" stroke="#7fe0cc" stroke-width="5" opacity=".8"/><path d="M165 28h70M142 70h116M165 112h70M165 228h70M142 270h116M165 312h70" stroke="#fff" stroke-width="3" opacity=".35"/></svg>
+   <div class="chip" style="top:22px;left:20px">🔒 Consent 2 of 2</div><div class="chip" style="top:84px;right:20px">Shared: matching genes only</div>
+   <div class="cap"><span class="mono">Synthetic data</span><b>Respectful, private and actionable.</b></div>
+  </div></div>
+ <div class="sec"><span class="mono" style="color:var(--mut)">Select a demonstration case</span><div class="cases" id="cases"></div></div>
+</section>
+
+<section class="page" id="p-match">
+ <h2>Private match</h2><p class="lead">Each partner decides what is shared.</p>
+ <div class="tools"><label><input type="radio" name="lg" value="en" checked> English</label><label><input type="radio" name="lg" value="ar"> العربية</label><label><input type="checkbox" id="rel"> Related partners</label><label><input type="checkbox" id="dist"> Distress flagged</label><label class="liveonly"><input type="radio" name="as" value="A" checked> View as Partner A</label><label class="liveonly"><input type="radio" name="as" value="B"> View as Partner B</label></div>
+ <div class="g2" id="pp"></div>
+ <div class="card" style="margin-top:16px" aria-live="polite"><div class="tools" style="margin:0 0 6px;justify-content:space-between"><h2 style="font-size:20px;margin:0">Result</h2><button class="gh" data-say="1" aria-label="Read the result aloud">🔊 Listen</button></div><div id="out"></div></div>
+ <div class="card" style="margin-top:16px" id="fh"></div>
+</section>
+
+<section class="page" id="p-punnett">
+ <h2>Punnett view</h2><p class="lead">Two carriers: what each pregnancy could look like.</p>
+ <div id="pn"></div>
+</section>
+
+<section class="page" id="p-learn"><h2>Learn</h2><p class="lead">Pick the level that suits you, then check your understanding.</p><div id="lrn"></div></section>
+<section class="page" id="p-options"><h2>Your options</h2><p class="lead">Every option is your choice. A counselor can explain each one.</p>
+ <div class="cases" style="margin-top:18px"><div class="fc"><b>Natural conception</b><p>With informed follow-up and early newborn care.</p></div><div class="fc"><b>Prenatal testing</b><p>Testing early in pregnancy, such as CVS or amniocentesis.</p></div><div class="fc"><b>Embryo testing (PGT-M)</b><p>Testing embryos during IVF for a known change.</p></div><div class="fc"><b>Early newborn care</b><p>Some conditions can be managed or treated from birth.</p></div></div>
+ <p class="small2">Some people also talk with family or a trusted adviser. The choice is yours.</p><p class="tag">Availability and cost vary. Confirm with a service.</p></section>
+<section class="page" id="p-risk"><h2>Risk curve</h2><p class="lead">How relatedness changes the chance, before screening.</p>
+ <div class="card" style="margin-top:18px"><div class="tools"><button class="gh" data-rf="0">Unrelated</button><button class="gh" data-rf="0.015625">Second cousins</button><button class="gh" data-rf="0.0625">First cousins</button><button class="gh" data-rf="0.125">Double first cousins</button></div>
+ <label class="small2" style="display:block;margin-top:14px">Relatedness (F)<input id="rf" type="range" min="0" max="0.25" step="0.0005" value="0.0625" style="width:100%"></label>
+ <label class="small2" style="display:block;margin-top:10px">Allele frequency q (illustrative)<input id="rq" type="range" min="0.002" max="0.05" step="0.001" value="0.01" style="width:100%"></label>
+ <div id="rsvg" style="margin-top:12px"></div><div class="res" id="rout"></div>
+ <p class="small2">Model: q² + F·q·(1−q) for one rare recessive gene. Illustrative values, not population data. Screening replaces this estimate with the couple’s actual result.</p></div></section>
+<section class="page" id="p-pilot"><h2>Pilot proposal</h2><p class="lead">A plan to test the idea safely. Not a deployed system.</p>
+ <div class="cases" style="margin-top:18px"><div class="fc"><span class="mono" style="color:var(--g)">Phase 1 · Months 1–3</span><p>Agree scope with a health authority and clinical advisors. Clinical review of all content. Privacy and security assessment.</p></div><div class="fc"><span class="mono" style="color:var(--g)">Phase 2 · Months 4–8</span><p>Small pilot at screening sites, with consent. Measure comprehension, counseling uptake, time to referral and privacy incidents.</p></div><div class="fc"><span class="mono" style="color:var(--g)">Phase 3 · Months 9–12</span><p>Review results with clinicians. Decide together whether to widen the pilot.</p></div></div>
+ <div class="card" style="margin-top:16px"><b>What we would measure</b><p class="small2">Understanding of results across languages and literacy levels. Counseling uptake. Time to referral. Privacy incidents (target: zero). Never: cancelled marriages or any single personal choice.</p><span class="tag">All targets to be set with clinical partners</span></div></section>
+<section class="page" id="p-server"><h2>Live backend</h2><p class="lead">The same case, checked by the real API. Works when the backend is running.</p>
+ <div class="card" style="margin-top:18px"><div class="tools"><span class="tag" id="srvst" style="margin:0">Checking…</span><button class="pri" data-srv="1">Sync current case to server</button></div><div id="srvout"></div></div></section>
+<section class="page" id="p-staff"><h2>Staff</h2><p class="lead">Counselors and coordinators sign in here. Each role sees only what it needs.</p><div class="card" id="stf" style="margin-top:18px"></div></section>
+<section class="page" id="p-privacy"><h2>My privacy</h2><p class="lead">See your consent history, withdraw, or delete your data.</p><div class="card" id="pv" style="margin-top:18px"></div></section>
+<section class="page" id="p-triage">
+ <h2>Triage &amp; audit</h2><p class="lead">Human review for serious or unclear findings.</p>
+ <div class="g2"><div class="card"><b>Referral pathway</b><ol class="st" id="st"></ol><div id="why"></div><button class="gh" data-req="1" style="margin-bottom:10px">Request a counseling visit</button><button class="pri" id="adv">Advance stage</button></div>
+ <div class="card" id="ldg"><b>Audit and consent ledger</b><ol id="log"></ol></div></div>
+ <div class="card" id="sbc" style="margin-top:16px"><b>Counselor handoff (SBAR)</b><pre class="sb" id="sbar"></pre><button class="gh" data-sb="1">Copy handoff</button> <button class="gh" data-pr="1">Print summary</button></div>
+ <div class="card" style="margin-top:16px"><b>Counselor intake brief</b><p class="small2">One page with your case reference, the shared genes and your questions. Pseudonymous, not anonymous.</p><textarea id="bq" maxlength="1000" rows="3" placeholder="Questions for your counselor" aria-label="Questions for your counselor" style="width:100%;font:inherit;padding:10px;border:1px solid var(--ln);border-radius:10px"></textarea><p><button class="pri" data-brief="1">Create brief</button></p><div id="brf"></div></div>
+</section>
+</div>
+<div id="prt"></div>
+<footer>Prototype with synthetic data. Education and decision support, not clinical advice.</footer>
+<script>
+const PANEL=[{id:"HBB",sev:1,en:"Hemoglobin disorders (HBB)",ar:"اضطرابات الهيموغلوبين (HBB)"},{id:"GJB2",sev:0,en:"Inherited hearing loss (GJB2)",ar:"فقدان السمع الوراثي (GJB2)"},{id:"SMN1",sev:1,en:"Spinal muscular atrophy (SMN1)",ar:"ضمور العضلات الشوكي (SMN1)"},{id:"CFTR",sev:1,en:"Cystic fibrosis (CFTR)",ar:"التليف الكيسي (CFTR)"}];
+const ST=[["0","No change found"],["1","Carrier"],["2","Uncertain variant"]];
+const T={en:{sh:g=>"You both carry a change linked to "+g+". Each pregnancy: 1 in 4 chance of an affected child. A chance, not a diagnosis.",none:"No shared carrier finding. The panel is limited, so risk is lowered, not removed.",rel:"Related partners may share changes this panel misses. A genetic counselor or doctor can help.",vus:"One uncertain variant. Its meaning is unknown, so no risk figure is shown. Understanding can change over time. Ask a genetic counselor or doctor about re-checking it.",lock:"Comparison locked until both partners consent.",esc:"Review by a genetic counselor or doctor is recommended.",o:["Affected","Carrier","Neither"]},
+ar:{sh:g=>"كلاكما يحمل تغيّرًا مرتبطًا بـ"+g+". في كل حمل احتمال واحد من أربعة لإصابة الطفل. هذا احتمال وليس تشخيصًا.",none:"لا يوجد تغيّر مشترك. اللوحة محدودة، لذلك يقلّ الاحتمال ولا يزول.",rel:"قد يتشارك الأقارب تغيّرات خارج هذه اللوحة. يمكن للمستشار الوراثي أو الطبيب مناقشة فحوصات أوسع.",vus:"متغيّر غير مؤكد الأثر. معناه غير معروف، لذا لا تُعرض نسبة خطر. قد يتغيّر الفهم العلمي مع الوقت، فاسأل مستشارًا وراثيًا أو طبيبًا عن إعادة فحصه.",lock:"المقارنة مقفلة حتى يوافق الشريكان.",esc:"يُنصح بمراجعة مستشار وراثي أو طبيب مختص بالوراثة.",o:["مصاب","حامل","غير حامل"]}};
+const FAM={en:"I had a genetic test. Silent gene changes are common. Nobody is to blame. If a relative has an inherited condition, they can ask a genetic counselor or doctor about testing.",ar:"أجريت فحصًا وراثيًا. التغيّرات الصامتة شائعة وليست ذنب أحد. إن كان لدى قريب حالة وراثية، فاسأل مستشارًا وراثيًا أو طبيبًا عن الفحص."};
+const STAGES=["Result issued","Counselor notified","Counseling completed","Confirmatory testing","Reproductive-genomics service (if chosen)"];
+const CASES=[{t:"Carrier couple",d:"Both carry HBB. Both consent.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:1,r:1},{t:"One carrier",d:"Only Partner A carries. No match.",a:{HBB:"1"},b:{},cA:1,cB:1,r:0},{t:"Uncertain variant",d:"GJB2 variant of unknown meaning.",a:{GJB2:"2"},b:{},cA:1,cB:1,r:0},{t:"Consent withheld",d:"Both carry HBB. Partner B declines.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:0,r:1}];
+const S={A:{},B:{},cA:0,cB:0,rel:0,dist:0,lang:"en",stage:0,log:[],esc:false,why:[],hist:{A:{},B:{}},gA:PANEL.map(g=>g.id),gB:PANEL.map(g=>g.id)};
+const $=i=>document.getElementById(i);
+function audit(m){S.log.unshift(new Date().toLocaleTimeString()+" · "+m);$("log").innerHTML=S.log.map(x=>"<li>"+x+"</li>").join("")}
+function load(c){PANEL.forEach(g=>{S.A[g.id]=c.a[g.id]||"0";S.B[g.id]=c.b[g.id]||"0"});S.cA=c.cA;S.cB=c.cB;S.rel=c.r;S.dist=0;S.stage=0;S.gA=PANEL.map(g=>g.id);S.gB=PANEL.map(g=>g.id);$("rel").checked=!!c.r;$("dist").checked=false;audit("Demo case loaded: "+c.t+" (synthetic)");push();go("match")}
+function go(p){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("on",e.id=="p-"+p));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.go==p));window.scrollTo(0,0);draw();if(p=="staff")staff();if(p=="privacy")privacy()}
+const LOC={HBB:"11p15.4",GJB2:"13q12.11",SMN1:"5q13.2",CFTR:"7q31.2"};
+function partner(k){return '<div class="card"><div class="ph"><i class="av">'+k+'</i><div><b>Partner '+k+'</b><div class="mono" style="color:var(--mut)">Synthetic profile</div></div></div><div class="mono" style="color:var(--mut);margin:16px 0 0">Individual carrier panel</div>'+PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+g.en.replace(/ \(.*\)/,"")+'</b> <span class="mono" style="color:var(--mut)">'+g.id+" · "+LOC[g.id]+'</span><div class="small2">Autosomal recessive</div></div><span class="st s'+v+'">'+ST[+v][1]+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="Partner '+k+" "+g.id+'">'+ST.map(s=>'<option value="'+s[0]+'"'+(v==s[0]?" selected":"")+">"+s[1]+"</option>").join("")+"</select></div>"}).join("")+'<label class="cons"><input type="checkbox" data-c="'+k+'"'+(S["c"+k]?" checked":"")+'> Allow gene-level match</label><div class="small2" style="margin-top:10px">Genes I allow in the match:</div><div class="tools" style="margin:6px 0 0">'+PANEL.map(g=>'<label class="cons" style="margin:0;padding:4px 10px"><input type="checkbox" data-cg="'+k+'" value="'+g.id+'"'+(S["g"+k].includes(g.id)?" checked":"")+'> '+g.id+"</label>").join("")+'</div></div>'}
+function out(){if(LIVE&&SV)return outLive();const L=S.lang,t=T[L],sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,vA=sc.some(g=>S.A[g.id]=="2"),vB=sc.some(g=>S.B[g.id]=="2");let h="",r=[];
+ if(!both){h+='<div class="warn">'+t.lock+"</div>"+LOCKV()}
+ else{const sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1");
+  if(sh.length)sh.forEach(g=>{h+='<div class="res"><b>'+g.id+"</b> · "+t.sh(g[L])+'<div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">'+t.o[0]+'</span><span style="flex:2">'+t.o[1]+'</span><span style="flex:1">'+t.o[2]+'</span></div><div class="small2" style="margin-top:8px">'+t.three+"</div></div>";r.push("Both carriers: "+g.id+(g.sev?" (severe)":""))});
+  else h+='<div class="res">'+t.none+"</div>";
+  if(vA||vB){h+='<div class="res">'+t.vus+"</div>";r.push("Uncertain variant")}
+  if(S.rel)h+='<div class="res">'+t.rel+"</div>"}
+ if(S.dist)r.push("Distress flagged");
+ S.esc=r.length>0;S.why=r;
+ if(S.esc)h+='<div class="warn">'+t.esc+"</div>";
+ h+='<span class="tag">🔒 '+(both?"Shared: matching genes only":"Nothing shared")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ $("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
+function tri(){$("st").innerHTML=STAGES.map((s,i)=>'<li class="'+(!S.esc?"":i<S.stage?"d":i==S.stage?"n":"")+'"><i>'+(S.esc&&i<S.stage?"✓":i+1)+"</i>"+s+"</li>").join("");
+ $("why").innerHTML=S.esc?'<div class="warn">Why: '+S.why.join("; ")+"</div>":'<p class="small" style="color:var(--mut)">No referral needed yet.</p>';
+ $("adv").disabled=!S.esc||S.stage>=STAGES.length-1}
+function pn(){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1")[0],real=both&&sh,g=sh||PANEL[0];
+ $("pn").innerHTML='<div class="pv"><div class="card"><span class="mono" style="color:var(--mut)">'+(real?"Gene · "+g.id:"Illustration only")+'</span><h2 style="margin-top:6px">'+(real?g.en:"Two carriers of the same gene")+'</h2><div class="pun"><span></span><b>Partner A: A</b><b>Partner A: a</b><b>Partner B: A</b><i class="n">AA<small>Neither</small></i><i class="c">Aa<small>Carrier</small></i><b>Partner B: a</b><i class="c">Aa<small>Carrier</small></i><i class="a">aa<small>Affected</small></i></div></div>'+
+ '<div><div class="tiles"><div class="tl" style="--c:#cfe3e0"><b>25%</b><span>Neither change</span></div><div class="tl" style="--c:#1d5e4c"><b>50%</b><span>Carrier child</span></div><div class="tl" style="--c:#b45309"><b>25%</b><span>Affected child</span></div></div>'+
+ '<div class="card" style="margin-top:14px"><b>Per pregnancy</b><div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">Affected</span><span style="flex:2">Carrier</span><span style="flex:1">Neither</span></div><p class="small2" style="margin:8px 0 0">3 in 4 chance a child will not have the condition.</p></div>'+
+ (both?(real?'<span class="tag">🔒 Shared with consent</span>':'<span class="tag">No shared carrier finding</span>'):'<div class="warn">Comparison locked until both partners consent.</div>')+
+ '<span class="tag">A chance, not a diagnosis</span> <span class="tag">Relatedness does not change these odds</span></div></div>'}
+let LV=0,QA=[],CC="1/16";
+const LVT=[["Simple","Think of two keys. A carrier has one working key and one that does not, and the door still opens. Trouble only happens if a child gets the non-working key from both parents."],["Standard","A carrier has one changed copy of a gene and one working copy. Carriers usually have no symptoms. A child is affected only if both parents pass on a changed copy."],["Clinical","Autosomal recessive inheritance. Two heterozygous carriers have a 25% recurrence risk per pregnancy, independent of earlier outcomes. Variants of uncertain significance (ACMG/AMP) are not used for risk counseling."]];
+const CCS={"0":["Unrelated","F = 0"],"1/64":["Second cousins","F = 1/64 (1.6%)"],"1/16":["First cousins","F = 1/16 (6.25%)"]};
+const QZ=[{q:"A carrier usually has…",o:["Symptoms of the condition","No symptoms","A diagnosis"],a:1,r:"Carriers have one working copy, so they usually have no symptoms."},{q:"Two carriers: chance of an affected child in each pregnancy?",o:["10%","25%","50%"],a:1,r:"Each pregnancy has a 1 in 4 chance."},{q:"After one affected child, the next pregnancy risk is…",o:["Lower","Still 1 in 4","Higher"],a:1,r:"Each pregnancy is independent, like a new coin toss."},{q:"An uncertain variant means…",o:["It is definitely harmful","Its meaning is not known yet","It is definitely harmless"],a:1,r:"Science cannot yet say. A counselor will review it."}];
+function learn(){const sc=QA.filter((x,i)=>x===QZ[i].a).length;
+ let h='<div class="card" style="margin-top:18px"><b>Explanation level</b><div class="tools">'+LVT.map((l,i)=>'<button class="gh'+(i==LV?" on":"")+'" data-lv="'+i+'">'+l[0]+"</button>").join("")+'</div><div class="res">'+LVT[LV][1]+"</div></div>";
+ h+='<div class="card" style="margin-top:16px"><b>Does being related change the odds?</b><div class="tools"><select data-cc="1" aria-label="Relationship">'+Object.keys(CCS).map(k=>'<option value="'+k+'"'+(k==CC?" selected":"")+">"+CCS[k][0]+"</option>").join("")+'</select></div><div class="res"><b>'+CCS[CC][1]+"</b><br>Raises the chance that both partners carry the same change. Does not change the 1 in 4 for two carriers. A counselor can give personal figures.</div></div>";
+ h+='<div class="card" style="margin-top:16px"><b>Self-check</b> <span class="tag">Score '+sc+" / "+QZ.length+"</span>"+QZ.map((z,i)=>'<p style="margin:16px 0 0"><b>'+(i+1)+". "+z.q+"</b></p>"+z.o.map((o,j)=>'<button class="gh qo'+(QA[i]===undefined?"":j==z.a?" ok":j==QA[i]?" bad":"")+'" data-q="'+i+"-"+j+'"'+(QA[i]!==undefined?" disabled":"")+">"+o+"</button>").join("")+(QA[i]!==undefined?'<p style="color:var(--mut);margin:6px 0 0">'+z.r+"</p>":"")).join("")+'<p><button class="gh" data-qr="1" style="margin-top:14px">Restart</button></p></div>';
+ $("lrn").innerHTML=h}
+function sbar(){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1").map(g=>g.id),v=sc.some(g=>S.A[g.id]=="2"||S.B[g.id]=="2");
+ $("sbar").textContent=!S.esc?"No handoff needed.":"S: Screening result needs counselor review.\nB: Synthetic panel (HBB, GJB2, SMN1, CFTR). Related partners: "+(S.rel?"yes":"no")+". Couple consent: "+(both?"both given":"incomplete")+".\nA: "+(both?(sh.length?"Shared carrier gene(s): "+sh.join(", ")+". ":"No shared carrier gene. ")+(v?"Uncertain variant present. ":""):"Couple comparison not available. ")+(S.dist?"Distress flagged. ":"")+"\nR: Genetic counseling visit; confirmatory testing as indicated.\nGenerated from fixed rules, not by a language model."}
+function draw(){$("pp").innerHTML=partner("A")+partner("B");out();tri();pn();learn();sbar();drawRisk();fh()}
+$("cases").innerHTML=CASES.map((c,i)=>'<button class="case" data-case="'+i+'"><b>'+c.t+"</b><span>"+c.d+"</span></button>").join("");
+document.addEventListener("click",e=>{const t=e.target.closest("[data-go],[data-case],[data-fam]");if(!t)return;
+ if(t.dataset.go)go(t.dataset.go);else if(t.dataset.case!==undefined)load(CASES[t.dataset.case]);
+ else{try{navigator.clipboard.writeText(FAM[S.lang])}catch(x){}audit("Generic family message copied (no result data)")}});
+document.addEventListener("change",e=>{const d=e.target.dataset,n=e.target;
+ if(d.g){S[d.k][d.g]=n.value;S.stage=0;audit("Result entered for partner "+d.k+" ("+d.g+")")}
+ else if(d.c){S["c"+d.c]=n.checked?1:0;audit("Consent "+(n.checked?"GRANTED":"REVOKED")+" by partner "+d.c)}
+ else if(n.name=="lg")S.lang=n.value;else if(n.name=="as")S.as=n.value;else if(n.id=="rel")S.rel=n.checked?1:0;else if(n.id=="dist")S.dist=n.checked?1:0;
+ out();tri();push()});
+$("adv").onclick=()=>{S.stage++;audit("Referral advanced: "+STAGES[S.stage]);tri()};
+document.addEventListener("click",e=>{const t=e.target.closest("[data-lv],[data-q],[data-qr],[data-sb]");if(!t)return;const d=t.dataset;
+ if(d.lv!==undefined)LV=+d.lv;else if(d.q){const[i,j]=d.q.split("-");QA[i]=+j;audit("Self-check answered ("+(+j==QZ[i].a?"correct":"incorrect")+")");quizPost()}else if(d.qr)QA=[];else{try{navigator.clipboard.writeText($("sbar").textContent)}catch(x){}audit("SBAR handoff copied")}
+ learn()});
+document.addEventListener("change",e=>{if(e.target.dataset.cc){CC=e.target.value;learn()}});
+let RF=0.0625,RQ=0.01;
+function drawRisk(){const W=560,H=240,p=36,m=0.25,f=F=>RQ*RQ+F*RQ*(1-RQ),mx=f(m),X=F=>p+F/m*(W-p-12),Y=v=>H-26-v/mx*(H-50);
+ let d="";for(let i=0;i<=50;i++){const F=m*i/50;d+=(i?"L":"M")+X(F).toFixed(1)+" "+Y(f(F)).toFixed(1)}
+ const v=f(RF),b=f(0),one=x=>"1 in "+Math.round(1/x).toLocaleString();
+ $("rsvg").innerHTML='<svg viewBox="0 0 '+W+" "+H+'" style="width:100%;height:auto" role="img" aria-label="Risk versus relatedness"><line x1="'+p+'" y1="'+(H-26)+'" x2="'+(W-12)+'" y2="'+(H-26)+'" stroke="#cbd5e1"/><line x1="'+p+'" y1="12" x2="'+p+'" y2="'+(H-26)+'" stroke="#cbd5e1"/><path d="'+d+'" fill="none" stroke="#1d5e4c" stroke-width="3"/><circle cx="'+X(RF)+'" cy="'+Y(v)+'" r="7" fill="#b45309"/><text x="'+p+'" y="'+(H-6)+'" font-size="12" fill="#475569">F = 0</text><text x="'+(W-62)+'" y="'+(H-6)+'" font-size="12" fill="#475569">F = 0.25</text><text x="6" y="22" font-size="12" fill="#475569">risk</text></svg>';
+ $("rout").innerHTML="<b>F = "+RF.toFixed(4)+"</b> · chance a child is affected, before screening: <b>"+(v*100).toFixed(3)+"%</b> ("+one(v)+"). Unrelated baseline: "+(b*100).toFixed(3)+"% ("+one(b)+"). Added by relatedness: <b>"+((v-b)*100).toFixed(3)+" percentage points</b>."}
+document.addEventListener("input",e=>{if(e.target.id=="rf"){RF=+e.target.value;drawRisk()}else if(e.target.id=="rq"){RQ=+e.target.value;drawRisk()}});
+document.addEventListener("click",e=>{const t=e.target.closest("[data-rf],[data-pr]");if(!t)return;
+ if(t.dataset.rf!==undefined){RF=+t.dataset.rf;$("rf").value=RF;drawRisk()}
+ else{$("prt").innerHTML='<h1 style="font-size:24px">Counselor referral summary</h1><p>'+new Date().toLocaleDateString()+' · Prototype with synthetic data. Not an official document. Not clinical advice.</p><pre style="white-space:pre-wrap;font:14px/1.6 monospace">'+$("sbar").textContent+'</pre><h2 style="font-size:18px">Consent and audit log</h2><ul>'+S.log.slice(0,12).map(x=>"<li>"+x+"</li>").join("")+"</ul>";try{window.print()}catch(x){}}});
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+async function api(path,opt,tok){const r=await fetch(path,{...(opt||{}),headers:{"Content-Type":"application/json",...(tok?{"X-Token":tok}:{})}});if(!r.ok)throw new Error(path+" "+r.status);return r.json()}
+const CT={co:"counselor-demo"};
+let LIVE=false,CP=null,SV=null,busy=false,again=false,STF=null;
+async function ping(){try{await api("/health");LIVE=true;$("srvst").textContent="Backend connected"}catch(x){LIVE=false;$("srvst").textContent="Backend not reachable. Run it locally (see README)."}document.body.classList.toggle("live",LIVE);return LIVE}
+async function syncSrv(){if(!(await ping()))return;const o=$("srvout");o.innerHTML='<p class="small2">Syncing…</p>';
+ try{const c=await api("/couples",{method:"POST",body:JSON.stringify({related:!!S.rel})}),id=c.couple_id,put=(p,b,t)=>api("/couples/"+id+"/"+p,{method:"PUT",body:JSON.stringify(b)},t);
+  await put("results",{results:S.A},c.token_a);await put("results",{results:S.B},c.token_b);
+  await put("consent",{share:!!S.cA},c.token_a);await put("consent",{share:!!S.cB},c.token_b);await put("flags",{distress:!!S.dist},c.token_a);
+  const L=S.lang,va=await api("/couples/"+id+"/view?lang="+L,{},c.token_a),vb=await api("/couples/"+id+"/view?lang="+L,{},c.token_b),h=await api("/couples/"+id+"/handoff",{},CT.co),au=await api("/couples/"+id+"/audit",{},CT.co);
+  const blk=(t,v)=>'<div class="card"><b>'+t+'</b><div class="res" dir="'+(L=="ar"?"rtl":"ltr")+'">'+esc(v.text).split(" | ").join("<br>")+'</div><span class="tag">Genes shown: '+(v.genes_shown.length?v.genes_shown.join(", "):"none")+"</span></div>";
+  o.innerHTML='<div class="g2">'+blk("Server view: Partner A",va)+blk("Server view: Partner B",vb)+'</div><div class="g2"><div class="card"><b>Counselor handoff (SBAR)</b><pre class="sb">'+esc(h.sbar)+'</pre></div><div class="card"><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span><ol id="log2" style="font-size:13px;padding-inline-start:18px">'+au.events.map(e=>"<li>"+esc(e.actor)+" · "+esc(e.event)+"</li>").join("")+"</ol></div></div>"
+ }catch(x){o.innerHTML='<div class="warn">Sync failed: '+esc(x.message)+"</div>"}}
+document.addEventListener("click",e=>{if(e.target.closest("[data-srv]"))syncSrv()});
+const ODDS=t=>'<div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">'+t.o[0]+'</span><span style="flex:2">'+t.o[1]+'</span><span style="flex:1">'+t.o[2]+'</span></div><div class="small2" style="margin-top:8px">'+t.three+"</div>";
+function outLive(){const L=S.lang,t=T[L],v=SV;let h="";
+ v.text.split(" | ").forEach(s=>{const g=v.genes_shown.find(x=>s.includes("("+x+")"));
+  if(s==t.lock||s==t.esc)h+='<div class="warn">'+esc(s)+"</div>"+(s==t.lock?LOCKV():"");else h+='<div class="res">'+(g?"<b>"+g+"</b> · ":"")+esc(s)+(g?ODDS(t):"")+"</div>"});
+ h+='<span class="tag">🔒 '+(v.text.includes(t.lock)?"Nothing shared":"Shared: matching genes only")+'</span> <span class="tag">Verified by server · viewing as Partner '+(S.as=="B"?"B":"A")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ S.esc=v.escalate;S.why=v.reasons||[];$("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
+async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
+ try{if(!CP||CP.rel!==!!S.rel){const c=await api("/couples",{method:"POST",body:JSON.stringify({related:!!S.rel})});CP={id:c.couple_id,ta:c.token_a,tb:c.token_b,rel:!!S.rel,ja:"",jb:"",ca:null,cb:null,d:null,hA:"",hB:""}}
+  const put=(p,b,t)=>api("/couples/"+CP.id+"/"+p,{method:"PUT",body:JSON.stringify(b)},t),ja=JSON.stringify(S.A),jb=JSON.stringify(S.B);
+  if(ja!==CP.ja){await put("results",{results:S.A},CP.ta);CP.ja=ja}
+  if(jb!==CP.jb){await put("results",{results:S.B},CP.tb);CP.jb=jb}
+  if(CP.ca!==JSON.stringify([!!S.cA,S.gA])){await put("consent",{share:!!S.cA&&S.gA.length>0,genes:S.cA&&S.gA.length?S.gA:null},CP.ta);CP.ca=JSON.stringify([!!S.cA,S.gA])}
+  if(CP.cb!==JSON.stringify([!!S.cB,S.gB])){await put("consent",{share:!!S.cB&&S.gB.length>0,genes:S.cB&&S.gB.length?S.gB:null},CP.tb);CP.cb=JSON.stringify([!!S.cB,S.gB])}
+  if(CP.d!==!!S.dist){await put("flags",{distress:!!S.dist},CP.ta);CP.d=!!S.dist}
+  const hA=JSON.stringify(S.hist.A),hB=JSON.stringify(S.hist.B);
+  if(hA!==CP.hA&&hA!=="{}"){await put("history",{answers:S.hist.A},CP.ta);CP.hA=hA}
+  if(hB!==CP.hB&&hB!=="{}"){await put("history",{answers:S.hist.B},CP.tb);CP.hB=hB}
+  SV=await api("/couples/"+CP.id+"/view?lang="+S.lang,{},S.as=="B"?CP.tb:CP.ta);
+  if(SV.escalate&&SV.referral_stage)S.stage=STAGES.indexOf(SV.referral_stage)}catch(x){SV=null}
+ busy=false;if(again){again=false;return push()}
+ out();tri();if($("p-staff").classList.contains("on"))staff()}
+async function staff(msg){const e=$("stf");
+ if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use staff roles.</div>';return}
+ if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role"><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Demo tokens: counselor-demo and coordinator-demo (change them before any real use).</p>';return}
+ if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
+ try{const au=await api("/couples/"+CP.id+"/audit",{},STF.tok),co=STF.role=="counselor";
+  const q=await api("/cases",{},STF.tok),m=await api("/metrics",{},STF.tok);
+  let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">Case '+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">Sign out</button></div>';
+  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},STF.tok);h+='<p><b>Handoff (SBAR)</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
+  else h+='<p><b>Referral stage:</b> '+esc(STAGES[Math.min(S.stage,4)])+'</p><button class="pri" data-advance="1">Advance stage</button>';
+  h+=queueHtml(q,m)+'<p><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";e.innerHTML=h}
+ catch(x){STF=null;staff("Access denied or case not ready.")}}
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
+ if(t.dataset.logout!==undefined){STF=null;return staff()}
+ if(t.dataset.login!==undefined){STF={role:$("srole").value,tok:$("stok").value};return staff()}
+ if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
+const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives"};
+function fh(){const k=S.as=="B"?"B":"A",a=S.hist[k];
+ $("fh").innerHTML='<b>Family history (private to Partner '+k+')</b><p class="small2" style="margin:4px 0 8px">Only you and a counselor can see your answers. Your partner cannot.</p>'+Object.keys(HI).map(i=>'<div class="row"><span>'+HI[i]+'</span><select data-h="'+i+'" aria-label="'+HI[i]+'">'+[["no","No"],["yes","Yes"],["unsure","Not sure"]].map(o=>'<option value="'+o[0]+'"'+((a[i]||"no")==o[0]?" selected":"")+">"+o[1]+"</option>").join("")+"</select></div>").join("")+(Object.values(a).includes("yes")?'<div class="warn">A counselor will review the family history you shared.</div>':"")+'<p><button class="gh" data-req="1">Request a counseling visit</button></p>'}
+function quizPost(){if(!LIVE||QA.filter(x=>x!==undefined).length<QZ.length)return;api("/quiz",{method:"POST",body:JSON.stringify({lang:S.lang,score:QA.filter((x,i)=>x===QZ[i].a).length,total:QZ.length})}).catch(()=>{})}
+function queueHtml(q,m){const P={urgent:"Urgent",high:"High",standard:"Standard"};
+ let h='<p><b>Counselor queue</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(c.stage)+(c.history_reported?" · family history":"")+(c.counseling_requested?" · visit requested":"")+"</li>").join("")+"</ol>":'<p class="small2">No cases need review.</p>');
+ h+='<p><b>Pilot metrics</b> <span class="tag">Demo data, not real outcomes</span></p><p class="small2">Cases: '+m.cases+" · Needing review: "+m.needing_review+" · Mean time to first referral step: "+(m.mean_minutes_to_first_referral_step==null?"n/a":m.mean_minutes_to_first_referral_step+" min")+" · Quiz average: "+(Object.keys(m.quiz).map(k=>k+" "+m.quiz[k].avg_pct+"% (n="+m.quiz[k].n+")").join(", ")||"n/a")+"</p>";
+ return h+'<p><button class="gh" data-fhir="1">View FHIR-style bundle</button></p><pre class="sb" id="fhirout" hidden></pre>'}
+let pdel=false;
+async function privacy(){const e=$("pv");
+ if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use privacy controls.</div>';return}
+ if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
+ const k=S.as=="B"?"B":"A",tok=k=="B"?CP.tb:CP.ta;
+ try{const r=await api("/couples/"+CP.id+"/privacy",{},tok);
+  e.innerHTML='<div class="ph"><i class="av">'+k+'</i><div><b>Partner '+k+'</b><div class="mono" style="color:var(--mut)">Your data and consent</div></div></div><p><span class="tag">Consent now: '+(r.consent_now?"Given":"Not given")+'</span></p><div class="tools" style="margin-top:0"><button class="gh" data-pwd="withdraw">Withdraw consent</button><button class="gh" data-pwd="delete">'+(pdel?"Click again to confirm deletion":"Delete my data")+'</button></div><div id="pvmsg"></div><p><b>Your history</b></p><ol style="font-size:13px;padding-inline-start:18px">'+r.events.map(x=>"<li>"+esc(new Date(x.ts*1000).toLocaleTimeString())+" · "+esc(x.event)+"</li>").join("")+"</ol>"}catch(x){e.innerHTML='<div class="warn">Could not load your privacy data.</div>'}}
+document.addEventListener("change",e=>{const i=e.target.dataset&&e.target.dataset.h;if(!i)return;S.hist[S.as=="B"?"B":"A"][i]=e.target.value;fh();push()});
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-a11y],[data-say],[data-req],[data-fhir],[data-pwd]");if(!t)return;const d=t.dataset;
+ if(d.a11y){const on=document.documentElement.classList.toggle(d.a11y);t.setAttribute("aria-pressed",on)}
+ else if(d.say!==undefined){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance($("out").innerText);u.lang=S.lang=="ar"?"ar-SA":"en-US";u.rate=.9;speechSynthesis.speak(u)}catch(x){audit("Audio is not supported on this device")}}
+ else if(d.req!==undefined){if(LIVE&&CP){try{await api("/couples/"+CP.id+"/request-counseling",{method:"POST"},S.as=="B"?CP.tb:CP.ta)}catch(x){}}audit("Counseling visit requested");t.textContent="Requested ✓";t.disabled=true}
+ else if(d.fhir!==undefined){try{const b=await api("/couples/"+CP.id+"/fhir",{},STF.tok),p=$("fhirout");p.textContent=JSON.stringify(b,null,1).slice(0,5000);p.hidden=false}catch(x){}}
+ else if(d.pwd){const k=S.as=="B"?"B":"A",tok=k=="B"?CP.tb:CP.ta;
+  if(d.pwd=="withdraw"){await api("/couples/"+CP.id+"/consent",{method:"PUT",body:JSON.stringify({share:false})},tok);S["c"+k]=0;CP["c"+k.toLowerCase()]=false;await push();privacy()}
+  else if(!pdel){pdel=true;privacy()}
+  else{await api("/couples/"+CP.id+"/my-data",{method:"DELETE"},tok);pdel=false;PANEL.forEach(g=>S[k][g.id]="0");S["c"+k]=0;S.hist[k]={};CP=null;SV=null;$("pv").innerHTML='<div class="res">Your data was deleted from the server. Pick a case on the Overview page to start a new one.</div>'}}});
+T.en.three="3 in 4 chance a child will not have the condition.";T.ar.three="احتمال ثلاثة من أربعة ألا يصاب الطفل بالحالة.";
+const LOCKV=()=>'<div class="g2" style="margin-top:12px"><div class="fc" style="text-align:center">🔒<b style="display:block">Partner A</b><span class="small2">Not shared</span></div><div class="fc" style="text-align:center">🔒<b style="display:block">Partner B</b><span class="small2">Not shared</span></div></div><p class="small2">Each partner’s results stay private until both consent.</p>';
+let BR=null;
+function briefHtml(b){return '<div class="res"><b>'+esc(b.reference)+"</b> · "+esc(b.generated)+"<br>"+esc(b.summary)+(b.questions?"<br><b>Questions:</b> "+esc(b.questions):"")+'<br><span class="small2">Pseudonymous, not anonymous. Education and decision support, not clinical advice. Prepares you for a visit; it does not replace counseling.</span></div>'}
+async function makeBrief(){const q=$("bq").value.slice(0,1000);let b=null;
+ if(LIVE&&CP){try{b=await api("/couples/"+CP.id+"/brief",{method:"POST",body:JSON.stringify({questions:q})},S.as=="B"?CP.tb:CP.ta)}catch(x){}}
+ if(!b){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=both?sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1").map(g=>g.id):[];
+  b={reference:"AMNA-DEMO",generated:new Date().toLocaleDateString(),summary:both?(sh.length?"Shared carrier gene(s): "+sh.join(", "):"No shared carrier finding on the agreed genes"):"Couple comparison not available (consent incomplete)",questions:q}}
+ BR=b;audit("Counselor intake brief created");$("brf").innerHTML=briefHtml(b)+'<button class="gh" data-prb="1">Print brief</button>'}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-brief],[data-prb]");if(!t)return;
+ if(t.dataset.brief!==undefined)makeBrief();else if(BR){$("prt").innerHTML='<h1 style="font-size:24px">Counselor intake brief</h1>'+briefHtml(BR);try{window.print()}catch(x){}}});
+document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.cg;if(!k)return;const set=S["g"+k],v=e.target.value;S["g"+k]=e.target.checked?[...new Set([...set,v])]:set.filter(x=>x!==v);audit("Partner "+k+(e.target.checked?" allowed gene ":" withdrew gene ")+v+" for matching");out();tri();pn();push()});
+ping().then(()=>push());
+load(CASES[0]);go("overview");
+</script></body></html>

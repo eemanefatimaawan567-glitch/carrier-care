@@ -1,0 +1,107 @@
+[
+ {
+  "test": "Carrier x carrier = 25/50/25",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Carrier x non-carrier: no affected child",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Probabilities always sum to 1",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "VUS never becomes a risk figure",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Relatedness is not an input to the risk engine",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "No-consent view is independent of both partners' results (5000 trials)",
+  "pass": true,
+  "detail": "0 leaking trials"
+ },
+ {
+  "test": "Unilateral carrier status is never revealed (5000 trials)",
+  "pass": true,
+  "detail": "0 trials"
+ },
+ {
+  "test": "Only shared-gene IDs appear in output",
+  "pass": true,
+  "detail": "0 trials"
+ },
+ {
+  "test": "Genes outside the agreed scope never influence output (5000 trials)",
+  "pass": true,
+  "detail": "0 trials"
+ },
+ {
+  "test": "No directive, stigmatizing or coercive phrases (EN+AR)",
+  "pass": true,
+  "detail": "[]"
+ },
+ {
+  "test": "Only approved percentages appear in text",
+  "pass": true,
+  "detail": "found [25]"
+ },
+ {
+  "test": "No success metric based on cancelled marriages",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Arabic has every English message key",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Every escalation produces a counselor message",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "test": "Reading grade <= 8: couple result",
+  "pass": true,
+  "detail": "grade 3.4, ease 82.9"
+ },
+ {
+  "test": "Reading grade <= 8: no match",
+  "pass": true,
+  "detail": "grade 7.4, ease 54.7"
+ },
+ {
+  "test": "Reading grade <= 8: related",
+  "pass": true,
+  "detail": "grade 7.8, ease 52.6"
+ },
+ {
+  "test": "Reading grade <= 8: uncertain",
+  "pass": true,
+  "detail": "grade 6.1, ease 63.8"
+ },
+ {
+  "test": "Reading grade <= 8: family message",
+  "pass": true,
+  "detail": "grade 7.2, ease 57.1"
+ },
+ {
+  "test": "Reading grade <= 8: level Simple",
+  "pass": true,
+  "detail": "grade 3.1, ease 93.3"
+ },
+ {
+  "test": "Reading grade <= 8: level Standard",
+  "pass": true,
+  "detail": "grade 5.9, ease 70.8"
+ }
+]
