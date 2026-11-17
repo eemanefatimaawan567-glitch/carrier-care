@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: amanah-genomics-demo
+    runtime: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: CARRIER_ENV
+        value: production
+      - key: COUNSELOR_TOKEN
+        generateValue: true
+      - key: COORDINATOR_TOKEN
+        generateValue: true
