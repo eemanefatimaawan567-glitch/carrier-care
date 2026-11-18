@@ -5,7 +5,7 @@
 
 A bilingual English/Arabic, consent-first carrier-screening **education and demonstration platform** built for the Abu Dhabi Future Health Digital Innovation Challenge, Fertility Challenge 03.
 
-[Demo video instructions](media/README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
+[Live synthetic demo](https://amanah-genomics-demo.onrender.com/) · [Demo video instructions](media/README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
 
 ![Amanah Genomics guided demo](assets/screenshots/01-introduction.jpg)
 
@@ -30,9 +30,10 @@ A bilingual English/Arabic, consent-first carrier-screening **education and demo
 | Counselor guidance and queue | **Demonstration only**; no clinical booking/referral |
 | Hash-chained audit and FHIR-style export | **Prototype implementations**; no UAE integrations |
 | Business model and pilot | **Hypotheses only**, no signed clinical partnerships |
-| Clinical review and live deployment | **Not completed/verified** |
+| Live deployment | **Public synthetic demo available on Render**; latest commit and endpoint health should be checked before judging |
+| Formal clinical validation | **Not completed**; five statements received limited external factual review |
 
-**Locally reported:** 19/19 backend tests in the latest patient-flow build; see test suite and rerun before claiming CI completion. Separate synthetic evaluation report documents its tested scope. No patient outcomes were measured.
+**Test evidence:** local runs have reported 18–19 backend tests across different revisions, plus a dated report of 37 synthetic evaluation checks and 5,000 randomized privacy trials for scoped consent behavior. These are not the same test category. Re-run CI on the submitted commit rather than treating an older count as current. No clinical outcomes were measured.
 
 ## Local run (macOS/Linux)
 
@@ -56,7 +57,7 @@ python eval/run_eval.py
 
 ## Deploy demo
 
-`render.yaml` and `Dockerfile` document a **synthetic-only** Render demonstration. Never enter real patient data. Free-tier SQLite storage is ephemeral; auth and encryption are not hospital-production ready.
+**Public demo:** https://amanah-genomics-demo.onrender.com/ (synthetic cases only). This is a public prototype deployment, **not** a clinical production deployment. Render's free service can sleep while idle; SQLite data on ephemeral storage can reset during restarts/deploys. Check `/health` and the live consent checks on the deployed commit. Never enter real patient data. Authentication and encryption are not hospital-production ready.
 
 ## Repository layout
 
@@ -91,8 +92,8 @@ cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload      # open http://localhost:8000
 ```
-The backend serves the web app at `/`. API docs are at `/docs`. Private match, Triage, Privacy, Staff and Server run on the API when it is reachable. Overview, Punnett, Learn, Risk curve, Options and Pilot are static pages. Use "View as Partner A/B" on Private match, the **Staff** tab (demo tokens `counselor-demo`, `coordinator-demo`) and the **Server** tab for a full check.
-Set `COUNSELOR_TOKEN` and `COORDINATOR_TOKEN` environment variables; the defaults are demo values only.
+The backend serves the web app at `/`. API docs are at `/docs`. Private match, Triage, Privacy, Staff and Server run on the API when it is reachable. Overview, Punnett, Learn, Risk curve, Options and Pilot are static pages. Use "View as Partner A/B" on Private match, the **Staff** tab (use the configured, role-specific demo tokens; do not publish live secrets) and the **Server** tab for a full check.
+Set distinct `COUNSELOR_TOKEN` and `COORDINATOR_TOKEN` environment variables in Render; never commit or share secret token values.
 
 ## Test
 ```
@@ -123,7 +124,7 @@ The evaluation checks engine correctness, privacy (no leakage of unilateral carr
 - **[Demonstration only]** Simulated feature with no live clinical service or production integration.
 - **[Planned / unconfirmed]** Future work, not a committed clinical partnership or scheduled review.
 
-**Recorded local evidence:** 18 automated backend tests passed in the latest reported run and the dated `backend/eval/eval_report.md` reports 37/37 synthetic evaluation checks, including 5,000-trial randomized privacy checks for specified consent rules. These are separate testing categories, not 55 clinical studies. Verify again after any code changes or deployment.
+**Recorded synthetic evidence:** earlier runs report 18 or 19 backend tests depending on revision; `backend/eval/eval_report.md` records 37/37 scoped synthetic evaluation checks, including 5,000 randomized privacy trials. Exact current pass counts must come from the successful CI run of the submitted commit. This is engineering evidence, not clinical validation.
 
 ## Features (prototype)
 - Private match with server-side, per-gene consent gating (each partner chooses which genes are shared); "View as Partner A/B" shows what each partner can see
@@ -160,3 +161,23 @@ Not included: Urdu (needs clinical and language review), an offline app, and any
 ## Business & pilot pathway (new)
 
 The patient homepage includes a bilingual, explicitly hypothetical **Business & pilot** section with a cost/revenue scenario calculator, customer segmentation, research/pilot milestones and honest evidence status. This addition leaves graph, quiz and advanced workflows unchanged. See `docs/COMMERCIAL_VIABILITY_AND_PILOT.md`.
+
+## Submission deployment evidence (November 2026)
+
+- **Public synthetic demo:** https://amanah-genomics-demo.onrender.com/
+- **Health endpoint:** https://amanah-genomics-demo.onrender.com/health — check immediately before judging; an idle free-tier service may take time to wake.
+- **Repository & CI:** [GitHub repository](https://github.com/eemanefatimaawan567-glitch/carrier-care) and [workflow runs](https://github.com/eemanefatimaawan567-glitch/carrier-care/actions). CI is configured to run backend tests and evaluation on pushes; verify the latest run's status, do not assume a pass.
+- **Demonstrated behavior:** synthetic bilateral consent, withdrawal checks (3/3 in a prior live demonstration), counselor handoff and coordinator referral progression. Recheck on the final deployed commit.
+- **Reproducibility:** Dockerfile, `render.yaml`, [deployment guide](docs/DEPLOYMENT.md), [architecture](docs/ARCHITECTURE.md), and [threat model](docs/THREAT_MODEL.md).
+- **Environment limits:** ephemeral SQLite, no production auth hardening, backup strategy or independent penetration test. Do **not** enter real patient data.
+
+### Planned migration path (not implemented)
+
+1. Move to managed PostgreSQL with encryption at rest, backups and a migration strategy.
+2. Replace demo tokens with individually managed identities, expiring sessions and stronger authorization, then conduct an independent security review.
+3. Add monitoring, incident response, load testing and deployment rollback procedures.
+4. Seek clinical governance, native Arabic medical review and provider-approved interoperability before any real-patient pilot. UAE Pass/Malaffi integration is a future possibility, not a connected service.
+
+### Commercial and pilot evidence
+
+Patients receive free educational access in the proposal; prospective institutional customers are screening centres and fertility/genetics providers. AED 750/facility/month is a **pricing hypothesis**, not a validated market price. At five hypothetical subscribing facilities, gross revenue would be AED 3,750/month and AED 45,000/year. An assumed AED 250/facility/month variable cost gives AED 30,000/year contribution **before** fixed, clinical, compliance, sales and integration costs. See [commercial viability and pilot pathway](docs/COMMERCIAL_VIABILITY_AND_PILOT.md).
