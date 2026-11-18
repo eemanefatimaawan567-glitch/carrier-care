@@ -286,6 +286,7 @@ body #p-overview .art{background:radial-gradient(circle at 52% 42%,#126d76,#0828
 <aside class="workspace-sidebar" aria-label="Amanah workspace navigation">
  <div class="workspace-sidebar-inner">
   <div class="workspace-overline">AMANAH WORKSPACE <span class="workspace-live-dot" aria-hidden="true"></span></div>
+  <div class="workspace-language-selector" role="group" aria-label="Workspace navigation language"><button type="button" data-ws-lang="en" aria-pressed="true">English</button><button type="button" data-ws-lang="ar" aria-pressed="false">العربية</button></div>
   <a class="workspace-home-link" href="/" aria-label="Return to Amanah website home"><span aria-hidden="true">⌂</span> Website home <span aria-hidden="true">↗</span></a>
   <div class="workspace-group-title">PATIENT JOURNEY · START HERE</div>
   <button type="button" data-go="guide"><span aria-hidden="true">①</span> 1. Start your story</button>
@@ -661,4 +662,83 @@ const drawer=document.getElementById('amanah-tools');
 drawer.addEventListener('click',function(event){const btn=event.target.closest('[data-tool-go]');if(!btn)return;const target=btn.dataset.toolGo;if(typeof go==='function'){go(target);drawer.open=false;try{history.replaceState(null,'','?view='+encodeURIComponent(target))}catch(e){}}});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')drawer.open=false});
 document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e.target))drawer.open=false});
-})();</script></body></html>
+})();</script><style id="workspace-arabic-navigation-styles">
+.workspace-language-selector{display:flex;gap:6px;padding:0 10px 13px}
+.workspace-language-selector button{width:auto!important;flex:1!important;justify-content:center!important;text-align:center!important;margin:0!important;padding:8px 5px!important;border:1px solid #345668!important;border-radius:9px!important;font-size:12px!important}
+.workspace-language-selector button[aria-pressed="true"]{background:#127c86!important;color:#fff!important;border-color:#46bbb4!important}
+.workspace-sidebar[dir="rtl"] button:not(.workspace-language-selector button),.workspace-sidebar[dir="rtl"] a.workspace-home-link{direction:rtl;text-align:right;flex-direction:row-reverse}
+.workspace-sidebar[dir="rtl"] .workspace-overline,.workspace-sidebar[dir="rtl"] .workspace-group-title,.workspace-sidebar[dir="rtl"] .workspace-role-divider,.workspace-sidebar[dir="rtl"] .workspace-safety{text-align:right;letter-spacing:0}
+.workspace-sidebar[dir="rtl"] .workspace-overline{flex-direction:row-reverse}
+.workspace-sidebar[dir="rtl"] .workspace-extras>summary{direction:rtl;text-align:right}
+.workspace-sidebar[dir="rtl"] button.on{box-shadow:inset -3px 0 0 #78ece2}
+.workspace-crumb[dir="rtl"]{direction:rtl}
+.workspace-crumb[dir="rtl"]>a{margin-left:0;margin-right:auto}
+</style><script id="workspace-arabic-navigation">
+(function(){
+ const sidebar=document.querySelector('.workspace-sidebar');
+ const crumb=document.querySelector('.workspace-crumb');
+ if(!sidebar||!crumb)return;
+ const labels=[
+ ['.workspace-overline','مساحة عمل أمانة'],
+ ['.workspace-home-link','الصفحة الرئيسية'],
+ ['.workspace-group-title','رحلة المستخدم · ابدأ هنا'],
+ ['[data-go="guide"]','١. ابدأ رحلتك'],
+ ['[data-go="learn"]','٢. تعلّم واختبر فهمك'],
+ ['[data-go="match"]','٣. المطابقة الخاصة'],
+ ['[data-go="options"]','٤. افهم خياراتك'],
+ ['[data-go="triage"]','٥. إرشادات الاستشارة الوراثية'],
+ ['[data-go="privacy"]','الخصوصية والأذونات'],
+ ['#ws-learning-tools>summary','استكشف أدوات تعليمية إضافية'],
+ ['[data-go="punnett"]','مربع بانت'],
+ ['[data-go="risk"]','منحنى المخاطر'],
+ ['[data-go="overview"]','نظرة عامة على مساحة العمل'],
+ ['.workspace-role-divider>b','فريق المشروع / المراجعون'],
+ ['.workspace-role-divider>p','العروض التقنية وخطط التجربة منفصلة عن التثقيف الصحي. هذه ليست خدمات سريرية.'],
+ ['#ws-research-tools>summary','عروض البحث والموظفين'],
+ ['[data-go="server"]','التحقق من واجهة البرمجة'],
+ ['[data-go="pilot"]','الأعمال والتجربة الأولية'],
+ ['[data-go="staff"]','مساحة عمل الموظفين التجريبية'],
+ ['.workspace-safety','بيانات اصطناعية فقط']
+ ];
+ const entries=labels.map(([sel,ar])=>{
+  const el=sidebar.querySelector(sel);
+  if(!el)return null;
+  let node=Array.from(el.childNodes).find(n=>n.nodeType===3&&n.textContent.trim());
+  if(!node){node=document.createTextNode('');el.insertBefore(node,el.firstChild)}
+  return {el,node,en:node.textContent,ar};
+ }).filter(Boolean);
+ const foot=sidebar.querySelector('.workspace-safety small');
+ const footEn=foot?foot.textContent:'';
+ const crumbSpan=crumb.querySelector('span');
+ const crumbLink=crumb.querySelector('a');
+ const enCrumb=crumbSpan?crumbSpan.textContent:'';
+ const enLink=crumbLink?crumbLink.textContent:'';
+ let selected='en';
+ function update(lang,changeGuide){
+  if(lang!=='en'&&lang!=='ar')return;
+  selected=lang;
+  sidebar.setAttribute('lang',lang);
+  sidebar.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+  crumb.setAttribute('lang',lang);
+  crumb.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+  entries.forEach(({node,en,ar})=>{node.textContent=lang==='ar'?ar:en});
+  if(foot)foot.textContent=lang==='ar'?'نموذج تعليمي · ليس نصيحة طبية':footEn;
+  if(crumbSpan)crumbSpan.textContent=lang==='ar'?'أمانة / مساحة العمل':enCrumb;
+  if(crumbLink)crumbLink.textContent=lang==='ar'?'الصفحة الرئيسية ↗':enLink;
+  document.querySelectorAll('[data-ws-lang]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.wsLang===lang)));
+  const active=sidebar.querySelector('button[data-go].on');
+  const current=document.getElementById('workspace-current');
+  if(current)current.textContent=active?active.textContent.trim():(lang==='ar'?'نظرة عامة':'Dashboard');
+  if(changeGuide&&typeof switchPatientLang==='function')switchPatientLang(lang);
+ }
+ document.addEventListener('click',event=>{
+  const b=event.target.closest('[data-ws-lang]');
+  if(b){update(b.dataset.wsLang,true);return}
+  const g=event.target.closest('[data-plang]');
+  if(g)update(g.dataset.plang,false);
+ });
+ // Preserve selection after changing sections. Only navigation is translated;
+ // deeper research/staff screens remain in English and are not clinically certified.
+ update('en',false);
+})();
+</script></body></html>
