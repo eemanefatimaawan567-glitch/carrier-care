@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amanah Genomics · Consent-first carrier care</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap">
+<style>
+:root{--bg:#fff;--s:#f8fafc;--ink:#0f172a;--mut:#475569;--ln:#e2e8f0;--g:#1d5e4c;--gx:#fff;--gs:#e3f1ec;--am:#b45309;--amb:#fff4e0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:light}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--ln);z-index:10}
+.hd{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:34px}
+.logo{width:42px;height:42px;border-radius:10px;background:var(--g);color:var(--gx);display:grid;place-items:center;font-size:20px;font-weight:800}
+.brand{display:flex;gap:12px;align-items:center}.brand b{display:block;font-size:19px;line-height:1.1}.brand span{color:var(--mut);font-size:10px}
+nav{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 0;font:600 13px "Plus Jakarta Sans",sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--g);border-color:var(--g)}
+@media(max-width:760px){.hd{flex-wrap:wrap;gap:6px 20px}nav{width:100%}}
+.wrap{max-width:1180px;margin:0 auto;padding:44px 20px 80px}
+.page{display:none}.page.on{display:block}
+.crumb{display:flex;gap:10px;flex-wrap:wrap;color:var(--mut);font-size:14px}.crumb .mono{color:var(--g);font-weight:500}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.03em;margin:16px 0 18px}
+h2{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+.lead{font-size:19px;color:var(--mut);max-width:56ch;margin:0}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+@media(max-width:640px){.feat{grid-template-columns:1fr}}
+.fc{border:1px solid var(--ln);background:var(--s);border-radius:14px;padding:16px}
+.fc b{display:flex;gap:8px;align-items:center}.fc p{margin:6px 0 0;color:var(--mut);font-size:14px}
+.ico{width:22px;height:22px;fill:none;stroke:var(--g);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.art{border-radius:20px;overflow:hidden;position:relative;min-height:360px;background:linear-gradient(150deg,#0b2924,#1d5e4c 60%,#2f8f78);color:#fff}
+.art svg{position:absolute;inset:0;width:100%;height:100%}
+.chip{position:absolute;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px);border-radius:12px;padding:8px 12px;font-size:14px;font-weight:600}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:18px;background:linear-gradient(transparent,rgba(5,20,17,.85))}
+.cap b{display:block;font-size:17px;margin-top:4px}
+.sec{border-top:1px solid var(--ln);padding-top:22px;margin-top:8px}
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.case{border:1px solid var(--ln);border-radius:14px;padding:16px;text-align:start;background:var(--bg);cursor:pointer;font:inherit;color:inherit}
+.case:hover{border-color:var(--g);background:var(--gs)}.case b{display:block}.case span{color:var(--mut);font-size:14px}
+:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+.card{border:1px solid var(--ln);border-radius:16px;padding:20px;background:var(--bg)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+@media(max-width:700px){.g2{grid-template-columns:1fr}}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln)}
+.row:last-of-type{border:0}
+select{font:inherit;color:var(--ink);background:var(--s);border:1px solid var(--ln);border-radius:8px;padding:6px 10px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 0}
+.tools label,.cons{display:flex;gap:8px;align-items:center;border:1px solid var(--ln);border-radius:99px;padding:6px 14px;font-size:14px;cursor:pointer}
+.cons{border-radius:10px;margin-top:12px}
+button.pri{background:var(--g);color:var(--gx);border:0;border-radius:10px;padding:11px 20px;font:600 15px inherit;cursor:pointer}
+button.pri:disabled{opacity:.4;cursor:not-allowed}
+button.gh{background:none;border:1px solid var(--ln);color:var(--ink);border-radius:10px;padding:9px 16px;font:600 14px inherit;cursor:pointer}
+.res{background:var(--gs);border-radius:12px;padding:14px 16px;margin-top:12px;border-inline-start:5px solid var(--g)}
+.warn{background:var(--amb);color:var(--am);border-radius:12px;padding:12px 16px;margin-top:12px;font-weight:600;border-inline-start:5px solid var(--am)}
+.odds{display:flex;height:36px;border-radius:10px;overflow:hidden;margin-top:12px}
+.odds i{font-style:normal;font-weight:700;display:grid;place-items:center}
+.odds i:nth-child(1){background:#b45309;color:#fff}.odds i:nth-child(2){background:#1d5e4c;color:#fff}.odds i:nth-child(3){background:#cfe3e0;color:#0f172a}
+.odl{display:flex;margin-top:4px;font-size:13px;color:var(--mut)}.odl span{text-align:center}
+.tag{display:inline-block;border:1px solid var(--ln);border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;margin-top:12px}
+.pun{display:grid;grid-template-columns:70px repeat(2,1fr);gap:8px;max-width:420px;margin:18px 0}
+.pun>*{display:grid;place-items:center;border-radius:12px;min-height:70px;font-weight:800;font-size:20px;text-align:center}
+.pun b{background:var(--s);min-height:44px;font-size:15px}.pun small{display:block;font-size:12px;font-weight:500}
+.pun .n{background:#cfe3e0;color:#0f172a}.pun .c{background:#1d5e4c;color:#fff}.pun .a{background:#b45309;color:#fff}
+ol.st{list-style:none;margin:14px 0;padding:0}
+ol.st li{display:flex;gap:12px;align-items:center;padding:9px 0;color:var(--mut)}
+ol.st li i{width:26px;height:26px;border-radius:50%;border:2px solid var(--ln);display:grid;place-items:center;font-size:13px;font-style:normal;font-weight:700}
+ol.st li.d{color:var(--ink)}ol.st li.d i{background:var(--g);border-color:var(--g);color:var(--gx)}
+ol.st li.n{color:var(--ink);font-weight:700}ol.st li.n i{border-color:var(--g);color:var(--g)}
+#log{font-size:13px;margin:10px 0 0;padding-inline-start:18px;max-height:260px;overflow:auto}
+footer{border-top:1px solid var(--ln);padding:18px 20px;text-align:center;color:var(--mut);font-size:13px}
+.pv{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-top:18px}@media(max-width:800px){.pv{grid-template-columns:1fr}}
+.pv .pun{max-width:none;margin:16px 0 0;grid-template-columns:90px repeat(2,1fr)}
+.pv .pun>*{min-height:100px;font-size:28px}.pv .pun b{min-height:48px;font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tl{border-radius:14px;padding:16px;background:var(--s);border:1px solid var(--ln);border-top:6px solid var(--c)}
+.tl b{display:block;font-size:34px;font-weight:800;line-height:1}.tl span{color:var(--mut);font-size:13px}
+button.gh.on{background:var(--g);color:var(--gx);border-color:var(--g)}
+.qo{display:block;width:100%;text-align:start;margin-top:8px}
+.qo.ok{border-color:var(--g);background:var(--gs)}.qo.bad{border-color:var(--am);background:var(--amb)}
+pre.sb{white-space:pre-wrap;font:13px/1.6 "JetBrains Mono",ui-monospace,monospace;background:var(--s);border:1px solid var(--ln);border-radius:10px;padding:12px;margin:10px 0}
+.ph{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--ln)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--gs);color:var(--g);display:grid;place-items:center;font-style:normal;font-weight:800}
+.gr{display:grid;grid-template-columns:1fr auto;gap:8px 10px;align-items:center;border:1px solid var(--ln);background:var(--s);border-radius:12px;padding:12px 14px;margin-top:10px}
+.gr select{grid-column:1/-1;background:var(--bg)}
+.small2{font-size:13px;color:var(--mut)}
+.st{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;border-radius:8px;padding:6px 10px;white-space:nowrap}
+.s0{background:#e3f4ea;color:#166534;border:1px solid #bfe3cc}.s1{background:#fff3cf;color:#8a5a00;border:1px solid #f0d98a}.s2{background:#e8eefc;color:#2a4a9a;border:1px solid #c7d4f3}
+#p-match .tools{background:var(--s);border:1px solid var(--ln);border-radius:14px;padding:12px 16px}
+#p-match .tools label{background:var(--bg)}
+.card{box-shadow:0 1px 3px rgba(15,23,42,.06)}
+#prt{display:none}
+@media print{body::before{display:none}body>*:not(#prt){display:none!important}#prt{display:block;padding:24px;color:#000;background:#fff}}
+input[type=range]{accent-color:var(--g);margin-top:4px}
+.liveonly{display:none}body.live .liveonly{display:flex}
+body.live #sbc,body.live #ldg,body.live #adv{display:none}
+html.big body{font-size:19px}html.big .lead{font-size:21px}
+html.hc{--ln:#475569;--mut:#1e293b}html.hc .card,html.hc .fc{border-width:2px}html.hc nav button{color:#0f172a}html.hc nav button.on{color:var(--g)}
+.a11y{display:flex;gap:6px;margin-inline-start:auto}.a11y button{padding:6px 10px}.a11y button[aria-pressed="true"]{background:var(--g);color:var(--gx);border-color:var(--g)}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.seg button{font:inherit;font-weight:600;background:var(--bg);color:var(--ink);border:1px solid var(--ln);border-radius:99px;padding:8px 16px;cursor:pointer}
+.seg button.on{background:var(--g);color:var(--gx);border-color:var(--g)}
+.tiles3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(max-width:700px){.tiles3{grid-template-columns:1fr}}
+.tiles3 .tl{display:flex;flex-direction:column;gap:2px}.tiles3 .tl b{font-size:26px}
+
+/* 2026 presentation refresh — built on top of the working app */
+:root{--bg:#fcfdfb;--s:#f4f8f5;--ink:#142b29;--mut:#59706b;--ln:#dbe8e2;--g:#126854;--gs:#e3f6ed;--am:#9d681c;--amb:#fff3de}
+body{background:radial-gradient(ellipse 75% 36% at 9% 0%,#eef9ef 0%,transparent 75%),var(--bg)}
+header{background:rgba(252,253,251,.93);backdrop-filter:blur(18px);box-shadow:0 6px 30px rgba(17,48,40,.04)}
+.hd{max-width:1340px;padding:13px 26px;gap:25px}
+.logo{border-radius:14px;background:linear-gradient(140deg,#0a4139,#16856c);box-shadow:0 8px 20px rgba(14,89,74,.19)}
+.brand b{letter-spacing:-.05em;font-size:20px}.brand span{font-size:9px;letter-spacing:.11em}
+nav{gap:15px}nav button{font-size:11px;letter-spacing:.02em;transition:color .2s,border-color .2s}nav button:hover{color:var(--g)}
+.wrap{max-width:1300px;padding:58px 26px 90px}
+#p-overview>.hero{grid-template-columns:1.02fr 1fr;gap:44px;min-height:570px}
+#p-overview h1{font-size:clamp(44px,5.25vw,79px);letter-spacing:-.068em;line-height:1.02;max-width:720px;margin:20px 0 25px}
+#p-overview .lead{font-size:clamp(17px,1.52vw,21px);line-height:1.7;max-width:570px}
+#p-overview .crumb{align-items:center;color:#17634f;font-weight:700}
+#p-overview .crumb .mono{font-size:10px;letter-spacing:.13em;background:#e4f3eb;border:1px solid #cfe5d9;padding:7px 10px;border-radius:999px}
+.hero-cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:27px}
+.hero-cta button{font:700 14px 'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;min-height:49px;padding:12px 22px;border-radius:10px;transition:transform .2s,box-shadow .2s}
+.hero-cta button:hover{transform:translateY(-2px)}
+.hero-cta .main-cta{border:1px solid #0f6a54;background:#0f6a54;color:white;box-shadow:0 10px 24px rgba(16,95,76,.2)}
+.hero-cta .second-cta{border:1px solid #c4dcd0;background:#fff;color:#175849}
+.trust-note{color:var(--mut);font-size:12px;display:flex;gap:7px;align-items:center;margin-top:15px}
+#p-overview .feat{gap:11px;margin:32px 0 0}
+#p-overview .fc{border-radius:17px;padding:16px;background:#fff;box-shadow:0 10px 34px rgba(20,63,48,.035);transition:transform .22s,box-shadow .22s}
+#p-overview .fc:hover{transform:translateY(-5px);box-shadow:0 15px 30px rgba(20,63,48,.08)}
+#p-overview .fc b{font-size:13px}#p-overview .fc p{font-size:12px;line-height:1.6}
+#p-overview .art{min-height:515px;border-radius:32px;background:radial-gradient(circle at 55% 43%,#1b7768,#063e39 58%,#062d2c);box-shadow:0 28px 70px rgba(4,55,48,.23);isolation:isolate}
+#p-overview .art:before{content:'';position:absolute;inset:-15%;background:radial-gradient(circle at 50% 30%,rgba(186,243,205,.14),transparent 38%);animation:artGlow 8s ease-in-out infinite alternate}
+#p-overview .art:after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent);z-index:-1}
+#p-overview .art>svg{width:85%;height:90%;inset:4% 8%;filter:drop-shadow(0 0 13px rgba(105,233,198,.25));animation:floatHelix 8s ease-in-out infinite alternate}
+#p-overview .art>svg path:nth-child(1){stroke-dasharray:900;stroke-dashoffset:900;animation:drawHelix 3.2s 0.3s ease-out forwards,glowHelix 5s ease-in-out 3s infinite}
+#p-overview .art>svg path:nth-child(2){stroke-dasharray:900;stroke-dashoffset:900;animation:drawHelix 3.2s 0.65s ease-out forwards,glowHelix 5s ease-in-out 3s infinite alternate}
+#p-overview .art .chip{font-size:12px;border-radius:999px;background:rgba(227,255,243,.11);border-color:rgba(224,255,246,.24);padding:10px 15px;box-shadow:0 7px 24px rgba(0,0,0,.08);animation:floatChip 5s ease-in-out infinite alternate}
+#p-overview .art .chip:nth-of-type(2){animation-delay:1.1s}
+#p-overview .cap{padding:30px;background:linear-gradient(transparent,rgba(1,31,31,.88))}#p-overview .cap b{font-size:21px;letter-spacing:-.025em}
+#p-overview .sec{margin-top:65px;padding-top:35px}
+#p-overview .case{background:#fff;box-shadow:0 7px 25px rgba(14,75,49,.045);transition:transform .2s,box-shadow .2s}#p-overview .case:hover{transform:translateY(-3px);box-shadow:0 12px 33px rgba(14,75,49,.09)}
+.safety-caption{font-size:12px;color:var(--mut);background:#f2f7f3;border:1px solid #deebe2;padding:8px 12px;border-radius:9px;display:inline-block;margin-top:16px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;font-weight:800;color:#5d897b}
+/* Opening sequence */
+#amanah-intro{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,#17685d 0%,#082f30 48%,#031c21 100%);color:#effdf7;overflow:hidden;transition:opacity .85s ease,visibility .85s ease}
+#amanah-intro:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000,transparent 80%)}
+#amanah-intro.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.intro-inner{text-align:center;position:relative;width:min(92vw,620px);display:flex;flex-direction:column;align-items:center}
+.intro-mark{font-size:12px;color:#bddbcf;letter-spacing:.36em;font-weight:700;margin-bottom:2px}
+.intro-helix{width:250px;height:205px;filter:drop-shadow(0 0 24px rgba(125,247,212,.4))}
+.intro-helix .strand{fill:none;stroke-width:5;stroke-linecap:round;stroke-dasharray:620;stroke-dashoffset:620;animation:introDraw 2.5s ease-in-out forwards}
+.intro-helix .strand.a{stroke:#80e9cf}.intro-helix .strand.b{stroke:#f3d190;animation-delay:.2s}
+.intro-helix .rung{stroke:#d9faf1;stroke-width:2;opacity:.0;animation:rungIn .4s ease forwards}
+.intro-title{font-size:clamp(36px,6vw,56px);font-weight:800;letter-spacing:-.06em;line-height:1.1;opacity:0;transform:translateY(14px);animation:welcome 1s .75s ease forwards}
+.intro-sub{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#b8dbd0;margin-top:14px;opacity:0;animation:welcome 1s 1.1s ease forwards}
+.intro-loader{width:142px;height:2px;margin-top:35px;background:rgba(255,255,255,.16);overflow:hidden;border-radius:6px}.intro-loader:before{content:'';display:block;width:100%;height:100%;background:#9cead5;transform-origin:left;animation:loadBar 2.6s linear forwards}
+.intro-skip{position:absolute;right:25px;top:24px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);border-radius:100px;padding:9px 16px;color:#fff;cursor:pointer;font:600 12px 'Plus Jakarta Sans',sans-serif}
+.intro-skip:hover{background:rgba(255,255,255,.17)}
+@keyframes introDraw{to{stroke-dashoffset:0}}
+@keyframes rungIn{to{opacity:.75}}
+@keyframes welcome{to{opacity:1;transform:translateY(0)}}
+@keyframes loadBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drawHelix{to{stroke-dashoffset:0}}
+@keyframes glowHelix{50%{opacity:1;filter:drop-shadow(0 0 3px rgba(143,255,224,.4))}}
+@keyframes floatHelix{to{transform:translateY(-14px) rotate(2deg)}}
+@keyframes floatChip{to{transform:translateY(-9px)}}
+@keyframes artGlow{to{transform:translate(10%,8%)}}
+@media(max-width:990px){#p-overview>.hero{grid-template-columns:1fr}.wrap{padding-top:36px}#p-overview .art{min-height:420px}nav{width:100%;order:3}.a11y{margin-inline-start:auto}.hd{flex-wrap:wrap}}
+@media(max-width:640px){.hd{padding:12px 15px}.wrap{padding:27px 17px 70px}#p-overview h1{font-size:clamp(40px,10vw,56px)}#p-overview .feat{grid-template-columns:1fr}#p-overview .art{min-height:355px;border-radius:22px}#p-overview .art .chip{font-size:10px}.hero-cta button{flex:1}.intro-helix{height:175px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}#amanah-intro{display:none!important}}
+
+
+/* Malaffi-inspired visual language, original Amanah design. No institutional affiliation implied. */
+:root{--bg:#f8fcfd;--s:#f0f8fb;--ink:#102e43;--mut:#526c7b;--ln:#dcebf1;--g:#087c92;--gs:#e7f7f8;--gx:#fff}
+body{background:radial-gradient(ellipse 55% 24% at 95% 0%,#d5f6f6 0%,transparent 85%),radial-gradient(ellipse 45% 30% at 1% 15%,#e9f6ff 0%,transparent 80%),var(--bg)}
+header{background:rgba(249,253,255,.94);border-bottom-color:#dcecf1;box-shadow:0 7px 28px rgba(13,74,102,.05)}
+.logo{background:linear-gradient(140deg,#0875b0,#05b9aa);box-shadow:0 9px 24px #0d90a124}
+#p-overview .crumb .mono{background:#e6f6fc;border-color:#cfe8f4;color:#176787}
+#p-overview h1{color:#102e43}
+#p-overview h1 em{font-style:normal;background:linear-gradient(100deg,#047cab,#03a89d);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero-cta .main-cta{background:linear-gradient(110deg,#086f9f,#079e9a);border-color:#087e9e;box-shadow:0 12px 28px #088eae38}
+.hero-cta .second-cta{color:#166c88;border-color:#c4e5ef}
+#p-overview .art{background:radial-gradient(circle at 52% 43%,#138dad,#075278 60%,#032d50);box-shadow:0 30px 75px rgba(5,69,115,.23)}
+#p-overview .art:before{background:radial-gradient(circle at 40% 30%,rgba(151,250,253,.20),transparent 45%)}
+#p-overview .art .chip{background:rgba(212,250,255,.13);border-color:rgba(218,253,255,.32)}
+#p-overview .cap{background:linear-gradient(transparent,rgba(2,40,72,.92))}
+#p-overview .fc{border-color:#dcebf1;box-shadow:0 12px 35px rgba(5,72,104,.045)}
+#p-overview .fc:hover{box-shadow:0 18px 38px rgba(5,72,104,.10)}
+#p-overview .case:hover{border-color:#17a3b6;background:#ebfafb}
+#amanah-intro{background:radial-gradient(ellipse at 50% 42%,#0a93aa 0%,#084b77 50%,#04233f 100%)}
+.intro-helix .strand.a{stroke:#7ff6ef}.intro-helix .strand.b{stroke:#b9e8ff}
+.intro-loader:before{background:#7af7ef}
+.eyebrow{color:#197e99}
+.amanah-value-strip{margin:38px 0 0;padding:16px 20px;background:linear-gradient(110deg,#eff9ff,#e7fbf8);border:1px solid #d3edf3;border-radius:18px;display:flex;flex-wrap:wrap;gap:10px 26px;align-items:center;justify-content:space-between;color:#145b75;font-size:12px;font-weight:700}
+.amanah-value-strip span{display:inline-flex;gap:8px;align-items:center}
+.amanah-dot{width:7px;height:7px;background:#14a6a7;border-radius:100%;display:inline-block}
+@media(max-width:640px){.amanah-value-strip{justify-content:flex-start;gap:12px 18px;margin-top:22px}}
+
+
+/* Patient-friendly guided experience */
+.more-nav{position:relative;align-self:center}.more-nav summary{cursor:pointer;list-style:none;color:var(--mut);font-size:12px;font-weight:700;white-space:nowrap}.more-nav summary::-webkit-details-marker{display:none}.more-nav summary::after{content:" ▾"}.more-menu{position:absolute;right:0;top:32px;min-width:218px;padding:10px;background:white;border:1px solid var(--ln);border-radius:16px;box-shadow:0 14px 35px #092e3b24;display:flex;flex-direction:column;z-index:20}.more-menu button{text-align:left;border:0;padding:11px 12px;text-transform:none;font-size:13px}.more-menu button:hover{background:var(--gs);border-radius:8px}
+.patient-head{background:linear-gradient(125deg,#eef9f7,#f8fcff 60%,#e4f4f8);padding:clamp(25px,5vw,56px);border-radius:28px;margin-bottom:24px}.patient-head h1{max-width:850px}.patient-pill{font-size:12px;color:#126c75;font-weight:800;letter-spacing:.12em}.patient-progress{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px}.patient-progress span{border-radius:10px;background:#edf3f5;color:#526577;text-align:center;padding:11px 6px;font-size:12px;font-weight:700}.patient-progress span.active{background:#117b83;color:white}.patient-card{border:1px solid #dae9eb;background:white;padding:clamp(22px,4vw,44px);border-radius:24px;box-shadow:0 12px 45px #173c4a0d}.patient-card[hidden]{display:none!important}.patient-card h2{font-size:clamp(24px,3vw,36px)}.patient-card>p{color:#49606a;max-width:680px}.patient-step{color:#12757e;letter-spacing:.12em;font-size:12px;font-weight:800;margin-bottom:15px}.patient-scenarios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}.patient-scenarios button{font:inherit;border:1.5px solid #d4e7e6;background:#fcfefe;text-align:left;padding:22px;border-radius:18px;cursor:pointer;display:flex;flex-direction:column;gap:9px;min-height:170px}.patient-scenarios button:hover,.patient-scenarios button:focus-visible{border-color:#117b83;background:#f1fbf9;transform:translateY(-2px)}.patient-scenarios b{font-size:18px}.patient-scenarios small,.patient-choice small{font-size:14px;color:#566872}.patient-emoji{font-size:27px}.patient-choice{display:grid;gap:14px;margin-top:20px}.patient-choice label{display:flex;align-items:center;gap:16px;border:1px solid #d7e6e6;padding:18px;border-radius:15px;cursor:pointer}.patient-choice input{width:24px;height:24px;accent-color:#0c777c;flex-shrink:0}.patient-choice span{display:grid;gap:3px}.patient-tip{background:#edf7f6;border-left:4px solid #0b7780;padding:17px;border-radius:9px;color:#274e55;margin:22px 0}.patient-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.patient-actions button{min-height:46px}.patient-explain{border-radius:18px;padding:23px;background:#eef8f7;margin-top:20px}.patient-explain h3{font-size:22px;margin:0 0 8px}.patient-explain p{font-size:17px;line-height:1.65}.patient-next{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.patient-next>div{padding:20px;border-radius:14px;background:#f3f9fa}.patient-next p{color:#526977;font-size:14px}.patient-footnote{margin-top:20px;color:#62727c;font-size:13px}.patient-danger{background:#fff5e7;border-left:4px solid #bb7a23}.patient-progress span.done{background:#dcefed;color:#1a666c}button:focus-visible,summary:focus-visible{outline:3px solid #e1a953;outline-offset:3px}@media(max-width:720px){.patient-progress{grid-template-columns:repeat(2,1fr)}.patient-scenarios,.patient-next{grid-template-columns:1fr}.patient-head{padding:24px}.patient-card{padding:20px}.patient-actions button{flex-grow:1}nav{gap:13px}.more-menu{right:auto;left:0}}
+
+/* Guided patient demo — accessibility and clarity */
+.patient-lang{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}.patient-lang [role=group]{display:flex;gap:6px}.patient-lang button.on{background:#087c92;color:#fff;border-color:#087c92}.patient-trust{font-size:13px;color:#236473;font-weight:700;margin-top:20px}.patient-questions,.patient-quiz{background:#f4fafb;border:1px solid #dbeef1;border-radius:17px;padding:22px;margin-top:21px}.patient-questions h3,.patient-quiz h3{font-size:19px;margin:0 0 10px}.patient-questions li{padding:4px 0}.patient-feedback{font-weight:700;color:#176b70;min-height:1.5em}.patient-card button{transition:background-color .18s,border-color .18s}.patient-card button:hover{filter:brightness(.96)}#p-guide[dir=rtl] .patient-card,#p-guide[dir=rtl] .patient-scenarios button{text-align:right}#p-guide[dir=rtl] .patient-tip{border-left:0;border-right:4px solid #0b7780}#p-guide .patient-scenarios button:focus-visible{outline:3px solid #b87a20;outline-offset:3px}#p-guide .patient-questions ul{padding-inline-start:24px}@media(max-width:600px){.patient-lang{align-items:flex-start}.patient-questions,.patient-quiz{padding:16px}}
+
+/* Always-available exploration drawer — navigation only, no clinical state changes */
+.amanah-tool-drawer{position:fixed;right:22px;bottom:22px;z-index:990;width:min(330px,calc(100vw - 28px));font-family:inherit;direction:ltr}
+.amanah-tool-drawer summary{list-style:none;margin-left:auto;max-width:max-content;border:1px solid #67d6d3;background:#09556b;color:#fff;border-radius:99px;padding:14px 22px;box-shadow:0 10px 38px #021d36aa;cursor:pointer;font-size:14px;font-weight:800;display:flex;align-items:center;gap:9px;min-height:50px;user-select:none}
+.amanah-tool-drawer summary::-webkit-details-marker{display:none}.amanah-tool-drawer summary:focus-visible{outline:3px solid #f3b25b;outline-offset:3px}
+.amanah-tool-drawer[open] summary{background:#0c8291}.amanah-tool-panel{background:#fff;border:1px solid #d7e8ed;border-radius:19px;box-shadow:0 18px 70px #021c2f55;margin:0 0 10px;padding:14px;max-height:min(66vh,530px);overflow:auto;color:#143245}
+.amanah-tool-panel header{position:static!important;background:none!important;border:0!important;margin:0 0 9px!important;color:#16334a;font-weight:800;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.amanah-tool-panel a,.amanah-tool-panel button{display:flex;align-items:center;gap:10px;width:100%;font:700 13px/1.25 inherit;text-align:left;color:#184153;background:#fff;border:0;text-decoration:none;padding:11px 12px;border-radius:10px;cursor:pointer;box-sizing:border-box;min-height:42px}
+.amanah-tool-panel a:hover,.amanah-tool-panel button:hover,.amanah-tool-panel .current{background:#dff4f3;color:#065c67}
+.amanah-tool-panel .tool-website{border-bottom:1px solid #deebec;border-radius:0;margin-bottom:6px;font-weight:800;color:#067987}
+.amanah-tool-panel .tool-hint{font-size:11px;color:#58707b;margin:8px 8px 2px;line-height:1.4}
+.brand-home{text-decoration:none;color:inherit;cursor:pointer}.brand-home:hover b,.brand-home:focus-visible b{color:#0c8c94}.brand-home:focus-visible{outline:3px solid #f2bb70;outline-offset:4px;border-radius:8px}
+@media(max-width:670px){.amanah-tool-drawer{right:12px;bottom:12px}.amanah-tool-drawer summary{padding:12px 18px}.amanah-tool-panel{max-height:61vh}}
+
+/* Amanah Connected Experience: cohesive, permanently visible workspace. */
+:root{--g:#078d96;--gs:#e6f6f5;--ink:#103247;--mut:#526d7c;--ln:#dbe8ed;--bg:#f6fafc;--s:#edf5f8;--gx:#fff}
+body{background:radial-gradient(ellipse 80% 38% at 80% 0%,#e7f6fa 0%,transparent 70%),#f6fafc}
+body>header{background:#061e36!important;color:#effcff!important;border-bottom:1px solid #29465b!important;box-shadow:0 8px 30px #04192d1c!important;position:sticky;top:0;z-index:100}
+body>header .hd{max-width:none!important;padding:12px 30px!important;min-height:76px;gap:18px}
+body>header .brand b{color:#f0fffd}body>header .brand span{color:#9cd6d8}body>header .brand .logo{background:#0d7786}
+body>header #nav{display:none!important}body>header .a11y{margin-left:auto}
+body>header .a11y button{color:#ecf7fa!important;border-color:#527184!important}
+.workspace-sidebar{width:252px;position:fixed;top:76px;bottom:0;left:0;background:linear-gradient(170deg,#08263e,#05192d);color:#c7dce5;z-index:80;box-shadow:6px 10px 30px #03172a10;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#41677b transparent}
+.workspace-sidebar-inner{padding:27px 16px 25px}.workspace-overline{font-size:10px;color:#85d0d1;letter-spacing:.17em;font-weight:800;padding:0 13px 15px;display:flex;align-items:center;justify-content:space-between}.workspace-live-dot{height:7px;width:7px;border-radius:50%;background:#4fcbc0;box-shadow:0 0 12px #57e1d2}
+.workspace-sidebar a,.workspace-sidebar button{font-family:inherit;font-size:13px;font-weight:650;letter-spacing:0;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;border:1px solid transparent;border-radius:12px;color:#c9dfe7;background:transparent;text-align:left;text-decoration:none;padding:11px 12px;margin:2px 0;transition:background .18s,color .18s}
+.workspace-sidebar a:hover,.workspace-sidebar button:hover{background:#143e54;color:white}.workspace-sidebar button.on{background:#15677a;color:#fff;border-color:#278d97;box-shadow:inset 3px 0 0 #78ece2}
+.workspace-sidebar a span:first-child,.workspace-sidebar button span:first-child{min-width:21px;text-align:center;color:#79d2d0;font-size:18px;line-height:1}.workspace-group-title{font-size:10px;color:#779bae;letter-spacing:.15em;font-weight:800;margin:25px 10px 9px}.workspace-home-link{background:#103c52!important;border:1px solid #25546a!important;color:#e8fffb!important}
+.workspace-safety{border-top:1px solid #26485c;margin:30px 9px 0;padding-top:19px;font-size:10px;color:#91c7c7;font-weight:750;letter-spacing:.09em;line-height:1.6}.workspace-safety small{font-size:11px;color:#91aebd;font-weight:500;letter-spacing:0}
+.wrap{margin-left:252px!important;max-width:none!important;padding:30px clamp(24px,4vw,65px) 85px!important;min-height:80vh}.wrap>.page{max-width:1180px;margin:0 auto}
+.workspace-crumb{display:flex;align-items:center;gap:12px;max-width:1180px;margin:0 auto 25px;font-size:12px;color:#63808e;letter-spacing:.04em}.workspace-crumb>b{color:#0d536a;font-weight:800}.workspace-crumb>span:after{content:" /";padding-left:10px;color:#a1b4c0}.workspace-crumb>a{margin-left:auto;color:#0b7581;text-decoration:none;font-weight:750}
+body .card,body .fc,body .case{background:#fff;border-color:#dbe9ed;box-shadow:0 4px 18px #0c36500a}body .lead{color:#546e80}
+body #p-overview .art{background:radial-gradient(circle at 52% 42%,#126d76,#08283e 66%,#041d31)!important}
+.amanah-tool-drawer{display:none!important}
+.workspace-intro-card{display:flex;justify-content:space-between;gap:24px;align-items:center;border:1px solid #cce7e9;background:linear-gradient(120deg,#ecf9f8,#fff);border-radius:22px;padding:24px 27px;margin-bottom:22px;box-shadow:0 14px 34px #164a5710}
+.workspace-intro-card h2{font-size:22px;margin:8px 0}.workspace-intro-card p{font-size:13px;color:#526e7b;max-width:62ch;margin:6px 0 0}.workspace-kicker{font-size:10px;letter-spacing:.13em;color:#067d84;font-weight:800}
+.workspace-case-actions{display:flex;flex-direction:column;gap:7px;flex:0 0 205px}.workspace-case-actions button{background:#fff;border:1px solid #b8d8dc;border-radius:10px;color:#075a64;padding:10px 12px;font:700 12px inherit;cursor:pointer;text-align:left}.workspace-case-actions button:hover{background:#d6f5f1}
+@media(max-width:1060px){.workspace-sidebar{width:220px}.wrap{margin-left:220px!important;padding:25px 22px 75px!important}.workspace-intro-card{flex-direction:column;align-items:stretch}.workspace-case-actions{flex-direction:row;flex-wrap:wrap;flex-basis:auto}.workspace-case-actions button{flex:1;min-width:155px}}
+@media(max-width:840px){.workspace-sidebar{display:none}.wrap{margin-left:0!important;max-width:100%!important;padding:25px 18px 100px!important}.amanah-tool-drawer{display:block!important}.workspace-crumb>a{display:none}body>header .hd{padding:11px 17px!important;min-height:67px}.wrap>.page{max-width:100%}}
+@media(max-width:550px){.workspace-crumb{font-size:10px;gap:5px}.workspace-intro-card{padding:18px}.workspace-case-actions{flex-direction:column}.workspace-case-actions button{min-width:0}.workspace-case-actions{gap:7px}.brand b{font-size:16px!important}}
+@media print{.workspace-sidebar,.workspace-crumb{display:none!important}.wrap{margin:0!important;padding:0!important}}
+
+/* Patient-first navigation: progressive disclosure for secondary and research tools. */
+.workspace-extras{border-top:1px solid #24485c;margin:15px 4px 0;padding:12px 7px 1px}
+.workspace-extras summary{cursor:pointer;padding:10px 7px;color:#b7e9e5;font-size:12px;font-weight:750;border-radius:9px;list-style:none}
+.workspace-extras summary:hover,.workspace-extras summary:focus-visible{background:#17445a;color:#fff}
+.workspace-extras summary::-webkit-details-marker{display:none}
+.workspace-extras button{font-size:12px;padding:10px 11px}
+.workspace-role-divider{margin:22px 8px 5px;border-top:1px solid #315a6d;padding-top:18px;color:#a3bfcd}
+.workspace-role-divider b{font-size:10px;letter-spacing:.12em;color:#75d8d0}
+.workspace-role-divider p{font-size:11px;line-height:1.55;margin:8px 0 0}
+.workspace-professional{border-top:none;margin-top:4px;padding-top:0}
+.workspace-professional summary{color:#c5d0e1}
+.workspace-role-note{padding:17px 19px;margin-bottom:22px;border:1px solid #b9dfdc;border-left:5px solid #087c85;border-radius:13px;background:#e8f6f5;color:#194951;font-size:13px;line-height:1.6}
+.workspace-extras button.on{background:#15677a;color:#fff;border-color:#278d97}
+</style></head>
+<body>
+<div id="amanah-intro" role="presentation" aria-label="Amanah Genomics introduction">
+ <button class="intro-skip" type="button" id="intro-skip">Skip intro ↗</button>
+ <div class="intro-inner">
+  <span class="intro-mark">AMANAH / SCIENCE WITH TRUST</span>
+  <svg class="intro-helix" viewBox="0 0 280 210" aria-hidden="true">
+   <path class="strand a" d="M85 10C230 38 230 75 85 106S-40 175 190 200"/>
+   <path class="strand b" d="M190 10C45 38 45 75 190 106S315 175 85 200"/>
+   <g><line class="rung" x1="85" y1="15" x2="190" y2="15" style="animation-delay:0.30s"/><line class="rung" x1="95" y1="31" x2="180" y2="31" style="animation-delay:0.43s"/><line class="rung" x1="85" y1="47" x2="190" y2="47" style="animation-delay:0.56s"/><line class="rung" x1="95" y1="63" x2="180" y2="63" style="animation-delay:0.69s"/><line class="rung" x1="85" y1="79" x2="190" y2="79" style="animation-delay:0.82s"/><line class="rung" x1="95" y1="95" x2="180" y2="95" style="animation-delay:0.95s"/><line class="rung" x1="85" y1="111" x2="190" y2="111" style="animation-delay:1.08s"/><line class="rung" x1="95" y1="127" x2="180" y2="127" style="animation-delay:1.21s"/><line class="rung" x1="85" y1="143" x2="190" y2="143" style="animation-delay:1.34s"/><line class="rung" x1="95" y1="159" x2="180" y2="159" style="animation-delay:1.47s"/><line class="rung" x1="85" y1="175" x2="190" y2="175" style="animation-delay:1.60s"/><line class="rung" x1="95" y1="191" x2="180" y2="191" style="animation-delay:1.73s"/></g>
+  </svg>
+  <div class="intro-title">Amanah Genomics</div>
+  <div class="intro-sub">From knowledge to informed choice</div>
+  <div class="intro-loader"></div>
+ </div>
+</div>
+
+<header><div class="hd">
+ <a class="brand brand-home" href="/" aria-label="Amanah Genomics — Back to home"><div class="logo">أ</div><div><b>Amanah Genomics</b><span class="mono">Future Health · Challenge 03</span></div></a>
+ <nav id="nav" aria-label="Main navigation"><button data-go="overview">Home</button><button data-go="guide">Start here</button><button data-go="learn">Understand results</button><button data-go="options">My choices</button><button data-go="privacy">My privacy</button><details class="more-nav"><summary>More tools</summary><div class="more-menu"><button data-go="match">Detailed matching</button><button data-go="punnett">Inheritance picture</button><button data-go="triage">Counselor pathway</button><button data-go="risk">Research risk model</button><button data-go="pilot">Pilot plan</button><button data-go="server">Technical server</button><button data-go="staff">Staff workspace</button></div></details></nav><div class="a11y"><button class="gh" data-a11y="big" aria-pressed="false" aria-label="Larger text">A+</button><button class="gh" data-a11y="hc" aria-pressed="false" aria-label="High contrast">Contrast</button></div>
+</div></header>
+
+<aside class="workspace-sidebar" aria-label="Amanah workspace navigation">
+ <div class="workspace-sidebar-inner">
+  <div class="workspace-overline">AMANAH WORKSPACE <span class="workspace-live-dot" aria-hidden="true"></span></div>
+  <a class="workspace-home-link" href="/" aria-label="Return to Amanah website home"><span aria-hidden="true">⌂</span> Website home <span aria-hidden="true">↗</span></a>
+  <div class="workspace-group-title">PATIENT JOURNEY · START HERE</div>
+  <button type="button" data-go="guide"><span aria-hidden="true">①</span> 1. Start your story</button>
+  <button type="button" data-go="learn"><span aria-hidden="true">②</span> 2. Learn & quiz</button>
+  <button type="button" data-go="match"><span aria-hidden="true">③</span> 3. Private matching</button>
+  <button type="button" data-go="options"><span aria-hidden="true">④</span> 4. Understand choices</button>
+  <button type="button" data-go="triage"><span aria-hidden="true">⑤</span> 5. Counselor guidance</button>
+  <button type="button" data-go="privacy"><span aria-hidden="true">♧</span> Privacy & permission</button>
+  <details class="workspace-extras" id="ws-learning-tools"><summary>Explore more learning tools <span aria-hidden="true">▾</span></summary>
+    <button type="button" data-go="punnett"><span aria-hidden="true">▦</span> Punnett Square</button>
+    <button type="button" data-go="risk"><span aria-hidden="true">⌁</span> Risk Curve</button>
+    <button type="button" data-go="overview"><span aria-hidden="true">◈</span> Workspace overview</button>
+  </details>
+  <div class="workspace-role-divider" role="note"><b>PROJECT TEAM / REVIEWERS</b><p>Technical demonstrations and pilot plans are separate from patient education. These are not clinical services.</p></div>
+  <details class="workspace-extras workspace-professional" id="ws-research-tools"><summary>Research & staff demos <span aria-hidden="true">▾</span></summary>
+    <button type="button" data-go="server"><span aria-hidden="true">⚙</span> API verification</button>
+    <button type="button" data-go="pilot"><span aria-hidden="true">▤</span> Business & pilot</button>
+    <button type="button" data-go="staff"><span aria-hidden="true">◎</span> Staff workspace demo</button>
+  </details>
+  <div class="workspace-safety">SYNTHETIC DATA ONLY<br><small>Educational prototype · Not medical advice</small></div>
+ </div>
+</aside>
+<div class="wrap">
+<div class="workspace-crumb" aria-live="polite"><span>AMANAH / WORKSPACE</span><b id="workspace-current">Dashboard</b><a href="/">Website home ↗</a></div>
+<section class="page" id="p-overview">
+ <div class="hero"><div>
+  <div class="crumb"><span class="mono">Future Health Digital Innovation Challenge</span><span>·</span><span>Inherited Disease Risk</span></div>
+  <h1>From screening results to <em>informed choice.</em></h1>
+  <p class="lead">Private carrier matching, plain-language explanations and counselor referral, without stigma.</p><p class="tag" style="margin:0 0 6px">Prepares you for a visit with a genetic counselor or doctor. Does not replace counseling.</p>
+  <div class="hero-cta"><button type="button" class="main-cta" data-go="guide">Start the guided demo →</button><button type="button" class="second-cta" data-go="learn">Learn in simple words</button></div>
+  <div class="trust-note">✦ No medical diagnosis · Demo uses fictional people and example results</div>
+  <div class="feat">
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>Private match</b><p>Only shared genes are revealed, and only with both consents.</p></div>
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 10c0 5.5-7 10-7 10z"/></svg>Culturally sensitive</b><p>Non-directive support for every family.</p></div>
+   <div class="fc"><b><svg class="ico" viewBox="0 0 24 24"><path d="M6 4c6 3 6 5 0 8s-6 5 0 8M18 4c-6 3-6 5 0 8s6 5 0 8"/></svg>Traceable care</b><p>Result to counselor to testing, all logged.</p></div>
+  </div></div>
+  <div class="art">
+   <svg viewBox="0 0 400 360" fill="none" stroke-linecap="round" aria-hidden="true"><path d="M150 0C300 60 300 110 150 170S0 290 250 360" stroke="#e8c36a" stroke-width="5" opacity=".8"/><path d="M250 0C100 60 100 110 250 170S400 290 150 360" stroke="#7fe0cc" stroke-width="5" opacity=".8"/><path d="M165 28h70M142 70h116M165 112h70M165 228h70M142 270h116M165 312h70" stroke="#fff" stroke-width="3" opacity=".35"/></svg>
+   <div class="chip" style="top:22px;left:20px">🔒 Consent 2 of 2</div><div class="chip" style="top:84px;right:20px">Shared: matching genes only</div>
+   <div class="cap"><span class="mono">Synthetic data</span><b>Respectful, private and actionable.</b></div>
+  </div></div>
+ <div class="amanah-value-strip" aria-label="Prototype principles"><span><i class="amanah-dot"></i> Consent-led design</span><span><i class="amanah-dot"></i> English + Arabic explanations</span><span><i class="amanah-dot"></i> Human counselor pathway</span><span><i class="amanah-dot"></i> Synthetic demonstration only</span></div>
+ <div class="sec"><div class="eyebrow">01 / Interactive demonstration</div><h2 style="font-size:clamp(26px,3vw,38px);margin:8px 0 4px;letter-spacing:-.045em">See consent-first care in action.</h2><p class="small2" style="margin-bottom:18px">Select a synthetic scenario to explore the complete workflow.</p><span class="mono" style="color:var(--mut)">Select a demonstration case</span><div class="cases" id="cases"></div></div>
+</section>
+
+<section class="page" id="p-guide" aria-label="Guided patient demo">
+ <div class="patient-head">
+  <div class="patient-lang"><span class="patient-pill">AMANAH / GUIDED LEARNING</span><div role="group" aria-label="Guide language"><button class="gh langbtn on" type="button" data-plang="en" aria-pressed="true">English</button><button class="gh langbtn" type="button" data-plang="ar" aria-pressed="false">العربية</button></div></div>
+  <h1 data-pt="hero">Understand genetic results, one step at a time.</h1>
+  <p class="lead" data-pt="heroP">Explore a made-up couple's story. No medical knowledge or real information needed.</p>
+  <p class="patient-trust">🔒 <span data-pt="trust">Fictional examples only · No personal data requested · Not medical advice</span></p>
+ </div>
+ <div class="patient-progress" role="list" aria-label="Progress through patient guide"><span role="listitem" class="active" data-pt="progress1">1. Choose story</span><span role="listitem" data-pt="progress2">2. Permission</span><span role="listitem" data-pt="progress3">3. Understand</span><span role="listitem" data-pt="progress4">4. Next steps</span></div>
+ <div class="patient-card" id="patient-step1">
+  <div class="patient-step" data-pt="step1">STEP 1 OF 4</div><h2 data-pt="choose">Which situation would you like to understand?</h2><p data-pt="chooseP">Choose one fictional story to learn at your own pace.</p>
+  <div class="patient-scenarios">
+   <button type="button" data-pcase="0"><span class="patient-emoji" aria-hidden="true">🧬</span><b data-pt="case0">Both people carry a change</b><small data-pt="case0p">What does 1 in 4 mean?</small></button>
+   <button type="button" data-pcase="1"><span class="patient-emoji" aria-hidden="true">🌱</span><b data-pt="case1">Only one person carries a change</b><small data-pt="case1p">Does this mean no risk?</small></button>
+   <button type="button" data-pcase="2"><span class="patient-emoji" aria-hidden="true">❔</span><b data-pt="case2">A result is unclear</b><small data-pt="case2p">Why might we need a specialist?</small></button>
+   <button type="button" data-pcase="3"><span class="patient-emoji" aria-hidden="true">🔒</span><b data-pt="case3">One person prefers not to share</b><small data-pt="case3p">What happens when consent is missing?</small></button>
+  </div>
+ </div>
+ <div class="patient-card" id="patient-step2" hidden>
+  <div class="patient-step" data-pt="step2">STEP 2 OF 4</div><h2 data-pt="consent">Sharing is always a choice.</h2><p data-pt="consentP">Each person decides separately. You can also say no and continue learning.</p>
+  <div class="patient-choice"><label><input type="checkbox" id="patient-consent-a"><span><b data-pt="personA">Person A gives permission</b><small data-pt="personAp">Allow this fictional result to be compared</small></span></label><label><input type="checkbox" id="patient-consent-b"><span><b data-pt="personB">Person B gives permission</b><small data-pt="personBp">Allow this fictional result to be compared</small></span></label></div>
+  <div class="patient-tip">🔐 <span data-pt="consentTip">If either person says no, the couple-level result stays hidden. No one should be pressured to share.</span></div>
+  <div class="patient-actions"><button class="gh" type="button" data-pback="1" data-pt="back">← Back</button><button class="pri" type="button" data-pnext="3" data-pt="see">See what happens →</button></div>
+ </div>
+ <div class="patient-card" id="patient-step3" hidden>
+  <div class="patient-step" data-pt="step3">STEP 3 OF 4</div><h2 data-pt="meaning">What does this mean?</h2><div id="patient-explanation" role="status" aria-live="polite"></div>
+  <div class="patient-actions"><button class="gh" type="button" data-pback="2" data-pt="back">← Back</button><button class="pri" type="button" data-pnext="4" data-pt="next">What can I do next? →</button></div>
+ </div>
+ <div class="patient-card" id="patient-step4" hidden>
+  <div class="patient-step" data-pt="step4">STEP 4 OF 4</div><h2 data-pt="choices">Your decision belongs to you.</h2><p data-pt="choicesP">A qualified genetics professional can explain a real report and discuss options without deciding for you.</p>
+  <div class="patient-next"><div><b data-pt="next1">💬 Talk to a professional</b><p data-pt="next1p">Ask what your report means and whether follow-up testing is appropriate.</p></div><div><b data-pt="next2">📝 Prepare for a visit</b><p data-pt="next2p">Take a short list of questions to your appointment.</p></div><div><b data-pt="next3">🔐 Protect your choices</b><p data-pt="next3p">You do not have to share this information with family members.</p></div></div>
+  <div class="patient-questions"><h3 data-pt="questions">Questions you could ask a genetic counselor</h3><ul id="patient-questions-list"></ul><button class="gh" type="button" id="patient-save-questions" data-pt="save">Download questions (text file)</button><p class="small2" data-pt="noBooking">This is a preparation checklist, not an appointment booking service.</p></div>
+  <div class="patient-quiz"><h3 data-pt="quizTitle">Quick understanding check</h3><p data-pt="quizQ">Does a 1 in 4 chance mean a child will definitely have the condition?</p><div class="patient-actions"><button type="button" class="gh" data-panswer="yes" data-pt="yes">Yes</button><button type="button" class="gh" data-panswer="no" data-pt="no">No</button></div><p id="patient-quiz-feedback" aria-live="polite" class="patient-feedback"></p></div>
+  <div class="patient-actions"><button class="gh" type="button" data-pback="3" data-pt="back">← Back</button><button class="pri" type="button" data-prestart="1" data-pt="again">Explore another story ↻</button><button class="gh" type="button" data-go="learn" data-pt="learn">Learn more</button></div>
+ </div>
+ <p class="patient-footnote" data-pt="foot">Educational research prototype using synthetic cases. Not a diagnostic test, secure patient portal, clinical validation, or appointment service. Please do not enter or upload real health records.</p>
+</section>
+
+<section class="page" id="p-match">
+ <div class="workspace-intro-card"><div><span class="workspace-kicker">YOUR PRIVATE MATCHING DEMO</span><h2>Understand a shared result, at your pace.</h2><p>These fictional examples demonstrate matching and permission decisions. Select one to populate the existing partner controls below. This page is an educational client-side demo; the backend enforces its own consent rules.</p></div>
+ <div class="workspace-case-actions"><button type="button" data-case="0">Both partners consent</button><button type="button" data-case="3">One partner declines</button><button type="button" data-case="2">Uncertain result</button></div></div>
+ <h2>Private match</h2><p class="lead">Each partner decides what is shared.</p>
+ <div class="tools"><label><input type="radio" name="lg" value="en" checked> English</label><label><input type="radio" name="lg" value="ar"> العربية</label><label><input type="checkbox" id="rel"> Related partners</label><label><input type="checkbox" id="dist"> Partner A feels distressed (not an emergency alert)</label><label class="liveonly"><input type="radio" name="as" value="A" checked> View as Partner A</label><label class="liveonly"><input type="radio" name="as" value="B"> View as Partner B</label></div>
+ <div class="g2" id="pp"></div>
+ <div class="card" style="margin-top:16px" aria-live="polite"><div class="tools" style="margin:0 0 6px;justify-content:space-between"><h2 style="font-size:20px;margin:0">Result</h2><button class="gh" data-say="1" aria-label="Read the result aloud">🔊 Listen</button></div><div id="out"></div></div>
+ <div class="card" style="margin-top:16px" id="fh"></div>
+</section>
+
+<section class="page" id="p-punnett">
+ <h2>Punnett view</h2><p class="lead">Two carriers: what each pregnancy could look like.</p>
+ <div id="pn"></div>
+</section>
+
+<section class="page" id="p-learn"><h2>Learn</h2><p class="lead">Pick the level that suits you, then check your understanding.</p><div id="lrn"></div></section>
+<section class="page" id="p-options"><h2>Your options</h2><p class="lead">Every option is your choice. A counselor can explain each one.</p>
+ <div class="cases" style="margin-top:18px"><div class="fc"><b>Natural conception</b><p>With informed follow-up and early newborn care.</p></div><div class="fc"><b>Prenatal testing</b><p>Testing early in pregnancy, such as CVS or amniocentesis.</p></div><div class="fc"><b>Embryo testing (PGT-M)</b><p>Testing embryos during IVF for a known change.</p></div><div class="fc"><b>Early newborn care</b><p>Some conditions can be managed or treated from birth.</p></div></div>
+ <p class="small2">Some people also talk with family or a trusted adviser. The choice is yours.</p><p class="tag">Availability and cost vary. Confirm with a service.</p></section>
+<section class="page" id="p-risk"><h2>Risk curve</h2><p class="lead">How relatedness changes the chance, before any screening result.</p>
+ <div class="seg" id="rseg" role="group" aria-label="Relationship"><button data-rf="0">Unrelated</button><button data-rf="0.015625">Second cousins</button><button data-rf="0.0625">First cousins</button><button data-rf="0.125">Double first cousins</button></div>
+ <div class="tiles3" id="rtiles"></div>
+ <div class="card" style="margin-top:14px"><b>Chance a child is affected, before screening</b><div id="rsvg" style="margin-top:8px"></div>
+  <div class="g2" style="margin-top:6px"><label class="small2">Relatedness F = <b id="rfv"></b><input id="rf" type="range" min="0" max="0.25" step="0.0005" value="0.0625" style="width:100%"></label><label class="small2">Allele frequency q = <b id="rqv"></b><input id="rq" type="range" min="0.002" max="0.05" step="0.001" value="0.01" style="width:100%"></label></div></div>
+ <div class="res" id="rout" style="margin-top:14px"></div>
+ <p class="small2">Model: q² + F·q·(1−q) for one rare recessive gene. Illustrative values, not population data. Screening replaces this estimate with the couple’s actual result.</p></section>
+<section class="page" id="p-pilot"><div class="workspace-role-note"><b>Research and business planning only.</b> Proposed pilot activity is not an active clinical deployment.</div><h2>Pilot proposal</h2><p class="lead">A plan to test the idea safely. Not a deployed system.</p>
+ <div class="cases" style="margin-top:18px"><div class="fc"><span class="mono" style="color:var(--g)">Phase 1 · Months 1–3</span><p>Agree scope with a health authority and clinical advisors. Clinical review of all content. Privacy and security assessment.</p></div><div class="fc"><span class="mono" style="color:var(--g)">Phase 2 · Months 4–8</span><p>Small pilot at screening sites, with consent. Measure comprehension, counseling uptake, time to referral and privacy incidents.</p></div><div class="fc"><span class="mono" style="color:var(--g)">Phase 3 · Months 9–12</span><p>Review results with clinicians. Decide together whether to widen the pilot.</p></div></div>
+ <div class="card" style="margin-top:16px"><b>What we would measure</b><p class="small2">Understanding of results across languages and literacy levels. Counseling uptake. Time to referral. Privacy incidents (target: zero). Never: cancelled marriages or any single personal choice.</p><span class="tag">All targets to be set with clinical partners</span></div></section>
+<section class="page" id="p-server"><div class="workspace-role-note"><b>Technical reviewer demonstration · fictional data only.</b> This screen is not a patient portal and does not establish clinical validation or production security.</div><h2>Live backend</h2><p class="lead">The same case, checked by the real API. Works when the backend is running.</p>
+ <div class="card" style="margin-top:18px"><div class="tools"><span class="tag" id="srvst" style="margin:0">Checking…</span><button class="pri" data-srv="1">Sync current case to server</button></div><div id="srvout"></div></div>
+ <div class="card" style="margin-top:16px"><h3>Independent API consent checks</h3><p class="small2">Creates a fresh fictional couple and tests three states directly against FastAPI: one-sided consent must remain locked; mutual consent may reveal the permitted shared gene; revoking either partner's consent must immediately lock comparison again. This verifies demo behavior, not regulatory security.</p><button class="pri" id="consent-check-button" type="button">Run consent safety checks</button><div id="consent-check-results" role="status" aria-live="polite" style="margin-top:12px"></div></div></section>
+<section class="page" id="p-staff"><div class="workspace-role-note"><b>Staff / researcher demonstration · not a live care service.</b> No real patient information, medical decisions or actual referrals should be entered here.</div><h2>Staff</h2><p class="lead">Counselors and coordinators sign in here. Each role sees only what it needs.</p><div class="card" id="stf" style="margin-top:18px"></div></section>
+<section class="page" id="p-privacy"><h2>My privacy</h2><p class="lead">See your consent history, withdraw, or delete your data.</p><div class="card" id="pv" style="margin-top:18px"></div></section>
+<section class="page" id="p-triage">
+ <h2>Triage &amp; audit</h2><p class="lead">Human review for serious or unclear findings.</p>
+ <div class="g2"><div class="card"><b>Referral pathway</b><ol class="st" id="st"></ol><div id="why"></div><button class="gh" data-req="1" style="margin-bottom:10px">Request a counseling visit</button><button class="pri" id="adv">Advance stage</button></div>
+ <div class="card" id="ldg"><b>Audit and consent ledger</b><ol id="log"></ol></div></div>
+ <div class="card" id="sbc" style="margin-top:16px"><b>Counselor handoff (SBAR)</b><pre class="sb" id="sbar"></pre><button class="gh" data-sb="1">Copy handoff</button> <button class="gh" data-pr="1">Print summary</button></div>
+ <div class="card" style="margin-top:16px"><b>Counselor intake brief</b><p class="small2">One page with your case reference, the shared genes and your questions. Pseudonymous, not anonymous. <b>Do not use this box in an emergency.</b></p><textarea id="bq" maxlength="1000" rows="3" placeholder="Questions for your counselor" aria-label="Questions for your counselor" style="width:100%;font:inherit;padding:10px;border:1px solid var(--ln);border-radius:10px"></textarea><p><button class="pri" data-brief="1">Create brief</button></p><div id="brf"></div></div>
+</section>
+</div>
+<div id="prt"></div>
+<footer>Prototype with synthetic data. Education and decision support, not clinical advice.<br><b>In an emergency this tool cannot help.</b> Call your local emergency number or go to the nearest hospital.</footer>
+<script>
+const PANEL=[{id:"HBB",sev:1,en:"Hemoglobin disorders (HBB)",ar:"اضطرابات الهيموغلوبين (HBB)"},{id:"GJB2",sev:0,en:"Inherited hearing loss (GJB2)",ar:"فقدان السمع الوراثي (GJB2)"},{id:"SMN1",sev:1,en:"Spinal muscular atrophy (SMN1)",ar:"ضمور العضلات الشوكي (SMN1)"},{id:"CFTR",sev:1,en:"Cystic fibrosis (CFTR)",ar:"التليف الكيسي (CFTR)"}];
+const ST=[["0","No change found"],["1","Carrier"],["2","Uncertain variant"]];
+const T={en:{sh:g=>"You both carry a change linked to "+g+". Each pregnancy: 1 in 4 chance of an affected child. A chance, not a diagnosis.",none:"No shared carrier finding. The panel is limited, so risk is lowered, not removed.",rel:"Related partners may share changes this panel misses. A genetic counselor or doctor can help.",vus:"One uncertain variant. Its meaning is unknown, so no risk figure is shown. Understanding can change over time. Ask a genetic counselor or doctor about re-checking it.",lock:"Comparison locked until both partners consent.",esc:"Review by a genetic counselor or doctor is recommended.",o:["Affected","Carrier","Neither"]},
+ar:{sh:g=>"كلاكما يحمل تغيّرًا جينيًا مرتبطًا بـ"+g+". في كل حمل احتمال واحد من أربعة لإصابة الطفل. هذا احتمال وليس تشخيصًا.",none:"لا يوجد تغيّر جيني مشترك بينكما. وبما أن نطاق الفحص محدود، فالاحتمال أقل لكنه لا يزول.",rel:"إذا كان بينكما قرابة، فقد تتشاركان تغيّرات جينية لا يغطيها هذا الفحص. يمكن للمستشار الوراثي أو الطبيب مساعدتكما.",vus:"وُجد تغيّر جيني غير مؤكد الأثر. معناه غير معروف حتى الآن، لذا لا تُعرض نسبة خطر. قد يتغيّر الفهم العلمي مع الوقت، فيمكنك سؤال مستشار وراثي أو طبيب عن إعادة فحصه.",lock:"المقارنة مقفلة حتى يوافق الشريكان.",esc:"يُنصح بمراجعة مستشار وراثي أو طبيب مختص بالوراثة.",o:["مصاب","حامل للتغيّر","غير مصاب ولا حامل"]}};
+const FAM={en:"I had a genetic test. Silent gene changes are common. Nobody is to blame. If a relative has an inherited condition, they can ask a genetic counselor or doctor about testing.",ar:"أجريت فحصًا وراثيًا. التغيّرات الجينية الصامتة شائعة، ولا يتحمل أحد اللوم عنها. إذا كان لدى أحد الأقارب حالة وراثية، فيمكنه استشارة طبيب أو مستشار وراثي بشأن الفحص."};
+const STAGES=["Result issued","Counselor notified","Counseling completed","Confirmatory testing","Reproductive-genomics service (if chosen)"];
+const CASES=[{t:"Carrier couple",d:"Both carry HBB. Both consent.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:1,r:1},{t:"One carrier",d:"Only Partner A carries. No match.",a:{HBB:"1"},b:{},cA:1,cB:1,r:0},{t:"Uncertain variant",d:"GJB2 variant of unknown meaning.",a:{GJB2:"2"},b:{},cA:1,cB:1,r:0},{t:"Consent withheld",d:"Both carry HBB. Partner B declines.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:0,r:1}];
+const S={A:{},B:{},cA:0,cB:0,rel:0,dist:0,lang:"en",stage:0,log:[],esc:false,why:[],hist:{A:{},B:{}},gA:PANEL.map(g=>g.id),gB:PANEL.map(g=>g.id)};
+const $=i=>document.getElementById(i);
+function audit(m){S.log.unshift(new Date().toLocaleTimeString()+" · "+m);$("log").innerHTML=S.log.map(x=>"<li>"+x+"</li>").join("")}
+function load(c){PANEL.forEach(g=>{S.A[g.id]=c.a[g.id]||"0";S.B[g.id]=c.b[g.id]||"0"});S.cA=c.cA;S.cB=c.cB;S.rel=c.r;S.dist=0;S.stage=0;S.gA=PANEL.map(g=>g.id);S.gB=PANEL.map(g=>g.id);$("rel").checked=!!c.r;$("dist").checked=false;audit("Demo case loaded: "+c.t+" (synthetic)");push();go("match")}
+function go(p){if(!document.getElementById("p-"+p))return;document.querySelectorAll(".page").forEach(e=>e.classList.toggle("on",e.id=="p-"+p));document.querySelectorAll("[data-go]").forEach(b=>{const current=b.dataset.go===p;b.classList.toggle("on",current);if(b.closest(".workspace-sidebar")){if(current)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")}});const label=document.querySelector('.workspace-sidebar [data-go="'+p+'"]');if(label){const parent=label.closest('details.workspace-extras');if(parent)parent.open=true;}const c=document.getElementById("workspace-current");if(c)c.textContent=label?label.textContent.trim():"Workspace";try{history.replaceState(null,"","?view="+encodeURIComponent(p))}catch(e){}window.scrollTo(0,0);draw();if(p=="staff")staff();if(p=="privacy")privacy()}
+const LOC={HBB:"11p15.4",GJB2:"13q12.11",SMN1:"5q13.2",CFTR:"7q31.2"};
+function partner(k){return '<div class="card"><div class="ph"><i class="av">'+k+'</i><div><b>Partner '+k+'</b><div class="mono" style="color:var(--mut)">Synthetic profile</div></div></div><div class="mono" style="color:var(--mut);margin:16px 0 0">Individual carrier panel</div>'+PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+g.en.replace(/ \(.*\)/,"")+'</b> <span class="mono" style="color:var(--mut)">'+g.id+" · "+LOC[g.id]+'</span><div class="small2">Autosomal recessive</div></div><span class="st s'+v+'">'+ST[+v][1]+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="Partner '+k+" "+g.id+'">'+ST.map(s=>'<option value="'+s[0]+'"'+(v==s[0]?" selected":"")+">"+s[1]+"</option>").join("")+"</select></div>"}).join("")+'<label class="cons"><input type="checkbox" data-c="'+k+'"'+(S["c"+k]?" checked":"")+'> Allow gene-level match</label><div class="small2" style="margin-top:10px">Genes I allow in the match:</div><div class="tools" style="margin:6px 0 0">'+PANEL.map(g=>'<label class="cons" style="margin:0;padding:4px 10px"><input type="checkbox" data-cg="'+k+'" value="'+g.id+'"'+(S["g"+k].includes(g.id)?" checked":"")+'> '+g.id+"</label>").join("")+'</div></div>'}
+function out(){if(LIVE&&SV)return outLive();const L=S.lang,t=T[L],sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,vA=sc.some(g=>S.A[g.id]=="2"),vB=sc.some(g=>S.B[g.id]=="2");let h="",r=[];
+ if(!both){h+='<div class="warn">'+t.lock+"</div>"+LOCKV()}
+ else{const sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1");
+  if(sh.length)sh.forEach(g=>{h+='<div class="res"><b>'+g.id+"</b> · "+t.sh(g[L])+'<div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">'+t.o[0]+'</span><span style="flex:2">'+t.o[1]+'</span><span style="flex:1">'+t.o[2]+'</span></div><div class="small2" style="margin-top:8px">'+t.three+"</div></div>";r.push("Both carriers: "+g.id+(g.sev?" (severe)":""))});
+  else h+='<div class="res">'+t.none+"</div>";
+  if(vA||vB){h+='<div class="res">'+t.vus+"</div>";r.push("Uncertain variant")}
+  if(S.rel)h+='<div class="res">'+t.rel+"</div>"}
+ if(S.dist)r.push("Distress flagged");
+ S.esc=r.length>0;S.why=r;
+ if(S.esc)h+='<div class="warn">'+t.esc+"</div>";
+ h+='<span class="tag">🔒 '+(both?"Shared: matching genes only":"Nothing shared")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ $("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
+function tri(){$("st").innerHTML=STAGES.map((s,i)=>'<li class="'+(!S.esc?"":i<S.stage?"d":i==S.stage?"n":"")+'"><i>'+(S.esc&&i<S.stage?"✓":i+1)+"</i>"+s+"</li>").join("");
+ $("why").innerHTML=S.esc?'<div class="warn">Why: '+S.why.join("; ")+"</div>":'<p class="small" style="color:var(--mut)">No referral needed yet.</p>';
+ $("adv").disabled=!S.esc||S.stage>=STAGES.length-1}
+function pn(){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1")[0],real=both&&sh,g=sh||PANEL[0];
+ $("pn").innerHTML='<div class="pv"><div class="card"><span class="mono" style="color:var(--mut)">'+(real?"Gene · "+g.id:"Illustration only")+'</span><h2 style="margin-top:6px">'+(real?g.en:"Two carriers of the same gene")+'</h2><div class="pun"><span></span><b>Partner A: A</b><b>Partner A: a</b><b>Partner B: A</b><i class="n">AA<small>Neither</small></i><i class="c">Aa<small>Carrier</small></i><b>Partner B: a</b><i class="c">Aa<small>Carrier</small></i><i class="a">aa<small>Affected</small></i></div></div>'+
+ '<div><div class="tiles"><div class="tl" style="--c:#cfe3e0"><b>25%</b><span>Neither change</span></div><div class="tl" style="--c:#1d5e4c"><b>50%</b><span>Carrier child</span></div><div class="tl" style="--c:#b45309"><b>25%</b><span>Affected child</span></div></div>'+
+ '<div class="card" style="margin-top:14px"><b>Per pregnancy</b><div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">Affected</span><span style="flex:2">Carrier</span><span style="flex:1">Neither</span></div><p class="small2" style="margin:8px 0 0">3 in 4 chance a child will not have the condition.</p></div>'+
+ (both?(real?'<span class="tag">🔒 Shared with consent</span>':'<span class="tag">No shared carrier finding</span>'):'<div class="warn">Comparison locked until both partners consent.</div>')+
+ '<span class="tag">A chance, not a diagnosis</span> <span class="tag">Relatedness does not change these odds</span></div></div>'}
+let LV=0,QA=[],CC="1/16";
+const LVT=[["Simple","Think of two keys. A carrier has one working key and one that does not, and the door still opens. Trouble only happens if a child gets the non-working key from both parents."],["Standard","A carrier has one changed copy of a gene and one working copy. Carriers usually have no symptoms. A child is affected only if both parents pass on a changed copy."],["Clinical","Autosomal recessive inheritance. Two heterozygous carriers have a 25% recurrence risk per pregnancy, independent of earlier outcomes. Variants of uncertain significance (ACMG/AMP) are not used for risk counseling."]];
+const CCS={"0":["Unrelated","F = 0"],"1/64":["Second cousins","F = 1/64 (1.6%)"],"1/16":["First cousins","F = 1/16 (6.25%)"]};
+const QZ=[{q:"A carrier usually has…",o:["Symptoms of the condition","No symptoms","A diagnosis"],a:1,r:"Carriers have one working copy, so they usually have no symptoms."},{q:"Two carriers: chance of an affected child in each pregnancy?",o:["10%","25%","50%"],a:1,r:"Each pregnancy has a 1 in 4 chance."},{q:"After one affected child, the next pregnancy risk is…",o:["Lower","Still 1 in 4","Higher"],a:1,r:"Each pregnancy is independent, like a new coin toss."},{q:"An uncertain variant means…",o:["It is definitely harmful","Its meaning is not known yet","It is definitely harmless"],a:1,r:"Science cannot yet say. A counselor will review it."}];
+function learn(){const sc=QA.filter((x,i)=>x===QZ[i].a).length;
+ let h='<div class="card" style="margin-top:18px"><b>Explanation level</b><div class="tools">'+LVT.map((l,i)=>'<button class="gh'+(i==LV?" on":"")+'" data-lv="'+i+'">'+l[0]+"</button>").join("")+'</div><div class="res">'+LVT[LV][1]+"</div></div>";
+ h+='<div class="card" style="margin-top:16px"><b>Does being related change the odds?</b><div class="tools"><select data-cc="1" aria-label="Relationship">'+Object.keys(CCS).map(k=>'<option value="'+k+'"'+(k==CC?" selected":"")+">"+CCS[k][0]+"</option>").join("")+'</select></div><div class="res"><b>'+CCS[CC][1]+"</b><br>Raises the chance that both partners carry the same change. Does not change the 1 in 4 for two carriers. A counselor can give personal figures.</div></div>";
+ h+='<div class="card" style="margin-top:16px"><b>Self-check</b> <span class="tag">Score '+sc+" / "+QZ.length+"</span>"+QZ.map((z,i)=>'<p style="margin:16px 0 0"><b>'+(i+1)+". "+z.q+"</b></p>"+z.o.map((o,j)=>'<button class="gh qo'+(QA[i]===undefined?"":j==z.a?" ok":j==QA[i]?" bad":"")+'" data-q="'+i+"-"+j+'"'+(QA[i]!==undefined?" disabled":"")+">"+o+"</button>").join("")+(QA[i]!==undefined?'<p style="color:var(--mut);margin:6px 0 0">'+z.r+"</p>":"")).join("")+'<p><button class="gh" data-qr="1" style="margin-top:14px">Restart</button></p></div>';
+ $("lrn").innerHTML=h}
+function sbar(){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1").map(g=>g.id),v=sc.some(g=>S.A[g.id]=="2"||S.B[g.id]=="2");
+ $("sbar").textContent=!S.esc?"No handoff needed.":"S: Screening result needs counselor review.\nB: Synthetic panel (HBB, GJB2, SMN1, CFTR). Related partners: "+(S.rel?"yes":"no")+". Couple consent: "+(both?"both given":"incomplete")+".\nA: "+(both?(sh.length?"Shared carrier gene(s): "+sh.join(", ")+". ":"No shared carrier gene. ")+(v?"Uncertain variant present. ":""):"Couple comparison not available. ")+(S.dist?"Distress flagged. ":"")+"\nR: Genetic counseling visit; confirmatory testing as indicated.\nGenerated from fixed rules, not by a language model."}
+function draw(){$("pp").innerHTML=partner("A")+partner("B");out();tri();pn();learn();sbar();drawRisk();fh()}
+$("cases").innerHTML=CASES.map((c,i)=>'<button class="case" data-case="'+i+'"><b>'+c.t+"</b><span>"+c.d+"</span></button>").join("");
+document.addEventListener("click",e=>{const t=e.target.closest("[data-go],[data-case],[data-fam]");if(!t)return;
+ if(t.dataset.go)go(t.dataset.go);else if(t.dataset.case!==undefined)load(CASES[t.dataset.case]);
+ else{try{navigator.clipboard.writeText(FAM[S.lang])}catch(x){}audit("Generic family message copied (no result data)")}});
+document.addEventListener("change",e=>{const d=e.target.dataset,n=e.target;
+ if(d.g){S[d.k][d.g]=n.value;S.stage=0;audit("Result entered for partner "+d.k+" ("+d.g+")")}
+ else if(d.c){S["c"+d.c]=n.checked?1:0;audit("Consent "+(n.checked?"GRANTED":"REVOKED")+" by partner "+d.c)}
+ else if(n.name=="lg")S.lang=n.value;else if(n.name=="as")S.as=n.value;else if(n.id=="rel")S.rel=n.checked?1:0;else if(n.id=="dist")S.dist=n.checked?1:0;
+ out();tri();push()});
+$("adv").onclick=()=>{S.stage++;audit("Referral advanced: "+STAGES[S.stage]);tri()};
+document.addEventListener("click",e=>{const t=e.target.closest("[data-lv],[data-q],[data-qr],[data-sb]");if(!t)return;const d=t.dataset;
+ if(d.lv!==undefined)LV=+d.lv;else if(d.q){const[i,j]=d.q.split("-");QA[i]=+j;audit("Self-check answered ("+(+j==QZ[i].a?"correct":"incorrect")+")");quizPost()}else if(d.qr)QA=[];else{try{navigator.clipboard.writeText($("sbar").textContent)}catch(x){}audit("SBAR handoff copied")}
+ learn()});
+document.addEventListener("change",e=>{if(e.target.dataset.cc){CC=e.target.value;learn()}});
+let RF=0.0625,RQ=0.01;
+function drawRisk(){const W=640,H=300,L=64,R=18,T=26,B=52,m=0.25,f=F=>RQ*RQ+F*RQ*(1-RQ),mx=f(m),X=F=>L+F/m*(W-L-R),Y=v=>T+(1-v/mx)*(H-T-B),pc=v=>(v*100).toFixed(v*100<0.1?3:2)+"%",one=x=>"1 in "+Math.round(1/x).toLocaleString();
+ let d="",N=60;for(let i=0;i<=N;i++){const F=m*i/N;d+=(i?"L":"M")+X(F).toFixed(1)+" "+Y(f(F)).toFixed(1)}
+ const v=f(RF),b0=f(0),px=X(RF),py=Y(v),area=d+"L"+X(m).toFixed(1)+" "+(H-B)+"L"+X(0).toFixed(1)+" "+(H-B)+"Z";
+ let g="";[0,.5,1].forEach(k=>{const y=Y(mx*k);g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="#e2e8f0"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="12" fill="#475569">'+pc(mx*k)+"</text>"});
+ let mk="";[[0,"Unrelated"],[1/64,"2nd cousins"],[1/16,"1st cousins"],[1/8,"Double 1st"]].forEach((q,i)=>{const x=X(q[0]),yy=Y(f(q[0]));mk+='<line x1="'+x+'" x2="'+x+'" y1="'+yy+'" y2="'+(H-B)+'" stroke="#94a3b8" stroke-dasharray="3 4"/><circle cx="'+x+'" cy="'+yy+'" r="4" fill="#fff" stroke="#1d5e4c" stroke-width="2"/><text x="'+x+'" y="'+(H-B+16+(i==1?15:0))+'" text-anchor="middle" font-size="12" fill="#475569">'+q[1]+"</text>"});
+ const lab=one(v),bx=Math.min(Math.max(px,L+52),W-R-52),by=py<T+44?py+16:py-42;
+ $("rsvg").innerHTML='<svg viewBox="0 0 '+W+" "+H+'" style="width:100%;height:auto" role="img" aria-label="Chance of an affected child before screening, by relatedness"><defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5e4c" stop-opacity=".28"/><stop offset="1" stop-color="#1d5e4c" stop-opacity="0"/></linearGradient></defs>'+g+'<path d="'+area+'" fill="url(#rg)"/><path d="'+d+'" fill="none" stroke="#1d5e4c" stroke-width="3" stroke-linecap="round"/>'+mk+'<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(b0)+'" y2="'+Y(b0)+'" stroke="#0f172a" stroke-opacity=".35" stroke-dasharray="5 4"/><line x1="'+px+'" x2="'+px+'" y1="'+py+'" y2="'+(H-B)+'" stroke="#b45309" stroke-width="2"/><circle cx="'+px+'" cy="'+py+'" r="8" fill="#b45309" stroke="#fff" stroke-width="3"/><rect x="'+(bx-52)+'" y="'+by+'" width="104" height="26" rx="13" fill="#0f172a"/><text x="'+bx+'" y="'+(by+17)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">'+lab+"</text></svg>";
+ const pre=[[0,"Unrelated"],[1/64,"Second cousins"],[1/16,"First cousins"],[1/8,"Double first cousins"]].find(q=>Math.abs(q[0]-RF)<0.0003),nm=pre?pre[1]:"Selected (F = "+RF.toFixed(4)+")";
+ $("rtiles").innerHTML='<div class="tl" style="--c:#cfe3e0"><span>Unrelated baseline</span><b>'+one(b0)+'</b><span>'+pc(b0)+'</span></div><div class="tl" style="--c:#1d5e4c"><span>'+nm+'</span><b>'+one(v)+'</b><span>'+pc(v)+'</span></div><div class="tl" style="--c:#b45309"><span>Added by relatedness</span><b>+'+pc(v-b0)+'</b><span>percentage points</span></div>';
+ $("rfv").textContent=RF.toFixed(4);$("rqv").textContent=RQ.toFixed(3)+" (carrier frequency about 1 in "+Math.round(1/(2*RQ*(1-RQ)))+")";
+ document.querySelectorAll("#rseg button").forEach(x=>x.classList.toggle("on",Math.abs(+x.dataset.rf-RF)<0.0003));
+ $("rout").innerHTML="<b>In absolute terms the added chance is small</b> for a rare gene. Screening replaces this estimate with the couple\u2019s actual result. <b>For two known carriers, the chance stays 1 in 4 whether or not they are related.</b>"}
+document.addEventListener("input",e=>{if(e.target.id=="rf"){RF=+e.target.value;drawRisk()}else if(e.target.id=="rq"){RQ=+e.target.value;drawRisk()}});
+document.addEventListener("click",e=>{const t=e.target.closest("[data-rf],[data-pr]");if(!t)return;
+ if(t.dataset.rf!==undefined){RF=+t.dataset.rf;$("rf").value=RF;drawRisk()}
+ else{$("prt").innerHTML='<h1 style="font-size:24px">Counselor referral summary</h1><p>'+new Date().toLocaleDateString()+' · Prototype with synthetic data. Not an official document. Not clinical advice.</p><pre style="white-space:pre-wrap;font:14px/1.6 monospace">'+$("sbar").textContent+'</pre><h2 style="font-size:18px">Consent and audit log</h2><ul>'+S.log.slice(0,12).map(x=>"<li>"+x+"</li>").join("")+"</ul>";try{window.print()}catch(x){}}});
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+async function api(path,opt,tok){const r=await fetch(path,{...(opt||{}),headers:{"Content-Type":"application/json",...(tok?{"X-Token":tok}:{})}});if(!r.ok)throw new Error(path+" "+r.status);return r.json()}
+// Consent verification intentionally uses fresh, synthetic cases and partner tokens only.
+async function runConsentSafetyChecks(){
+ const b=document.getElementById('consent-check-button'),o=document.getElementById('consent-check-results');
+ b.disabled=true;o.textContent='Running three checks against the live API…';
+ const results=[];
+ try{
+   await api('/health');
+   const c=await api('/couples',{method:'POST',body:JSON.stringify({related:false})});
+   const id=c.couple_id;
+   const put=(path,body,token)=>api('/couples/'+id+'/'+path,{method:'PUT',body:JSON.stringify(body)},token);
+   const view=token=>api('/couples/'+id+'/view?lang=en',{},token);
+   const profiles={HBB:'1',GJB2:'0',SMN1:'0',CFTR:'0'};
+   await put('results',{results:profiles},c.token_a);
+   await put('results',{results:profiles},c.token_b);
+   await put('consent',{share:true,genes:['HBB']},c.token_a);
+   const one=await view(c.token_b);
+   results.push({name:'One-sided consent stays locked',ok:one.genes_shown.length===0&&!JSON.stringify(one).includes('25%')});
+   await put('consent',{share:true,genes:['HBB']},c.token_b);
+   const both=await view(c.token_a);
+   results.push({name:'Both consent: permitted shared gene shown',ok:both.genes_shown.includes('HBB')});
+   await put('consent',{share:false},c.token_b);
+   const revoked=await view(c.token_a);
+   results.push({name:'Partner B revokes: sharing locked again',ok:revoked.genes_shown.length===0&&!JSON.stringify(revoked).includes('25%')});
+   const all=results.every(x=>x.ok);
+   o.innerHTML='<div class="'+(all?'res':'warn')+'"><b>'+(all?'3/3 consent checks passed':'Consent verification FAILED')+'</b><ul>'+results.map(x=>'<li>'+(x.ok?'✓ ':'✗ ')+esc(x.name)+'</li>').join('')+'</ul><small>Checked against this running FastAPI instance · synthetic case only · not a clinical validation</small></div>';
+ }catch(e){o.textContent='Could not complete API checks: '+e.message+'. Check that the backend is running; do not assume consent security passed.';}
+ finally{b.disabled=false;}
+}
+document.getElementById('consent-check-button').addEventListener('click',runConsentSafetyChecks);
+const CT={co:"counselor-demo"};
+let LIVE=false,CP=null,SV=null,busy=false,again=false,STF=null;
+async function ping(){try{await api("/health");LIVE=true;$("srvst").textContent="Backend connected"}catch(x){LIVE=false;$("srvst").textContent="Backend not reachable. Run it locally (see README)."}document.body.classList.toggle("live",LIVE);return LIVE}
+async function syncSrv(){if(!(await ping()))return;const o=$("srvout");o.innerHTML='<p class="small2">Syncing…</p>';
+ try{const c=await api("/couples",{method:"POST",body:JSON.stringify({related:!!S.rel})}),id=c.couple_id,put=(p,b,t)=>api("/couples/"+id+"/"+p,{method:"PUT",body:JSON.stringify(b)},t);
+  await put("results",{results:S.A},c.token_a);await put("results",{results:S.B},c.token_b);
+  await put("consent",{share:!!S.cA},c.token_a);await put("consent",{share:!!S.cB},c.token_b);await put("flags",{distress:!!S.dist},c.token_a);
+  const L=S.lang,va=await api("/couples/"+id+"/view?lang="+L,{},c.token_a),vb=await api("/couples/"+id+"/view?lang="+L,{},c.token_b),h=await api("/couples/"+id+"/handoff",{},CT.co),au=await api("/couples/"+id+"/audit",{},CT.co);
+  const blk=(t,v)=>'<div class="card"><b>'+t+'</b><div class="res" dir="'+(L=="ar"?"rtl":"ltr")+'">'+esc(v.text).split(" | ").join("<br>")+'</div><span class="tag">Genes shown: '+(v.genes_shown.length?v.genes_shown.join(", "):"none")+"</span></div>";
+  o.innerHTML='<div class="g2">'+blk("Server view: Partner A",va)+blk("Server view: Partner B",vb)+'</div><div class="g2"><div class="card"><b>Counselor handoff (SBAR)</b><pre class="sb">'+esc(h.sbar)+'</pre></div><div class="card"><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span><ol id="log2" style="font-size:13px;padding-inline-start:18px">'+au.events.map(e=>"<li>"+esc(e.actor)+" · "+esc(e.event)+"</li>").join("")+"</ol></div></div>"
+ }catch(x){o.innerHTML='<div class="warn">Sync failed: '+esc(x.message)+"</div>"}}
+document.addEventListener("click",e=>{if(e.target.closest("[data-srv]"))syncSrv()});
+const ODDS=t=>'<div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%</i><i style="flex:1">25%</i></div><div class="odl"><span style="flex:1">'+t.o[0]+'</span><span style="flex:2">'+t.o[1]+'</span><span style="flex:1">'+t.o[2]+'</span></div><div class="small2" style="margin-top:8px">'+t.three+"</div>";
+function outLive(){const L=S.lang,t=T[L],v=SV;let h="";
+ v.text.split(" | ").forEach(s=>{const g=v.genes_shown.find(x=>s.includes("("+x+")"));
+  if(s==t.lock||s==t.esc)h+='<div class="warn">'+esc(s)+"</div>"+(s==t.lock?LOCKV():"");else h+='<div class="res">'+(g?"<b>"+g+"</b> · ":"")+esc(s)+(g?ODDS(t):"")+"</div>"});
+ h+='<span class="tag">🔒 '+(v.text.includes(t.lock)?"Nothing shared":"Shared: matching genes only")+'</span> <span class="tag">Verified by server · viewing as Partner '+(S.as=="B"?"B":"A")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ S.esc=v.escalate;S.why=v.reasons||[];$("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
+async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
+ try{if(!CP||CP.rel!==!!S.rel){const c=await api("/couples",{method:"POST",body:JSON.stringify({related:!!S.rel})});CP={id:c.couple_id,ta:c.token_a,tb:c.token_b,rel:!!S.rel,ja:"",jb:"",ca:null,cb:null,d:null,hA:"",hB:""}}
+  const put=(p,b,t)=>api("/couples/"+CP.id+"/"+p,{method:"PUT",body:JSON.stringify(b)},t),ja=JSON.stringify(S.A),jb=JSON.stringify(S.B);
+  if(ja!==CP.ja){await put("results",{results:S.A},CP.ta);CP.ja=ja}
+  if(jb!==CP.jb){await put("results",{results:S.B},CP.tb);CP.jb=jb}
+  if(CP.ca!==JSON.stringify([!!S.cA,S.gA])){await put("consent",{share:!!S.cA&&S.gA.length>0,genes:S.cA&&S.gA.length?S.gA:null},CP.ta);CP.ca=JSON.stringify([!!S.cA,S.gA])}
+  if(CP.cb!==JSON.stringify([!!S.cB,S.gB])){await put("consent",{share:!!S.cB&&S.gB.length>0,genes:S.cB&&S.gB.length?S.gB:null},CP.tb);CP.cb=JSON.stringify([!!S.cB,S.gB])}
+  if(CP.d!==!!S.dist){await put("flags",{distress:!!S.dist},CP.ta);CP.d=!!S.dist}
+  const hA=JSON.stringify(S.hist.A),hB=JSON.stringify(S.hist.B);
+  if(hA!==CP.hA&&hA!=="{}"){await put("history",{answers:S.hist.A},CP.ta);CP.hA=hA}
+  if(hB!==CP.hB&&hB!=="{}"){await put("history",{answers:S.hist.B},CP.tb);CP.hB=hB}
+  SV=await api("/couples/"+CP.id+"/view?lang="+S.lang,{},S.as=="B"?CP.tb:CP.ta);
+  if(SV.escalate&&SV.referral_stage)S.stage=STAGES.indexOf(SV.referral_stage)}catch(x){SV=null}
+ busy=false;if(again){again=false;return push()}
+ out();tri();if(BR){BR=null;$("brf").innerHTML='<p class="small2">Your answers changed, so the earlier brief is out of date. Create it again.</p>'}if($("p-staff").classList.contains("on"))staff()}
+async function staff(msg){const e=$("stf");
+ if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use staff roles.</div>';return}
+ if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role"><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Demo tokens: counselor-demo and coordinator-demo (change them before any real use).</p>';return}
+ if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
+ try{const au=await api("/couples/"+CP.id+"/audit",{},STF.tok),co=STF.role=="counselor";
+  const q=await api("/cases",{},STF.tok),m=await api("/metrics",{},STF.tok);
+  let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">Case '+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">Sign out</button></div>';
+  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},STF.tok);h+='<p><b>Handoff (SBAR)</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
+  else h+='<p><b>Referral stage:</b> '+esc(STAGES[Math.min(S.stage,4)])+'</p><button class="pri" data-advance="1">Advance stage</button>';
+  h+=queueHtml(q,m)+'<p><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";e.innerHTML=h}
+ catch(x){STF=null;staff("Access denied or case not ready.")}}
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
+ if(t.dataset.logout!==undefined){STF=null;return staff()}
+ if(t.dataset.login!==undefined){STF={role:$("srole").value,tok:$("stok").value};return staff()}
+ if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
+const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives"};
+function fh(){const k=S.as=="B"?"B":"A",a=S.hist[k];
+ $("fh").innerHTML='<b>Family history (private to Partner '+k+')</b><p class="small2" style="margin:4px 0 8px">Only you and a counselor can see your answers. Your partner cannot.</p>'+Object.keys(HI).map(i=>'<div class="row"><span>'+HI[i]+'</span><select data-h="'+i+'" aria-label="'+HI[i]+'">'+[["no","No"],["yes","Yes"],["unsure","Not sure"]].map(o=>'<option value="'+o[0]+'"'+((a[i]||"no")==o[0]?" selected":"")+">"+o[1]+"</option>").join("")+"</select></div>").join("")+(Object.values(a).includes("yes")?'<div class="warn">A counselor will review the family history you shared.</div>':"")+'<p><button class="gh" data-req="1">Request a counseling visit</button></p>'}
+function quizPost(){if(!LIVE||QA.filter(x=>x!==undefined).length<QZ.length)return;api("/quiz",{method:"POST",body:JSON.stringify({lang:S.lang,score:QA.filter((x,i)=>x===QZ[i].a).length,total:QZ.length})}).catch(()=>{})}
+function queueHtml(q,m){const P={urgent:"Urgent",high:"High",standard:"Standard"};
+ let h='<p><b>Counselor queue</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(c.stage)+(c.history_reported?" · family history":"")+(c.counseling_requested?" · visit requested":"")+"</li>").join("")+"</ol>":'<p class="small2">No cases need review.</p>');
+ h+='<p><b>Pilot metrics</b> <span class="tag">Demo data, not real outcomes</span></p><p class="small2">Cases: '+m.cases+" · Needing review: "+m.needing_review+" · Mean time to first referral step: "+(m.mean_minutes_to_first_referral_step==null?"n/a":m.mean_minutes_to_first_referral_step+" min")+" · Quiz average: "+(Object.keys(m.quiz).map(k=>k+" "+m.quiz[k].avg_pct+"% (n="+m.quiz[k].n+")").join(", ")||"n/a")+"</p>";
+ return h+'<p><button class="gh" data-fhir="1">View FHIR-style bundle</button></p><pre class="sb" id="fhirout" hidden></pre>'}
+let pdel=false;
+async function privacy(){const e=$("pv");
+ if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use privacy controls.</div>';return}
+ if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
+ const k=S.as=="B"?"B":"A",tok=k=="B"?CP.tb:CP.ta;
+ try{const r=await api("/couples/"+CP.id+"/privacy",{},tok);
+  e.innerHTML='<div class="ph"><i class="av">'+k+'</i><div><b>Partner '+k+'</b><div class="mono" style="color:var(--mut)">Your data and consent</div></div></div><p><span class="tag">Consent now: '+(r.consent_now?"Given":"Not given")+'</span></p><div class="tools" style="margin-top:0"><button class="gh" data-pwd="withdraw">Withdraw consent</button><button class="gh" data-pwd="delete">'+(pdel?"Click again to confirm deletion":"Delete my data")+'</button></div><div id="pvmsg"></div><p><b>Your history</b></p><ol style="font-size:13px;padding-inline-start:18px">'+r.events.map(x=>"<li>"+esc(new Date(x.ts*1000).toLocaleTimeString())+" · "+esc(x.event)+"</li>").join("")+"</ol>"}catch(x){e.innerHTML='<div class="warn">Could not load your privacy data.</div>'}}
+document.addEventListener("change",e=>{const i=e.target.dataset&&e.target.dataset.h;if(!i)return;S.hist[S.as=="B"?"B":"A"][i]=e.target.value;fh();push()});
+document.addEventListener("click",async e=>{const t=e.target.closest("[data-a11y],[data-say],[data-req],[data-fhir],[data-pwd]");if(!t)return;const d=t.dataset;
+ if(d.a11y){const on=document.documentElement.classList.toggle(d.a11y);t.setAttribute("aria-pressed",on)}
+ else if(d.say!==undefined){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance($("out").innerText);u.lang=S.lang=="ar"?"ar-SA":"en-US";u.rate=.9;speechSynthesis.speak(u)}catch(x){audit("Audio is not supported on this device")}}
+ else if(d.req!==undefined){if(LIVE&&CP){try{await api("/couples/"+CP.id+"/request-counseling",{method:"POST"},S.as=="B"?CP.tb:CP.ta)}catch(x){}}audit("Counseling visit requested");t.textContent="Requested ✓";t.disabled=true}
+ else if(d.fhir!==undefined){try{const b=await api("/couples/"+CP.id+"/fhir",{},STF.tok),p=$("fhirout");p.textContent=JSON.stringify(b,null,1).slice(0,5000);p.hidden=false}catch(x){}}
+ else if(d.pwd){const k=S.as=="B"?"B":"A",tok=k=="B"?CP.tb:CP.ta;
+  if(d.pwd=="withdraw"){await api("/couples/"+CP.id+"/consent",{method:"PUT",body:JSON.stringify({share:false})},tok);S["c"+k]=0;CP["c"+k.toLowerCase()]=false;await push();privacy()}
+  else if(!pdel){pdel=true;privacy()}
+  else{await api("/couples/"+CP.id+"/my-data",{method:"DELETE"},tok);pdel=false;PANEL.forEach(g=>S[k][g.id]="0");S["c"+k]=0;S.hist[k]={};CP=null;SV=null;$("pv").innerHTML='<div class="res">Your data was deleted from the server. Pick a case on the Overview page to start a new one.</div>'}}});
+T.en.three="3 in 4 chance a child will not have the condition.";T.ar.three="احتمال ثلاثة من أربعة ألا يصاب الطفل بالحالة.";
+const LOCKV=()=>'<div class="g2" style="margin-top:12px"><div class="fc" style="text-align:center">🔒<b style="display:block">Partner A</b><span class="small2">Not shared</span></div><div class="fc" style="text-align:center">🔒<b style="display:block">Partner B</b><span class="small2">Not shared</span></div></div><p class="small2">Each partner’s results stay private until both consent.</p>';
+const URG=[/suicid|kill myself|end(ing)? my (own )?life|want to die|hurt myself|self[- ]?harm|emergency|can'?t breathe|chest pain|bleeding heavily/i,/انتحار|أقتل نفسي|أريد أن أموت|طوارئ|نزيف/];
+const urgentText=t=>URG.some(r=>r.test(t));
+const EMG={en:"This tool cannot help in an emergency. If you or someone else is in danger or needs urgent medical help, call your local emergency number now or go to the nearest hospital. If you feel unsafe, contact someone you trust.",ar:"لا تستطيع هذه الأداة المساعدة في حالات الطوارئ. إذا كنت أنت أو شخص آخر في خطر أو تحتاج إلى مساعدة طبية عاجلة، فاتصل برقم الطوارئ المحلي الآن أو توجه إلى أقرب مستشفى. وإذا كنت لا تشعر بالأمان، فتواصل مع شخص تثق به."};
+let BR=null;
+function briefHtml(b){return '<div class="res"><b>'+esc(b.reference)+"</b> · "+esc(b.generated)+"<br>"+esc(b.summary)+(b.questions?"<br><b>Questions:</b> "+esc(b.questions):"")+'<br><span class="small2">Pseudonymous, not anonymous. Education and decision support, not clinical advice. Prepares you for a visit; it does not replace counseling.</span></div>'}
+async function makeBrief(){const q=$("bq").value.slice(0,1000);let b=null;
+ if(urgentText(q)){BR=null;audit("Emergency wording detected; emergency message shown");$("brf").innerHTML='<div class="warn"><b>'+EMG[S.lang]+"</b></div>";return}
+ if(LIVE&&CP){try{b=await api("/couples/"+CP.id+"/brief",{method:"POST",body:JSON.stringify({questions:q})},S.as=="B"?CP.tb:CP.ta)}catch(x){}}
+ if(b&&b.urgent){BR=null;$("brf").innerHTML='<div class="warn"><b>'+EMG[S.lang]+"</b></div>";return}
+ if(!b){const sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,sh=both?sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1").map(g=>g.id):[];
+  b={reference:"AMNA-DEMO",generated:new Date().toLocaleDateString(),summary:both?(sh.length?"Shared carrier gene(s): "+sh.join(", "):"No shared carrier finding on the agreed genes"):"Couple comparison not available (consent incomplete)",questions:q}}
+ BR=b;audit("Counselor intake brief created");$("brf").innerHTML=briefHtml(b)+'<button class="gh" data-prb="1">Print brief</button>'}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-brief],[data-prb]");if(!t)return;
+ if(t.dataset.brief!==undefined)makeBrief();else if(BR){$("prt").innerHTML='<h1 style="font-size:24px">Counselor intake brief</h1>'+briefHtml(BR);try{window.print()}catch(x){}}});
+document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.cg;if(!k)return;const set=S["g"+k],v=e.target.value;S["g"+k]=e.target.checked?[...new Set([...set,v])]:set.filter(x=>x!==v);audit("Partner "+k+(e.target.checked?" allowed gene ":" withdrew gene ")+v+" for matching");out();tri();pn();push()});
+ping().then(()=>push());
+load(CASES[0]);go("overview");
+
+// Patient-only educational simulation. Consent here never calls an API or stores personal data.
+let patientCase=0,patientStep=1,patientLang='en',patientResultLocked=true;
+const pt={
+ en:{hero:'Understand genetic results, one step at a time.',heroP:"Explore a made-up couple's story. No medical knowledge or real information needed.",trust:'Fictional examples only · No personal data requested · Not medical advice',progress1:'1. Choose story',progress2:'2. Permission',progress3:'3. Understand',progress4:'4. Next steps',step1:'STEP 1 OF 4',choose:'Which situation would you like to understand?',chooseP:'Choose one fictional story to learn at your own pace.',case0:'Both people carry a change',case0p:'What does 1 in 4 mean?',case1:'Only one person carries a change',case1p:'Does this mean no risk?',case2:'A result is unclear',case2p:'Why might we need a specialist?',case3:'One person prefers not to share',case3p:'What happens when consent is missing?',step2:'STEP 2 OF 4',consent:'Sharing is always a choice.',consentP:'Each person decides separately. You can also say no and continue learning.',personA:'Person A gives permission',personAp:'Allow this fictional result to be compared',personB:'Person B gives permission',personBp:'Allow this fictional result to be compared',consentTip:'If either person says no, the couple-level result stays hidden. No one should be pressured to share.',back:'← Back',see:'See what happens →',step3:'STEP 3 OF 4',meaning:'What does this mean?',next:'What can I do next? →',step4:'STEP 4 OF 4',choices:'Your decision belongs to you.',choicesP:'A qualified genetics professional can explain a real report and discuss options without deciding for you.',next1:'💬 Talk to a professional',next1p:'Ask what your report means and whether follow-up testing is appropriate.',next2:'📝 Prepare for a visit',next2p:'Take a short list of questions to your appointment.',next3:'🔐 Protect your choices',next3p:'You do not have to share this information with family members.',questions:'Questions you could ask a genetic counselor',save:'Download questions (text file)',noBooking:'This is a preparation checklist, not an appointment booking service.',quizTitle:'Quick understanding check',quizQ:'Does a 1 in 4 chance mean a child will definitely have the condition?',yes:'Yes',no:'No',again:'Explore another story ↻',learn:'Learn more',foot:'Educational research prototype using synthetic cases. Not a diagnostic test, secure patient portal, clinical validation, or appointment service. Please do not enter or upload real health records.',quizCorrect:'Correct. A chance is not a certainty. Each pregnancy is a separate event.',quizTry:'Not quite. A 1 in 4 chance is a probability, not a prediction for any one child.',reminder:'Made-up example only. Real results must be discussed with a qualified professional.',lockedTitle:'The shared result stays private.',lockedBody:'One or both people did not agree. No couple-level result is shown. You can still learn and ask questions without sharing another person’s results.',bothTitle:'Both are carriers in this example.',bothBody:'For this particular autosomal recessive condition, each pregnancy has a 1 in 4 (25%) chance of an affected child. This is a chance, not a diagnosis.',bothHelp:'A genetic counselor can explain your actual laboratory report and available choices.',oneTitle:'No shared carrier finding in this limited example.',oneBody:'Only one person has a known carrier finding in the selected gene. This does not mean zero risk: limited testing may miss genetic changes.',oneHelp:'Ask a healthcare professional whether further testing is useful.',uncertainTitle:'This genetic change is uncertain.',uncertainBody:'There is not enough evidence to tell whether it causes disease. No personal reproductive-risk figure is calculated from this uncertain finding.',uncertainHelp:'A genetics professional may review the result and discuss any suitable next steps.',refuseTitle:'You are in control of sharing.',refuseBody:'Both fictional people selected permission. This changes only the educational illustration. It is not proof of secure patient-data handling.',refuseHelp:'For a technical review, separately test the backend consent controls.',whatHelps:'Next step',questionsList:['What exactly does my laboratory report say?','Do I need another test or an updated interpretation?','What does this mean for a future pregnancy?','What information may be shared, and with whom?']},
+ ar:{hero:'افهم النتائج الوراثية خطوة بخطوة',heroP:'استكشف قصة افتراضية لشخصين. لا تحتاج إلى معرفة طبية أو بيانات حقيقية.',trust:'أمثلة افتراضية فقط · لا نطلب بيانات شخصية · ليست نصيحة طبية',progress1:'١. اختر مثالاً',progress2:'٢. الموافقة',progress3:'٣. فهم النتيجة',progress4:'٤. الخطوات التالية',step1:'الخطوة ١ من ٤',choose:'ما الحالة التي تود فهمها؟',chooseP:'اختر قصة افتراضية وتعلم بالسرعة التي تناسبك.',case0:'كلا الشخصين حامل لتغير وراثي',case0p:'ماذا يعني احتمال واحد من أربعة؟',case1:'شخص واحد فقط حامل لتغير وراثي',case1p:'هل هذا يعني عدم وجود خطر؟',case2:'نتيجة غير واضحة',case2p:'متى نحتاج إلى مختص؟',case3:'شخص لا يرغب في مشاركة نتيجته',case3p:'ماذا يحدث بدون موافقة؟',step2:'الخطوة ٢ من ٤',consent:'مشاركة المعلومات خيار شخصي.',consentP:'يقرر كل شخص بشكل مستقل. يمكنك الرفض ومواصلة التعلم.',personA:'الشخص أ يوافق',personAp:'السماح بمقارنة النتيجة الافتراضية',personB:'الشخص ب يوافق',personBp:'السماح بمقارنة النتيجة الافتراضية',consentTip:'إذا لم يوافق أحد الشخصين، تبقى نتيجة المقارنة مخفية. لا ينبغي الضغط على أحد للمشاركة.',back:'→ رجوع',see:'عرض ما يحدث ←',step3:'الخطوة ٣ من ٤',meaning:'ماذا تعني هذه النتيجة؟',next:'ماذا أفعل بعد ذلك؟ ←',step4:'الخطوة ٤ من ٤',choices:'القرار يعود إليك.',choicesP:'يمكن لمختص مؤهل في الوراثة شرح التقرير الحقيقي ومناقشة الخيارات دون اتخاذ القرار نيابةً عنك.',next1:'💬 تحدث إلى مختص',next1p:'اسأل عن معنى التقرير والحاجة إلى فحوص إضافية.',next2:'📝 حضّر أسئلتك',next2p:'خذ قائمة أسئلة قصيرة إلى موعدك.',next3:'🔐 احمِ خصوصيتك',next3p:'لست مضطراً لمشاركة معلوماتك مع أفراد العائلة.',questions:'أسئلة يمكنك طرحها على مستشار الوراثة',save:'تنزيل الأسئلة (ملف نصي)',noBooking:'هذه قائمة للتحضير وليست خدمة لحجز المواعيد.',quizTitle:'تحقق سريع من الفهم',quizQ:'هل يعني احتمال واحد من أربعة أن الطفل سيصاب بالتأكيد؟',yes:'نعم',no:'لا',again:'استكشف قصة أخرى ↻',learn:'اعرف المزيد',foot:'نموذج بحثي تعليمي يستخدم أمثلة افتراضية. ليس فحصاً تشخيصياً أو بوابة مرضى آمنة أو خدمة مواعيد. لا تدخل سجلات صحية حقيقية.',quizCorrect:'صحيح. الاحتمال لا يعني اليقين؛ كل حمل حدث مستقل.',quizTry:'ليس تماماً. احتمال واحد من أربعة لا يتنبأ بنتيجة حمل معين.',reminder:'هذا مثال افتراضي فقط. ناقش النتائج الحقيقية مع مختص مؤهل.',lockedTitle:'تبقى نتيجة المقارنة خاصة.',lockedBody:'لم يوافق أحد الشخصين أو كلاهما. لن تظهر نتيجة مشتركة. ما زال بإمكانك التعلم وطرح الأسئلة دون مشاركة معلومات الشريك.',bothTitle:'كلا الشخصين حامل في هذا المثال.',bothBody:'بالنسبة إلى هذه الحالة الوراثية المتنحية تحديداً، احتمال إنجاب طفل مصاب في كل حمل هو واحد من أربعة (٢٥٪). هذا احتمال وليس تشخيصاً.',bothHelp:'يمكن لمستشار الوراثة شرح التقرير الحقيقي والخيارات المتاحة.',oneTitle:'لم يُكتشف حمل مشترك في هذا المثال المحدود.',oneBody:'لدى شخص واحد فقط نتيجة حمل معروفة في الجين المختار. هذا لا يعني انعدام الخطر؛ فقد لا تكشف الفحوص المحدودة كل التغيرات.',oneHelp:'اسأل المختص عن فائدة إجراء فحوص أخرى.',uncertainTitle:'معنى هذا التغير الوراثي غير مؤكد.',uncertainBody:'الأدلة غير كافية لمعرفة ما إذا كان يسبب مرضاً. لا نعطي رقماً شخصياً للخطر بناءً على هذه النتيجة غير المؤكدة.',uncertainHelp:'يمكن لمختص الوراثة مراجعة النتيجة ومناقشة الخطوات المناسبة.',refuseTitle:'أنت تتحكم في مشاركة المعلومات.',refuseBody:'وافق الشخصان في هذا المثال الافتراضي. هذا يغير العرض التعليمي فقط ولا يثبت أمان التعامل مع بيانات المرضى.',refuseHelp:'يجب اختبار ضوابط الموافقة في الخادم بشكل مستقل.',whatHelps:'الخطوة التالية',questionsList:['ماذا يقول التقرير المخبري تحديداً؟','هل أحتاج إلى فحص آخر أو إعادة تفسير النتيجة؟','ماذا تعني النتيجة بالنسبة إلى حمل مستقبلي؟','ما المعلومات التي يمكن مشاركتها ومع من؟']}
+};
+function showPatientStep(n){patientStep=n;for(let i=1;i<=4;i++)document.getElementById('patient-step'+i).hidden=i!==n;document.querySelectorAll('.patient-progress span').forEach((el,i)=>{el.classList.toggle('active',i===n-1);el.classList.toggle('done',i<n-1);if(i===n-1)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});if(n===3)renderPatientResult();if(n===4)renderPatientQuestions();document.getElementById('p-guide').scrollIntoView({behavior:'auto',block:'start'});}
+function renderPatientResult(){const t=pt[patientLang],a=document.getElementById('patient-consent-a').checked,b=document.getElementById('patient-consent-b').checked;patientResultLocked=!(a&&b);let head,body,help;if(patientResultLocked){head=t.lockedTitle;body=t.lockedBody}else{const names=['both','one','uncertain','refuse'];const key=names[patientCase];head=t[key+'Title'];body=t[key+'Body'];help=t[key+'Help']}const c=document.createElement('div');c.className='patient-explain'+(patientResultLocked?' patient-danger':'');[head,body,help?t.whatHelps+': '+help:null].filter(Boolean).forEach((v,i)=>{let el=document.createElement(i===0?'h3':'p');el.textContent=v;c.appendChild(el)});const p=document.createElement('p');p.className='patient-footnote';p.textContent=t.reminder;const target=document.getElementById('patient-explanation');target.replaceChildren(c,p);}
+function renderPatientQuestions(){let t=pt[patientLang];let ul=document.getElementById('patient-questions-list');ul.replaceChildren(...t.questionsList.map(q=>{const li=document.createElement('li');li.textContent=q;return li}));document.getElementById('patient-quiz-feedback').textContent='';}
+function switchPatientLang(lang){if(!pt[lang])return;patientLang=lang;const area=document.getElementById('p-guide');area.setAttribute('dir',lang==='ar'?'rtl':'ltr');area.setAttribute('lang',lang);area.querySelectorAll('[data-pt]').forEach(el=>{const key=el.dataset.pt;if(typeof pt[lang][key]==='string')el.textContent=pt[lang][key]});document.querySelectorAll('[data-plang]').forEach(b=>{const on=b.dataset.plang===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false')});if(patientStep===3)renderPatientResult();if(patientStep===4)renderPatientQuestions()}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-pcase],[data-pnext],[data-pback],[data-plang],[data-panswer],[data-prestart],#patient-save-questions');if(!t)return;if(t.dataset.plang){switchPatientLang(t.dataset.plang)}else if(t.dataset.pcase!==undefined){patientCase=Number(t.dataset.pcase);document.getElementById('patient-consent-a').checked=false;document.getElementById('patient-consent-b').checked=false;showPatientStep(2)}else if(t.dataset.pnext)showPatientStep(Number(t.dataset.pnext));else if(t.dataset.pback)showPatientStep(Number(t.dataset.pback));else if(t.dataset.prestart){showPatientStep(1)}else if(t.dataset.panswer){document.getElementById('patient-quiz-feedback').textContent=pt[patientLang][t.dataset.panswer==='no'?'quizCorrect':'quizTry']}else if(t.id==='patient-save-questions'){const tt=pt[patientLang];const data=tt.questions+'\n\n'+tt.questionsList.map((q,i)=>(i+1)+'. '+q).join('\n')+'\n\n'+tt.foot;const blob=new Blob([data],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='amanah-counselor-questions-'+patientLang+'.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}});
+document.addEventListener('click',e=>{if(e.target.closest('.more-menu [data-go]')){document.querySelector('.more-nav').open=false}});
+</script><script>
+(function(){
+ const intro=document.getElementById('amanah-intro');
+ if(!intro)return;
+ let done=false;
+ function finish(){if(done)return;done=true;intro.classList.add('is-done');window.setTimeout(()=>intro.remove(),900)}
+ document.getElementById('intro-skip').addEventListener('click',finish);
+ if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return}
+ window.setTimeout(finish,2900);
+})();
+
+</script>
+<script>
+// Deep links from patient homepage. All original pages remain intact.
+window.addEventListener('load',()=>{
+  const allowed=new Set(['overview','guide','match','punnett','learn','options','risk','pilot','server','staff','privacy','triage']);
+  const view=new URLSearchParams(location.search).get('view');
+  if(view && allowed.has(view) && typeof go==='function') go(view);
+});
+</script>
+<details class="amanah-tool-drawer" id="amanah-tools" aria-label="Quick access to all Amanah tools"><div class="amanah-tool-panel"><header>Explore Amanah tools</header><a class="tool-website" href="/">⌂ &nbsp; Website home</a><button type="button" data-tool-go="guide"><span aria-hidden="true">🧭</span> Guided example</button><button type="button" data-tool-go="match"><span aria-hidden="true">🔐</span> Private matching</button><button type="button" data-tool-go="risk"><span aria-hidden="true">📈</span> Risk curve</button><button type="button" data-tool-go="punnett"><span aria-hidden="true">🧬</span> Punnett square</button><button type="button" data-tool-go="learn"><span aria-hidden="true">🧠</span> Quizzes & learning</button><button type="button" data-tool-go="triage"><span aria-hidden="true">💬</span> Counselor pathway</button><button type="button" data-tool-go="options"><span aria-hidden="true">🌿</span> Informed choices</button><button type="button" data-tool-go="privacy"><span aria-hidden="true">🛡️</span> Privacy & consent</button><button type="button" data-tool-go="pilot"><span aria-hidden="true">📋</span> Pilot & evidence</button><button type="button" data-tool-go="server"><span aria-hidden="true">⚙️</span> Technical server</button><button type="button" data-tool-go="staff"><span aria-hidden="true">👩‍⚕️</span> Staff workspace</button><div class="tool-hint">Switch between any tools without using the browser Back button.</div></div><summary aria-label="Open all tools menu">☷ &nbsp; All tools <span aria-hidden="true">⌃</span></summary></details><script id="always-available-tool-navigation">(function(){
+const drawer=document.getElementById('amanah-tools');
+drawer.addEventListener('click',function(event){const btn=event.target.closest('[data-tool-go]');if(!btn)return;const target=btn.dataset.toolGo;if(typeof go==='function'){go(target);drawer.open=false;try{history.replaceState(null,'','?view='+encodeURIComponent(target))}catch(e){}}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')drawer.open=false});
+document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e.target))drawer.open=false});
+})();</script></body></html>
