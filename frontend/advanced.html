@@ -445,7 +445,7 @@ function partner(k){
  const ar=S.lang==="ar", trans=(en,arabic)=>ar?arabic:en;
  const status=["No change found","Carrier","Uncertain variant"],arabic=[MATCH_AR.no,MATCH_AR.carrier,MATCH_AR.uncertain];
  return '<div class="card"><div class="ph"><i class="av">'+k+'</i><div><b>'+trans("Partner ","الطرف ")+k+'</b><div class="mono" style="color:var(--mut)">'+trans("Synthetic profile",MATCH_AR.profile)+'</div></div></div><div class="mono" style="color:var(--mut);margin:16px 0 0">'+trans("Individual carrier panel",MATCH_AR.panel)+'</div>'+
- PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+trans(g.en.replace(/ \\(.*\\)/,""),g.ar.replace(/ \\(.*\\)/,""))+'</b> <span class="mono" style="color:var(--mut)">'+g.id+' · '+LOC[g.id]+'</span><div class="small2">'+trans("Autosomal recessive",MATCH_AR.recessive)+'</div></div><span class="st s'+v+'">'+trans(status[+v],arabic[+v])+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="'+trans("Partner ","الطرف ")+k+' '+g.id+'">'+status.map((t,i)=>'<option value="'+i+'"'+(v==String(i)?" selected":"")+'>'+trans(t,arabic[i])+'</option>').join("")+'</select></div>'}).join("")+
+ PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+trans(g.en.split(" (")[0],g.ar.split(" (")[0])+'</b> <span class="mono" style="color:var(--mut)">'+g.id+' · '+LOC[g.id]+'</span><div class="small2">'+trans("Autosomal recessive",MATCH_AR.recessive)+'</div></div><span class="st s'+v+'">'+trans(status[+v],arabic[+v])+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="'+trans("Partner ","الطرف ")+k+' '+g.id+'">'+status.map((t,i)=>'<option value="'+i+'"'+(v==String(i)?" selected":"")+'>'+trans(t,arabic[i])+'</option>').join("")+'</select></div>'}).join("")+
  '<label class="cons"><input type="checkbox" data-c="'+k+'"'+(S["c"+k]?" checked":"")+'>'+trans(" Allow gene-level match",MATCH_AR.allow)+'</label><div class="small2" style="margin-top:10px">'+trans("Genes I allow in the match:",MATCH_AR.genes)+'</div><div class="tools" style="margin:6px 0 0">'+PANEL.map(g=>'<label class="cons" style="margin:0;padding:4px 10px"><input type="checkbox" data-cg="'+k+'" value="'+g.id+'"'+(S["g"+k].includes(g.id)?" checked":"")+'> '+g.id+'</label>').join("")+'</div></div>'
 }
 function out(){if(LIVE&&SV)return outLive();const L=S.lang,t=T[L],sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,vA=sc.some(g=>S.A[g.id]=="2"),vB=sc.some(g=>S.B[g.id]=="2");let h="",r=[];
@@ -488,7 +488,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-go],[data-
 document.addEventListener("change",e=>{const d=e.target.dataset,n=e.target;
  if(d.g){S[d.k][d.g]=n.value;S.stage=0;audit("Result entered for partner "+d.k+" ("+d.g+")")}
  else if(d.c){S["c"+d.c]=n.checked?1:0;audit("Consent "+(n.checked?"GRANTED":"REVOKED")+" by partner "+d.c)}
- else if(n.name=="lg")S.lang=n.value;else if(n.name=="as")S.as=n.value;else if(n.id=="rel")S.rel=n.checked?1:0;else if(n.id=="dist")S.dist=n.checked?1:0;
+ else if(n.name=="lg"){S.lang=n.value;draw();}else if(n.name=="as")S.as=n.value;else if(n.id=="rel")S.rel=n.checked?1:0;else if(n.id=="dist")S.dist=n.checked?1:0;
  out();tri();push()});
 $("adv").onclick=()=>{S.stage++;audit("Referral advanced: "+STAGES[S.stage]);tri()};
 document.addEventListener("click",e=>{const t=e.target.closest("[data-lv],[data-q],[data-qr],[data-sb]");if(!t)return;const d=t.dataset;
