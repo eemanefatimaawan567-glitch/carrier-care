@@ -1,0 +1,15 @@
+[
+{"name":"Both carry HBB, both consent","A":{"HBB":"1"},"B":{"HBB":"1"},"ca":1,"cb":1,"expect":{"escalate":true,"genes":["HBB"],"contains":["1 in 4"],"absent":[]}},
+{"name":"Only one partner carries (no match)","A":{"HBB":"1"},"B":{},"ca":1,"cb":1,"expect":{"escalate":false,"genes":[],"contains":["No shared carrier finding"],"absent":["HBB"]}},
+{"name":"Both carry HBB but Partner B withheld consent","A":{"HBB":"1"},"B":{"HBB":"1"},"ca":1,"cb":0,"expect":{"escalate":false,"genes":[],"contains":["locked"],"absent":["HBB","1 in 4"]}},
+{"name":"Both carry HBB and GJB2, scope limited to GJB2","A":{"HBB":"1","GJB2":"1"},"B":{"HBB":"1","GJB2":"1"},"ca":1,"cb":1,"scope":["GJB2"],"expect":{"escalate":true,"genes":["GJB2"],"contains":["1 in 4"],"absent":["HBB"]}},
+{"name":"Uncertain variant in A, none in B","A":{"GJB2":"2"},"B":{},"ca":1,"cb":1,"expect":{"escalate":true,"genes":[],"contains":["uncertain variant"],"absent":["1 in 4"]}},
+{"name":"Uncertain variant outside the agreed scope","A":{"GJB2":"2"},"B":{},"ca":1,"cb":1,"scope":["HBB"],"expect":{"escalate":false,"genes":[],"contains":["No shared carrier finding"],"absent":["uncertain"]}},
+{"name":"Both have an uncertain variant in the same gene","A":{"GJB2":"2"},"B":{"GJB2":"2"},"ca":1,"cb":1,"expect":{"escalate":true,"genes":[],"contains":["uncertain variant"],"absent":["1 in 4"]}},
+{"name":"No carriers, distress flagged","A":{},"B":{},"ca":1,"cb":1,"distress":true,"expect":{"escalate":true,"genes":[],"contains":["No shared carrier finding"],"absent":[],"reasons_contain":["Distress flagged"]}},
+{"name":"Related partners, no shared carrier","A":{},"B":{},"ca":1,"cb":1,"related":true,"expect":{"escalate":false,"genes":[],"contains":["Related partners"],"absent":[]}},
+{"name":"Both consented but agreed genes do not overlap","A":{"HBB":"1"},"B":{"HBB":"1"},"ca":1,"cb":1,"scope":[],"expect":{"escalate":false,"genes":[],"contains":["locked"],"absent":["HBB","1 in 4"]}},
+{"name":"Severe gene SMN1, both carry, related","A":{"SMN1":"1"},"B":{"SMN1":"1"},"ca":1,"cb":1,"related":true,"expect":{"escalate":true,"genes":["SMN1"],"contains":["1 in 4","Related partners"],"absent":[]}},
+{"name":"A carries one gene, B has an uncertain variant in another","A":{"HBB":"1"},"B":{"GJB2":"2"},"ca":1,"cb":1,"expect":{"escalate":true,"genes":[],"contains":["uncertain variant"],"absent":["HBB"]}},
+{"name":"Arabic: both carry CFTR","A":{"CFTR":"1"},"B":{"CFTR":"1"},"ca":1,"cb":1,"lang":"ar","expect":{"escalate":true,"genes":["CFTR"],"contains":["كلاكما"],"absent":[]}}
+]

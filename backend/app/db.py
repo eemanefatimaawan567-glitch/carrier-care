@@ -7,6 +7,7 @@ def init():
 create table if not exists couples(id text primary key, related int, distress int default 0);
 create table if not exists tokens(token text primary key, couple_id text, role text);
 create table if not exists results(couple_id text, partner text, genes text, primary key(couple_id, partner));
+create table if not exists flags(couple_id text, partner text, distress int, primary key(couple_id, partner));
 create table if not exists history(couple_id text, partner text, answers text, primary key(couple_id, partner));
 create table if not exists quiz(lang text, score int, total int);
 create table if not exists ledger(id integer primary key autoincrement, couple_id text, ts real, actor text, event text, payload text, prev text, hash text);"""); c.commit(); c.close()

@@ -10,10 +10,10 @@ EN = {"sh": lambda g: f"You both carry a change linked to {g}. Each pregnancy: 1
       "vus": "One uncertain variant. Its meaning is unknown, so no risk figure is shown. Understanding can change over time. Ask a genetic counselor or doctor about re-checking it.",
       "lock": "Comparison locked until both partners consent.",
       "esc": "Review by a genetic counselor or doctor is recommended."}
-AR = {"sh": lambda g: f"كلاكما يحمل تغيّرًا مرتبطًا بـ{g}. في كل حمل احتمال واحد من أربعة لإصابة الطفل. هذا احتمال وليس تشخيصًا.",
-      "none": "لا يوجد تغيّر مشترك. اللوحة محدودة، لذلك يقلّ الاحتمال ولا يزول.",
-      "rel": "قد يتشارك الأقارب تغيّرات خارج هذه اللوحة. يمكن للمستشار الوراثي أو الطبيب مناقشة فحوصات أوسع.",
-      "vus": "متغيّر غير مؤكد الأثر. معناه غير معروف، لذا لا تُعرض نسبة خطر. قد يتغيّر الفهم العلمي مع الوقت، فاسأل مستشارًا وراثيًا أو طبيبًا عن إعادة فحصه.",
+AR = {"sh": lambda g: f"كلاكما يحمل تغيّرًا جينيًا مرتبطًا بـ{g}. في كل حمل احتمال واحد من أربعة لإصابة الطفل. هذا احتمال وليس تشخيصًا.",
+      "none": "لا يوجد تغيّر جيني مشترك بينكما. وبما أن نطاق الفحص محدود، فالاحتمال أقل لكنه لا يزول.",
+      "rel": "إذا كان بينكما قرابة، فقد تتشاركان تغيّرات جينية لا يغطيها هذا الفحص. يمكن للمستشار الوراثي أو الطبيب مساعدتكما.",
+      "vus": "وُجد تغيّر جيني غير مؤكد الأثر. معناه غير معروف حتى الآن، لذا لا تُعرض نسبة خطر. قد يتغيّر الفهم العلمي مع الوقت، فيمكنك سؤال مستشار وراثي أو طبيب عن إعادة فحصه.",
       "lock": "المقارنة مقفلة حتى يوافق الشريكان.",
       "esc": "يُنصح بمراجعة مستشار وراثي أو طبيب مختص بالوراثة."}
 LEVELS = {"Simple": "Think of two keys. A carrier has one working key and one that does not, and the door still opens. Trouble only happens if a child gets the non-working key from both parents.",
@@ -58,3 +58,9 @@ HISTORY = {"sibling_condition": "A sibling or close relative has thalassemia, SM
            "infant_death": "A child or sibling died in infancy from an unknown cause",
            "hearing_or_blood": "Early hearing loss or a blood disorder runs in the family",
            "relatives_married": "Our families have several marriages between relatives"}
+
+import re as _re
+URGENT = _re.compile(r"suicid|kill myself|end(ing)? my (own )?life|want to die|hurt myself|self[- ]?harm|emergency|can'?t breathe|chest pain|bleeding heavily|انتحار|أقتل نفسي|أريد أن أموت|طوارئ|نزيف", _re.I)
+EMERGENCY = {"en": "This tool cannot help in an emergency. If you or someone else is in danger or needs urgent medical help, call your local emergency number now or go to the nearest hospital. If you feel unsafe, contact someone you trust.",
+             "ar": "لا تستطيع هذه الأداة المساعدة في حالات الطوارئ. إذا كنت أنت أو شخص آخر في خطر أو تحتاج إلى مساعدة طبية عاجلة، فاتصل برقم الطوارئ المحلي الآن أو توجه إلى أقرب مستشفى. وإذا كنت لا تشعر بالأمان، فتواصل مع شخص تثق به."}
+def urgent(text): return bool(URGENT.search(text or ""))

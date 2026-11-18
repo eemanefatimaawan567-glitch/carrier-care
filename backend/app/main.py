@@ -1,10 +1,11 @@
-import os, json, secrets
+import os, json, secrets, hashlib, hmac
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 from . import db, engine as E
 db.init()
 app = FastAPI(title="Consent-first carrier care (prototype)")
 COUNSELOR = os.environ.get("COUNSELOR_TOKEN", "counselor-demo"); COORD = os.environ.get("COORDINATOR_TOKEN", "coordinator-demo")
+if os.environ.get("CARRIER_ENV") == "production" and ("counselor-demo" in (COUNSELOR,) or "coordinator-demo" in (COORD,)): raise RuntimeError("Set COUNSELOR_TOKEN and COORDINATOR_TOKEN before running with CARRIER_ENV=production")
 STAGES = ["Result issued", "Counselor notified", "Counseling completed", "Confirmatory testing", "Reproductive-genomics service (if chosen)"]
 class NewCouple(BaseModel): related: bool = False
 class Results(BaseModel): results: dict[str, str]
@@ -14,28 +15,31 @@ class Consent(BaseModel):
 class Brief(BaseModel): questions: str = ""
 class Flags(BaseModel): distress: bool
 def auth(c, cid, tok):
-    if tok == COUNSELOR: return "counselor"
-    if tok == COORD: return "coordinator"
-    r = c.execute("select role from tokens where token=? and couple_id=?", (tok, cid)).fetchone()
+    if hmac.compare_digest(tok.encode(), COUNSELOR.encode()): return "counselor"
+    if hmac.compare_digest(tok.encode(), COORD.encode()): return "coordinator"
+    r = c.execute("select role from tokens where token=? and couple_id=?", (hashlib.sha256(tok.encode()).hexdigest(), cid)).fetchone()
     if not r: raise HTTPException(403, "forbidden")
     return r["role"]
 def partner_only(c, cid, tok):
     role = auth(c, cid, tok)
     if role not in ("A", "B"): raise HTTPException(403, "partners only")
     return role
-def compute(c, cid, lang="en"):
+def distress_for(c, cid, viewer):
+    rows = c.execute("select partner, distress from flags where couple_id=?", (cid,)).fetchall()
+    return any(r["distress"] for r in rows if viewer is None or r["partner"] == viewer)
+def compute(c, cid, lang="en", viewer=None):
     cp = c.execute("select * from couples where id=?", (cid,)).fetchone()
     if not cp: raise HTTPException(404, "not found")
     R = {p: c.execute("select genes from results where couple_id=? and partner=?", (cid, p)).fetchone() for p in "AB"}
     if not all(R.values()): raise HTTPException(409, "waiting for both partners' results")
     A, B = (json.loads(R[p]["genes"]) for p in "AB"); ga, gb = db.consent_genes(c, cid, "A"), db.consent_genes(c, cid, "B"); scope = ga & gb
-    v = E.couple_view(A, B, bool(ga), bool(gb), bool(cp["related"]), bool(cp["distress"]), lang, scope=scope)
+    v = E.couple_view(A, B, bool(ga), bool(gb), bool(cp["related"]), distress_for(c, cid, viewer), lang, scope=scope)
     return v, bool(cp["related"]), bool(scope)
 @app.post("/couples")
 def create(b: NewCouple):
     cid = secrets.token_hex(6); c = db.conn(); c.execute("insert into couples(id,related) values(?,?)", (cid, int(b.related))); out = {"couple_id": cid}
     for p in "AB":
-        t = secrets.token_urlsafe(24); c.execute("insert into tokens values(?,?,?)", (t, cid, p)); out["token_" + p.lower()] = t
+        t = secrets.token_urlsafe(24); c.execute("insert into tokens values(?,?,?)", (hashlib.sha256(t.encode()).hexdigest(), cid, p)); out["token_" + p.lower()] = t
     db.log(c, cid, "system", "couple_created"); c.commit(); return out
 @app.put("/couples/{cid}/results")
 def put_results(cid: str, b: Results, x_token: str = Header()):
@@ -49,10 +53,10 @@ def put_consent(cid: str, b: Consent, x_token: str = Header()):
     db.log(c, cid, p, "consent", {"share": b.share, "genes": sorted(b.genes) if (b.share and b.genes) else None}); c.commit(); return {"share": b.share}
 @app.put("/couples/{cid}/flags")
 def put_flags(cid: str, b: Flags, x_token: str = Header()):
-    c = db.conn(); p = partner_only(c, cid, x_token); c.execute("update couples set distress=? where id=?", (int(b.distress), cid)); db.log(c, cid, p, "flag", {"distress": b.distress}); c.commit(); return {"ok": True}
+    c = db.conn(); p = partner_only(c, cid, x_token); c.execute("insert or replace into flags values(?,?,?)", (cid, p, int(b.distress))); db.log(c, cid, p, "flag", {"distress": b.distress}); c.commit(); return {"ok": True}
 @app.get("/couples/{cid}/view")
 def view(cid: str, lang: str = "en", x_token: str = Header()):
-    c = db.conn(); p = partner_only(c, cid, x_token); v, rel, both = compute(c, cid, lang)
+    c = db.conn(); p = partner_only(c, cid, x_token); v, rel, both = compute(c, cid, lang, viewer=p)
     db.log(c, cid, p, "view", {"escalate": v["escalate"]}); c.commit()
     return {"text": v["text"], "escalate": v["escalate"], "genes_shown": v["genes_shown"], "reasons": v["reasons"], "referral_stage": STAGES[min(db.stage(c, cid), 4)] if v["escalate"] else None}
 @app.get("/couples/{cid}/handoff")
@@ -97,7 +101,7 @@ def case_info(c, cid):
     hist = any(any(v == "yes" for v in json.loads(r["answers"]).values()) for r in c.execute("select answers from history where couple_id=?", (cid,)))
     req = c.execute("select 1 from ledger where couple_id=? and event='counseling_requested'", (cid,)).fetchone() is not None
     severe = any(E.GENES[g][0] for g in v["genes_shown"])
-    pr = "urgent" if cp["distress"] else "high" if severe else "standard" if (v["escalate"] or hist) else None
+    pr = "urgent" if distress_for(c, cid, None) else "high" if severe else "standard" if (v["escalate"] or hist) else None
     if pr is None: return None
     return {"case": cid, "priority": pr, "stage": STAGES[min(db.stage(c, cid), 4)], "history_reported": hist, "counseling_requested": req}
 @app.put("/couples/{cid}/history")
@@ -163,11 +167,20 @@ def fhir(cid: str, x_token: str = Header()):
     return {"resourceType": "Bundle", "type": "collection", "meta": TAG, "entry": [{"resource": e} for e in ents]}
 @app.post("/couples/{cid}/brief")
 def brief(cid: str, b: Brief, x_token: str = Header()):
-    c = db.conn(); p = partner_only(c, cid, x_token); v, rel, both = compute(c, cid)
+    c = db.conn(); p = partner_only(c, cid, x_token)
+    if E.urgent(b.questions):
+        db.log(c, cid, p, "urgent_wording_shown"); c.commit(); return {"urgent": True, "message": E.EMERGENCY["en"]}
+    v, rel, both = compute(c, cid, viewer=p)
     q = "".join(ch for ch in b.questions[:1000] if ch.isprintable() or ch == "\n")
     summary = ("Shared carrier gene(s): " + ", ".join(v["genes_shown"]) if v["genes_shown"] else "No shared carrier finding on the agreed genes") if both else "Couple comparison not available (consent incomplete)"
     db.log(c, cid, p, "brief_generated"); c.commit()
     return {"reference": f"AMNA-{cid[:4].upper()}-{cid[4:8].upper()}", "generated": datetime.date.today().isoformat(), "shared_genes": v["genes_shown"], "summary": summary, "questions": q, "note": "Pseudonymous, not anonymous. Education and decision support, not clinical advice. Prepares you for a visit; it does not replace counseling."}
+@app.middleware("http")
+async def security_headers(request, call_next):
+    resp = await call_next(request)
+    resp.headers["X-Content-Type-Options"] = "nosniff"; resp.headers["Referrer-Policy"] = "no-referrer"
+    if resp.headers.get("content-type", "").startswith("application/json"): resp.headers["Cache-Control"] = "no-store"
+    return resp
 @app.get("/health")
 def health(): return {"ok": True}
 from fastapi.staticfiles import StaticFiles
