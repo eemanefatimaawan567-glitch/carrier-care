@@ -804,7 +804,16 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
   }
   translateContent(lang);
   const note=document.querySelector('footer');
-  if(note){note.setAttribute('lang',lang);note.setAttribute('dir',lang==='ar'?'rtl':'ltr');}
+  if(note){
+   note.setAttribute('lang',lang);note.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+   const enFoot='Prototype with synthetic data. Education and decision support, not clinical advice.';
+   const enUrgent='In an emergency this tool cannot help.';
+   const enAdvice='Call your local emergency number or go to the nearest hospital.';
+   const footText=UI(enFoot), urgentText=UI(enUrgent), adviceText=UI(enAdvice);
+   note.innerHTML=footText+'<br><b>'+urgentText+'</b> '+adviceText;
+  }
+  if(document.getElementById('p-staff').classList.contains('on') && typeof staff==='function')staff();
+  if(document.getElementById('p-privacy').classList.contains('on') && typeof privacy==='function')privacy();
  }
  document.addEventListener('click',event=>{
   const b=event.target.closest('[data-ws-lang]');
