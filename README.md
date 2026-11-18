@@ -5,7 +5,7 @@
 
 A bilingual English/Arabic, consent-first carrier-screening **education and demonstration platform** built for the Abu Dhabi Future Health Digital Innovation Challenge, Fertility Challenge 03.
 
-[Watch the 2-minute narrated demo](media/Amanah_Genomics_Demo.mp4) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
+[Demo video instructions](media/README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
 
 ![Amanah Genomics guided demo](assets/screenshots/01-introduction.jpg)
 
