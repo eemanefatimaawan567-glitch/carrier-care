@@ -59,6 +59,14 @@ def view(cid: str, lang: str = "en", x_token: str = Header()):
     c = db.conn(); p = partner_only(c, cid, x_token); v, rel, both = compute(c, cid, lang, viewer=p)
     db.log(c, cid, p, "view", {"escalate": v["escalate"]}); c.commit()
     return {"text": v["text"], "escalate": v["escalate"], "genes_shown": v["genes_shown"], "reasons": v["reasons"], "referral_stage": STAGES[min(db.stage(c, cid), 4)] if v["escalate"] else None}
+@app.get("/couples/{cid}/staff-role")
+def staff_role(cid: str, x_token: str = Header()):
+    c = db.conn()
+    role = auth(c, cid, x_token)
+    if role not in ("counselor", "coordinator"):
+        raise HTTPException(403, "staff only")
+    return {"role": role}
+
 @app.get("/couples/{cid}/handoff")
 def handoff(cid: str, x_token: str = Header()):
     c = db.conn(); role = auth(c, cid, x_token)
