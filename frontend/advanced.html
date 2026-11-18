@@ -427,7 +427,27 @@ function audit(m){S.log.unshift(new Date().toLocaleTimeString()+" · "+m);$("log
 function load(c){PANEL.forEach(g=>{S.A[g.id]=c.a[g.id]||"0";S.B[g.id]=c.b[g.id]||"0"});S.cA=c.cA;S.cB=c.cB;S.rel=c.r;S.dist=0;S.stage=0;S.gA=PANEL.map(g=>g.id);S.gB=PANEL.map(g=>g.id);$("rel").checked=!!c.r;$("dist").checked=false;audit("Demo case loaded: "+c.t+" (synthetic)");push();go("match")}
 function go(p){if(!document.getElementById("p-"+p))return;document.querySelectorAll(".page").forEach(e=>e.classList.toggle("on",e.id=="p-"+p));document.querySelectorAll("[data-go]").forEach(b=>{const current=b.dataset.go===p;b.classList.toggle("on",current);if(b.closest(".workspace-sidebar")){if(current)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")}});const label=document.querySelector('.workspace-sidebar [data-go="'+p+'"]');if(label){const parent=label.closest('details.workspace-extras');if(parent)parent.open=true;}const c=document.getElementById("workspace-current");if(c)c.textContent=label?label.textContent.trim():"Workspace";try{history.replaceState(null,"","?view="+encodeURIComponent(p))}catch(e){}window.scrollTo(0,0);draw();if(p=="staff")staff();if(p=="privacy")privacy()}
 const LOC={HBB:"11p15.4",GJB2:"13q12.11",SMN1:"5q13.2",CFTR:"7q31.2"};
-function partner(k){return '<div class="card"><div class="ph"><i class="av">'+k+'</i><div><b>Partner '+k+'</b><div class="mono" style="color:var(--mut)">Synthetic profile</div></div></div><div class="mono" style="color:var(--mut);margin:16px 0 0">Individual carrier panel</div>'+PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+g.en.replace(/ \(.*\)/,"")+'</b> <span class="mono" style="color:var(--mut)">'+g.id+" · "+LOC[g.id]+'</span><div class="small2">Autosomal recessive</div></div><span class="st s'+v+'">'+ST[+v][1]+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="Partner '+k+" "+g.id+'">'+ST.map(s=>'<option value="'+s[0]+'"'+(v==s[0]?" selected":"")+">"+s[1]+"</option>").join("")+"</select></div>"}).join("")+'<label class="cons"><input type="checkbox" data-c="'+k+'"'+(S["c"+k]?" checked":"")+'> Allow gene-level match</label><div class="small2" style="margin-top:10px">Genes I allow in the match:</div><div class="tools" style="margin:6px 0 0">'+PANEL.map(g=>'<label class="cons" style="margin:0;padding:4px 10px"><input type="checkbox" data-cg="'+k+'" value="'+g.id+'"'+(S["g"+k].includes(g.id)?" checked":"")+'> '+g.id+"</label>").join("")+'</div></div>'}
+const MATCH_AR={
+  no:"لم يُعثر على تغيّر",carrier:"حامل لتغيّر وراثي",uncertain:"تغيّر غير مؤكّد الأثر",
+  profile:"ملف شخصي افتراضي",panel:"فحص حمل التغيرات الوراثية للفرد",recessive:"وراثة جسمية متنحية",
+  allow:"السماح بمطابقة الجينات",genes:"الجينات التي أسمح بمقارنتها:",
+  shared:"مشاركة الجينات المتطابقة المصرح بها فقط",locked:"لم تُشارك معلومات",
+  server:"تم التحقق بواسطة الخادم · العرض بصفتك الطرف ",family:"نسخ رسالة للعائلة",
+  history:"التاريخ العائلي (خاص بالطرف ",privacy:"يمكنك أنت والمستشار الوراثي فقط الاطلاع على إجاباتك. لا يمكن للطرف الآخر رؤيتها.",
+  request:"طلب زيارة للاستشارة الوراثية",review:"سيراجع المستشار الوراثي التاريخ العائلي الذي شاركته.",
+  yes:"نعم",noOpt:"لا",unsureOpt:"غير متأكد",
+  sibling:"أحد إخوتي أو أقاربي المقربين لديه ثلاسيميا أو ضمور عضلات شوكي أو تليف كيسي أو حالة وراثية أخرى",
+  infant:"توفي طفل أو أحد الإخوة في سن الرضاعة بسبب غير معروف",
+  hearing:"توجد حالات فقدان سمع مبكر أو اضطراب دم وراثي في العائلة",
+  relatives:"توجد عدة حالات زواج بين الأقارب في عائلتنا"
+};
+function partner(k){
+ const ar=S.lang==="ar", trans=(en,arabic)=>ar?arabic:en;
+ const status=["No change found","Carrier","Uncertain variant"],arabic=[MATCH_AR.no,MATCH_AR.carrier,MATCH_AR.uncertain];
+ return '<div class="card"><div class="ph"><i class="av">'+k+'</i><div><b>'+trans("Partner ","الطرف ")+k+'</b><div class="mono" style="color:var(--mut)">'+trans("Synthetic profile",MATCH_AR.profile)+'</div></div></div><div class="mono" style="color:var(--mut);margin:16px 0 0">'+trans("Individual carrier panel",MATCH_AR.panel)+'</div>'+
+ PANEL.map(g=>{const v=S[k][g.id];return '<div class="gr"><div><b>'+trans(g.en.replace(/ \\(.*\\)/,""),g.ar.replace(/ \\(.*\\)/,""))+'</b> <span class="mono" style="color:var(--mut)">'+g.id+' · '+LOC[g.id]+'</span><div class="small2">'+trans("Autosomal recessive",MATCH_AR.recessive)+'</div></div><span class="st s'+v+'">'+trans(status[+v],arabic[+v])+'</span><select data-k="'+k+'" data-g="'+g.id+'" aria-label="'+trans("Partner ","الطرف ")+k+' '+g.id+'">'+status.map((t,i)=>'<option value="'+i+'"'+(v==String(i)?" selected":"")+'>'+trans(t,arabic[i])+'</option>').join("")+'</select></div>'}).join("")+
+ '<label class="cons"><input type="checkbox" data-c="'+k+'"'+(S["c"+k]?" checked":"")+'>'+trans(" Allow gene-level match",MATCH_AR.allow)+'</label><div class="small2" style="margin-top:10px">'+trans("Genes I allow in the match:",MATCH_AR.genes)+'</div><div class="tools" style="margin:6px 0 0">'+PANEL.map(g=>'<label class="cons" style="margin:0;padding:4px 10px"><input type="checkbox" data-cg="'+k+'" value="'+g.id+'"'+(S["g"+k].includes(g.id)?" checked":"")+'> '+g.id+'</label>').join("")+'</div></div>'
+}
 function out(){if(LIVE&&SV)return outLive();const L=S.lang,t=T[L],sc=PANEL.filter(g=>S.gA.includes(g.id)&&S.gB.includes(g.id)),both=S.cA&&S.cB&&sc.length>0,vA=sc.some(g=>S.A[g.id]=="2"),vB=sc.some(g=>S.B[g.id]=="2");let h="",r=[];
  if(!both){h+='<div class="warn">'+t.lock+"</div>"+LOCKV()}
  else{const sh=sc.filter(g=>S.A[g.id]=="1"&&S.B[g.id]=="1");
@@ -539,7 +559,7 @@ const ODDS=t=>'<div class="odds"><i style="flex:1">25%</i><i style="flex:2">50%<
 function outLive(){const L=S.lang,t=T[L],v=SV;let h="";
  v.text.split(" | ").forEach(s=>{const g=v.genes_shown.find(x=>s.includes("("+x+")"));
   if(s==t.lock||s==t.esc)h+='<div class="warn">'+esc(s)+"</div>"+(s==t.lock?LOCKV():"");else h+='<div class="res">'+(g?"<b>"+g+"</b> · ":"")+esc(s)+(g?ODDS(t):"")+"</div>"});
- h+='<span class="tag">🔒 '+(v.text.includes(t.lock)?"Nothing shared":"Shared: matching genes only")+'</span> <span class="tag">Verified by server · viewing as Partner '+(S.as=="B"?"B":"A")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ h+='<span class="tag">🔒 '+(v.text.includes(t.lock)?(L==="ar"?MATCH_AR.locked:"Nothing shared"):(L==="ar"?MATCH_AR.shared:"Shared: matching genes only"))+'</span> <span class="tag">'+(L==="ar"?MATCH_AR.server:"Verified by server · viewing as Partner ")+(S.as=="B"?"B":"A")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">'+(L==="ar"?MATCH_AR.family:"Copy family message")+'</button>';
  S.esc=v.escalate;S.why=v.reasons||[];$("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
 async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
  try{if(!CP||CP.rel!==!!S.rel){const c=await api("/couples",{method:"POST",body:JSON.stringify({related:!!S.rel})});CP={id:c.couple_id,ta:c.token_a,tb:c.token_b,rel:!!S.rel,ja:"",jb:"",ca:null,cb:null,d:null,hA:"",hB:""}}
@@ -581,8 +601,17 @@ document.addEventListener("click",async e=>{const t=e.target.closest("[data-logi
  if(t.dataset.login!==undefined){const choice=$("srole").value, token=$("stok").value.trim();if(!choice){$("srole").focus();return}if(!token){$("stok").focus();return}STF={role:choice,tok:token};return staff()}
  if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
 const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives"};
-function fh(){const k=S.as=="B"?"B":"A",a=S.hist[k];
- $("fh").innerHTML='<b>Family history (private to Partner '+k+')</b><p class="small2" style="margin:4px 0 8px">Only you and a counselor can see your answers. Your partner cannot.</p>'+Object.keys(HI).map(i=>'<div class="row"><span>'+HI[i]+'</span><select data-h="'+i+'" aria-label="'+HI[i]+'">'+[["no","No"],["yes","Yes"],["unsure","Not sure"]].map(o=>'<option value="'+o[0]+'"'+((a[i]||"no")==o[0]?" selected":"")+">"+o[1]+"</option>").join("")+"</select></div>").join("")+(Object.values(a).includes("yes")?'<div class="warn">A counselor will review the family history you shared.</div>':"")+'<p><button class="gh" data-req="1">Request a counseling visit</button></p>'}
+function fh(){
+ const k=S.as==="B"?"B":"A",a=S.hist[k],ar=S.lang==="ar";
+ const t=(en,arabic)=>ar?arabic:en;
+ const labels={sibling_condition:MATCH_AR.sibling,infant_death:MATCH_AR.infant,hearing_or_blood:MATCH_AR.hearing,relatives_married:MATCH_AR.relatives};
+ const choices=[["no",t("No",MATCH_AR.noOpt)],["yes",t("Yes",MATCH_AR.yes)],["unsure",t("Not sure",MATCH_AR.unsureOpt)]];
+ $("fh").innerHTML='<b>'+t("Family history (private to Partner ",MATCH_AR.history)+k+')</b><p class="small2" style="margin:4px 0 8px">'+t("Only you and a counselor can see your answers. Your partner cannot.",MATCH_AR.privacy)+'</p>'+
+ Object.keys(HI).map(i=>'<div class="row"><span>'+t(HI[i],labels[i])+'</span><select data-h="'+i+'" aria-label="'+t(HI[i],labels[i])+'">'+choices.map(o=>'<option value="'+o[0]+'"'+((a[i]||"no")===o[0]?" selected":"")+'>'+o[1]+'</option>').join("")+'</select></div>').join("")+
+ (Object.values(a).includes("yes")?'<div class="warn">'+t("A counselor will review the family history you shared.",MATCH_AR.review)+'</div>':"")+
+ '<p><button class="gh" data-req="1">'+t("Request a counseling visit",MATCH_AR.request)+'</button></p>';
+ $("fh").setAttribute("dir",ar?"rtl":"ltr");
+}
 function quizPost(){if(!LIVE||QA.filter(x=>x!==undefined).length<QZ.length)return;api("/quiz",{method:"POST",body:JSON.stringify({lang:S.lang,score:QA.filter((x,i)=>x===QZ[i].a).length,total:QZ.length})}).catch(()=>{})}
 function queueHtml(q,m){const P={urgent:"Urgent",high:"High",standard:"Standard"};
  let h='<p><b>Counselor queue</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(c.stage)+(c.history_reported?" · family history":"")+(c.counseling_requested?" · visit requested":"")+"</li>").join("")+"</ol>":'<p class="small2">No cases need review.</p>');
@@ -756,6 +785,12 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
   const current=document.getElementById('workspace-current');
   if(current)current.textContent=active?active.textContent.trim():(lang==='ar'?'نظرة عامة':'Dashboard');
   if(changeGuide&&typeof switchPatientLang==='function')switchPatientLang(lang);
+  // Keep the sidebar, private match API language, and all patient explanations in sync.
+  const matchRadio=document.querySelector('input[name="lg"][value="'+lang+'"]');
+  if(matchRadio && !matchRadio.checked){
+   matchRadio.checked=true;
+   matchRadio.dispatchEvent(new Event('change',{bubbles:true}));
+  }
   translateContent(lang);
   const note=document.querySelector('footer');
   if(note){note.setAttribute('lang',lang);note.setAttribute('dir',lang==='ar'?'rtl':'ltr');}
@@ -765,6 +800,9 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
   if(b){update(b.dataset.wsLang,true);return}
   const g=event.target.closest('[data-plang]');
   if(g)update(g.dataset.plang,false);
+ });
+ document.addEventListener('change',event=>{
+  if(event.target?.matches('input[name="lg"]'))update(event.target.value,false);
  });
  // Reapply translations if an educational section renders new content after navigation.
  const contentObserver=new MutationObserver(()=>{if(!translationBusy&&selected==='ar')translateContent('ar')});
