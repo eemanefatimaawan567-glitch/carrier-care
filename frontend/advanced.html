@@ -555,17 +555,25 @@ async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
   if(SV.escalate&&SV.referral_stage)S.stage=STAGES.indexOf(SV.referral_stage)}catch(x){SV=null}
  busy=false;if(again){again=false;return push()}
  out();tri();if(BR){BR=null;$("brf").innerHTML='<p class="small2">Your answers changed, so the earlier brief is out of date. Create it again.</p>'}if($("p-staff").classList.contains("on"))staff()}
-async function staff(msg){const e=$("stf");
+let STAFF_RENDER_SEQ=0;
+async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF;
  if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use staff roles.</div>';return}
- if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role"><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Demo tokens: counselor-demo and coordinator-demo (change them before any real use).</p>';return}
+ if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role"><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Enter the access token for your selected role. Live Render tokens are configured securely under Render Environment; never share them.</p>';return}
  if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
- try{const au=await api("/couples/"+CP.id+"/audit",{},STF.tok),co=STF.role=="counselor";
-  const q=await api("/cases",{},STF.tok),m=await api("/metrics",{},STF.tok);
+ try{
+  const identity=await api("/couples/"+CP.id+"/staff-role",{},active.tok);
+  if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
+  if(identity.role!==active.role)throw Error("This access token belongs to the "+identity.role+" role. Select the matching role and sign in again.");
+  const au=await api("/couples/"+CP.id+"/audit",{},active.tok);
+  if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
+  const co=active.role==="counselor";
+  const q=await api("/cases",{},active.tok),m=await api("/metrics",{},active.tok);
+  if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
   let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">Case '+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">Sign out</button></div>';
-  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},STF.tok);h+='<p><b>Handoff (SBAR)</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
+  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},active.tok);if(seq!==STAFF_RENDER_SEQ || STF!==active)return;h+='<p><b>Handoff (SBAR)</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
   else h+='<p><b>Referral stage:</b> '+esc(STAGES[Math.min(S.stage,4)])+'</p><button class="pri" data-advance="1">Advance stage</button>';
-  h+=queueHtml(q,m)+'<p><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";e.innerHTML=h}
- catch(x){STF=null;staff("Access denied or case not ready.")}}
+  h+=queueHtml(q,m)+'<p><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";if(seq===STAFF_RENDER_SEQ && STF===active)e.innerHTML=h}
+ catch(x){if(seq!==STAFF_RENDER_SEQ || STF!==active)return;STF=null;staff(x.message||"Access denied or case not ready.")}}
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
  if(t.dataset.logout!==undefined){STF=null;return staff()}
  if(t.dataset.login!==undefined){STF={role:$("srole").value,tok:$("stok").value};return staff()}
