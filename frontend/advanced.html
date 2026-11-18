@@ -558,7 +558,8 @@ async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
 let STAFF_RENDER_SEQ=0;
 async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF;
  if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use staff roles.</div>';return}
- if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role"><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Enter the access token for your selected role. Live Render tokens are configured securely under Render Environment; never share them.</p>';return}
+ if(!STF && !msg && e.querySelector("#srole"))return; // preserve a role being selected while background updates arrive
+ if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role" required><option value="" selected disabled>Choose staff role…</option><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Choose Coordinator or Counselor, enter that role’s separate secret access token, then click Sign in. Simply selecting a role does not sign in. Live Render credentials are under Render → Environment. Staff login fix v2.</p>';return}
  if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
  try{
   const identity=await api("/couples/"+CP.id+"/staff-role",{},active.tok);
@@ -576,7 +577,7 @@ async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF;
  catch(x){if(seq!==STAFF_RENDER_SEQ || STF!==active)return;STF=null;staff(x.message||"Access denied or case not ready.")}}
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
  if(t.dataset.logout!==undefined){STF=null;return staff()}
- if(t.dataset.login!==undefined){STF={role:$("srole").value,tok:$("stok").value};return staff()}
+ if(t.dataset.login!==undefined){const choice=$("srole").value, token=$("stok").value.trim();if(!choice){$("srole").focus();return}if(!token){$("stok").focus();return}STF={role:choice,tok:token};return staff()}
  if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
 const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives"};
 function fh(){const k=S.as=="B"?"B":"A",a=S.hist[k];
