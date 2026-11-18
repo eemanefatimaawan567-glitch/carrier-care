@@ -616,10 +616,16 @@ function fh(){
  $("fh").setAttribute("dir",ar?"rtl":"ltr");
 }
 function quizPost(){if(!LIVE||QA.filter(x=>x!==undefined).length<QZ.length)return;api("/quiz",{method:"POST",body:JSON.stringify({lang:S.lang,score:QA.filter((x,i)=>x===QZ[i].a).length,total:QZ.length})}).catch(()=>{})}
-function queueHtml(q,m){const P={urgent:UI("Urgent"),high:UI("High"),standard:UI("Standard")};
- let h='<p><b>'+UI("Counselor queue")+'</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(UI(c.stage))+(c.history_reported?" · '+UI("family history")+'":"")+(c.counseling_requested?" · '+UI("visit requested")+'":"")+"</li>").join("")+"</ol>":'<p class="small2">'+UI("No cases need review.")+'</p>');
- h+='<p><b>'+UI("Pilot metrics")+'</b> <span class="tag">'+UI("Demo data, not real outcomes")+'</span></p><p class="small2">'+UI("Cases: ")+m.cases+" · '+UI("Needing review: ")+"+m.needing_review+" · '+UI("Mean time to first referral step: ")+"+(m.mean_minutes_to_first_referral_step==null?"n/a":m.mean_minutes_to_first_referral_step+"'+UI(" min")+")+" · '+UI("Quiz average: ")+"+(Object.keys(m.quiz).map(k=>k+" "+m.quiz[k].avg_pct+"% (n="+m.quiz[k].n+")").join(", ")||"n/a")+"</p>";
- return h+'<p><button class="gh" data-fhir="1">'+UI("View FHIR-style bundle")+'</button></p><pre class="sb" id="fhirout" hidden></pre>'}
+function queueHtml(q,m){
+ const P={urgent:UI("Urgent"),high:UI("High"),standard:UI("Standard")};
+ let h='<p><b>'+UI("Counselor queue")+'</b></p>';
+ if(q.cases.length){
+  h+='<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>'<li><b>'+P[c.priority]+'</b> · '+UI("Case ")+esc(c.case)+' · '+esc(UI(c.stage))+(c.history_reported?' · '+UI("family history"):'')+(c.counseling_requested?' · '+UI("visit requested"):'')+'</li>').join('')+'</ol>';
+ }else h+='<p class="small2">'+UI("No cases need review.")+'</p>';
+ h+='<p><b>'+UI("Pilot metrics")+'</b> <span class="tag">'+UI("Demo data, not real outcomes")+'</span></p>';
+ h+='<p class="small2">'+UI("Cases: ")+m.cases+' · '+UI("Needing review: ")+m.needing_review+' · '+UI("Mean time to first referral step: ")+(m.mean_minutes_to_first_referral_step==null?'n/a':m.mean_minutes_to_first_referral_step+UI(" min"))+' · '+UI("Quiz average: ")+(Object.keys(m.quiz).map(k=>k+' '+m.quiz[k].avg_pct+'% (n='+m.quiz[k].n+')').join(', ')||'n/a')+'</p>';
+ return h+'<p><button class="gh" data-fhir="1">'+UI("View FHIR-style bundle")+'</button></p><pre class="sb" id="fhirout" hidden></pre>';
+}
 let pdel=false;
 async function privacy(){const e=$("pv"),t=UI;
  if(!LIVE){e.innerHTML='<div class="warn">'+t("Backend not reachable. Start it to use privacy controls.")+'</div>';return}
