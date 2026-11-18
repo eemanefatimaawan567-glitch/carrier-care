@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      CARRIER_ENV: ${CARRIER_ENV:-demo}
+      COUNSELOR_TOKEN: ${COUNSELOR_TOKEN:-counselor-demo}
+      COORDINATOR_TOKEN: ${COORDINATOR_TOKEN:-coordinator-demo}
+    volumes: ["carrier-data:/data"]
+volumes:
+  carrier-data:
