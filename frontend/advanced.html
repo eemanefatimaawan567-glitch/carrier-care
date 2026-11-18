@@ -580,11 +580,11 @@ async function push(){if(!LIVE)return;if(busy){again=true;return}busy=true;
  busy=false;if(again){again=false;return push()}
  out();tri();if(BR){BR=null;$("brf").innerHTML='<p class="small2">Your answers changed, so the earlier brief is out of date. Create it again.</p>'}if($("p-staff").classList.contains("on"))staff()}
 let STAFF_RENDER_SEQ=0;
-async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF;
- if(!LIVE){e.innerHTML='<div class="warn">Backend not reachable. Start it to use staff roles.</div>';return}
+async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF,t=UI;
+ if(!LIVE){e.innerHTML='<div class="warn">'+t("Backend not reachable. Start it to use staff roles.")+'</div>';return}
  if(!STF && !msg && e.querySelector("#srole"))return; // preserve a role being selected while background updates arrive
- if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role" required><option value="" selected disabled>Choose staff role…</option><option value="counselor">Counselor</option><option value="coordinator">Coordinator</option></select><input id="stok" type="password" placeholder="Access token" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">Sign in</button></div><p class="small2">Choose Coordinator or Counselor, enter that role’s separate secret access token, then click Sign in. Simply selecting a role does not sign in. Live Render credentials are under Render → Environment. Staff login fix v2.</p>';return}
- if(!CP){e.innerHTML='<div class="warn">No active case. Open Private match and pick a case first.</div>';return}
+ if(!STF){e.innerHTML=(msg?'<div class="warn">'+esc(msg)+"</div>":"")+'<div class="tools" style="margin-top:0"><select id="srole" aria-label="Role" required><option value="" selected disabled>'+t("Choose staff role…")+'</option><option value="counselor">'+t("Counselor")+'</option><option value="coordinator">'+t("Coordinator")+'</option></select><input id="stok" type="password" placeholder="'+t("Access token")+'" aria-label="Access token" style="font:inherit;padding:8px 12px;border:1px solid var(--ln);border-radius:8px"><button class="pri" data-login="1">'+t("Sign in")+'</button></div><p class="small2">'+t("Choose Coordinator or Counselor, enter that role’s separate secret access token, then click Sign in. Simply selecting a role does not sign in. Live Render credentials are under Render → Environment. Staff login fix v2.")+'</p>';return}
+ if(!CP){e.innerHTML='<div class="warn">'+t("No active case. Open Private match and pick a case first.")+'</div>';return}
  try{
   const identity=await api("/couples/"+CP.id+"/staff-role",{},active.tok);
   if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
@@ -594,11 +594,11 @@ async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF;
   const co=active.role==="counselor";
   const q=await api("/cases",{},active.tok),m=await api("/metrics",{},active.tok);
   if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
-  let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">Case '+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">Sign out</button></div>';
-  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},active.tok);if(seq!==STAFF_RENDER_SEQ || STF!==active)return;h+='<p><b>Handoff (SBAR)</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
-  else h+='<p><b>Referral stage:</b> '+esc(STAGES[Math.min(S.stage,4)])+'</p><button class="pri" data-advance="1">Advance stage</button>';
-  h+=queueHtml(q,m)+'<p><b>Audit ledger</b> <span class="tag">'+(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";if(seq===STAFF_RENDER_SEQ && STF===active)e.innerHTML=h}
- catch(x){if(seq!==STAFF_RENDER_SEQ || STF!==active)return;STF=null;staff(x.message||"Access denied or case not ready.")}}
+  let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+t(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">'+t("Case ")+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">'+t("Sign out")+'</button></div>';
+  if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},active.tok);if(seq!==STAFF_RENDER_SEQ || STF!==active)return;h+='<p><b>'+t("Counselor handoff (SBAR)")+'</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
+  else h+='<p><b>'+t("Referral stage:")+'</b> '+esc(t(STAGES[Math.min(S.stage,4)]))+'</p><button class="pri" data-advance="1">'+t("Advance stage")+'</button>';
+  h+=queueHtml(q,m)+'<p><b>'+t("Audit ledger")+'</b> <span class="tag">'+t(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";if(seq===STAFF_RENDER_SEQ && STF===active)e.innerHTML=h}
+ catch(x){if(seq!==STAFF_RENDER_SEQ || STF!==active)return;STF=null;staff(x.message||t("Access denied or case not ready."))}}
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
  if(t.dataset.logout!==undefined){STF=null;return staff()}
  if(t.dataset.login!==undefined){const choice=$("srole").value, token=$("stok").value.trim();if(!choice){$("srole").focus();return}if(!token){$("stok").focus();return}STF={role:choice,tok:token};return staff()}
@@ -616,10 +616,10 @@ function fh(){
  $("fh").setAttribute("dir",ar?"rtl":"ltr");
 }
 function quizPost(){if(!LIVE||QA.filter(x=>x!==undefined).length<QZ.length)return;api("/quiz",{method:"POST",body:JSON.stringify({lang:S.lang,score:QA.filter((x,i)=>x===QZ[i].a).length,total:QZ.length})}).catch(()=>{})}
-function queueHtml(q,m){const P={urgent:"Urgent",high:"High",standard:"Standard"};
- let h='<p><b>Counselor queue</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(c.stage)+(c.history_reported?" · family history":"")+(c.counseling_requested?" · visit requested":"")+"</li>").join("")+"</ol>":'<p class="small2">No cases need review.</p>');
- h+='<p><b>Pilot metrics</b> <span class="tag">Demo data, not real outcomes</span></p><p class="small2">Cases: '+m.cases+" · Needing review: "+m.needing_review+" · Mean time to first referral step: "+(m.mean_minutes_to_first_referral_step==null?"n/a":m.mean_minutes_to_first_referral_step+" min")+" · Quiz average: "+(Object.keys(m.quiz).map(k=>k+" "+m.quiz[k].avg_pct+"% (n="+m.quiz[k].n+")").join(", ")||"n/a")+"</p>";
- return h+'<p><button class="gh" data-fhir="1">View FHIR-style bundle</button></p><pre class="sb" id="fhirout" hidden></pre>'}
+function queueHtml(q,m){const P={urgent:UI("Urgent"),high:UI("High"),standard:UI("Standard")};
+ let h='<p><b>'+UI("Counselor queue")+'</b></p>'+(q.cases.length?'<ol style="font-size:14px;padding-inline-start:18px">'+q.cases.map(c=>"<li><b>"+P[c.priority]+"</b> · case "+esc(c.case)+" · "+esc(UI(c.stage))+(c.history_reported?" · '+UI("family history")+'":"")+(c.counseling_requested?" · '+UI("visit requested")+'":"")+"</li>").join("")+"</ol>":'<p class="small2">'+UI("No cases need review.")+'</p>');
+ h+='<p><b>'+UI("Pilot metrics")+'</b> <span class="tag">'+UI("Demo data, not real outcomes")+'</span></p><p class="small2">'+UI("Cases: ")+m.cases+" · '+UI("Needing review: ")+"+m.needing_review+" · '+UI("Mean time to first referral step: ")+"+(m.mean_minutes_to_first_referral_step==null?"n/a":m.mean_minutes_to_first_referral_step+"'+UI(" min")+")+" · '+UI("Quiz average: ")+"+(Object.keys(m.quiz).map(k=>k+" "+m.quiz[k].avg_pct+"% (n="+m.quiz[k].n+")").join(", ")||"n/a")+"</p>";
+ return h+'<p><button class="gh" data-fhir="1">'+UI("View FHIR-style bundle")+'</button></p><pre class="sb" id="fhirout" hidden></pre>'}
 let pdel=false;
 async function privacy(){const e=$("pv"),t=UI;
  if(!LIVE){e.innerHTML='<div class="warn">'+t("Backend not reachable. Start it to use privacy controls.")+'</div>';return}
