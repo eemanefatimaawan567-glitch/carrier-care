@@ -51,7 +51,7 @@ corpus = []
 for lang, T in (("en", E.EN), ("ar", E.AR)):
     for k, v in T.items(): corpus.append((lang+":"+k, v("X") if callable(v) else v))
 corpus += [("level:"+k, v) for k, v in E.LEVELS.items()] + [("family", E.FAM["en"])]
-BANNED = [r"\byou (should|must|need to) (not )?(marry|avoid|have|cancel)", r"\bavoid (marriage|marrying|having children)", r"\bcancel", r"\bdangerous", r"\bdefect", r"\binbred", r"bad genes", r"\bcousin marriage is", r"\brisky marriage", r"\bonly safe", r"لا تتزوج", r"ممنوع", r"عيب"]
+from lint import BANNED, flag
 hits = [(n, p) for n, t in corpus for p in BANNED if re.search(p, t, re.I)]
 check("No directive, stigmatizing or coercive phrases (EN+AR)", not hits, str(hits))
 nums = {int(x) for n, t in corpus for x in re.findall(r"(\d+)\s*%", t)}
@@ -59,6 +59,29 @@ check("Only approved percentages appear in text", nums <= {25, 50}, f"found {sor
 check("No success metric based on cancelled marriages", not any("cancel" in t.lower() for _, t in corpus))
 check("Arabic has every English message key", set(E.AR) == set(E.EN))
 check("Every escalation produces a counselor message", all("Review by a genetic counselor or doctor is recommended" in E.couple_view(A,B,1,1)["text"] for A,B in [({**{g:"0" for g in E.GENES},"HBB":"1"},{**{g:"0" for g in E.GENES},"HBB":"1"})]))
+
+# 4b. Language lint on sentence sets written separately from the app text
+import json as _j, os as _o
+_here = _o.path.dirname(_o.path.abspath(__file__))
+for _v, _what in (("heldout_v1.json", "first held-out set: 1 of 8 unsafe caught before the first patch"), ("heldout_v2.json", "fresh set: 6 of 8 caught before the second patch")):
+    _d = _j.load(open(_o.path.join(_here, _v))); _miss = [t for t in _d["unsafe"] if not flag(t)]; _fp = [t for t in _d["safe"] if flag(t)]
+    check(f"Language lint regression set {_v}: all unsafe caught, no safe flagged", not _miss and not _fp, f"{_what}; now missed={len(_miss)}, false positives={len(_fp)}")
+
+# 4c. Hard-case benchmark: expected answers were written down before running (by the author, not an independent reviewer)
+_cases = _j.load(open(_o.path.join(_here, "benchmark_cases.json"))); _bench = []
+for _c in _cases:
+    _A = {g: "0" for g in E.GENES}; _A.update(_c["A"]); _B = {g: "0" for g in E.GENES}; _B.update(_c["B"])
+    _v = E.couple_view(_A, _B, _c["ca"], _c["cb"], _c.get("related", False), _c.get("distress", False), _c.get("lang", "en"), scope=_c.get("scope")); _x = _c["expect"]
+    _bad = []
+    if _v["escalate"] != _x["escalate"]: _bad.append("escalate")
+    if sorted(_v["genes_shown"]) != sorted(_x["genes"]): _bad.append("genes")
+    _bad += ["missing:" + s for s in _x["contains"] if s not in _v["text"]] + ["leaked:" + s for s in _x["absent"] if s in _v["text"]] + ["reason:" + s for s in _x.get("reasons_contain", []) if s not in _v["reasons"]]
+    _bench.append((_c["name"], not _bad, ", ".join(_bad)))
+    check("Benchmark case: " + _c["name"], not _bad, ", ".join(_bad) or "as expected")
+
+# 4d. Emergency-wording detector (keyword safety net; the standing notice is the main safeguard)
+_u = _j.load(open(_o.path.join(_here, "heldout_urgent.json"))); _um = [t for t in _u["must_catch"] if not E.urgent(t)]; _ub = [t for t in _u["benign"] if E.urgent(t)]; _ug = [t for t in _u["known_gaps"] if not E.urgent(t)]
+check("Emergency detector: catches listed phrases and flags no benign question", not _um and not _ub, f"missed={len(_um)}, false positives={len(_ub)}; known gaps (not caught): {len(_ug)} of {len(_u['known_gaps'])}")
 
 # 5. Readability
 def syl(w):
@@ -84,6 +107,6 @@ md = [f"# Evaluation report\nGenerated {datetime.date.today()} on synthetic data
 md += [f"| {'PASS' if r['pass'] else 'FAIL'} | {r['test']} | {r['detail']} |" for r in R]
 md += ["\n## Readability (English)", "| Text | FK grade | Reading ease |", "|---|---|---|"] + [f"| {n} | {g} | {e} |" for n, g, e in read]
 md += ["\n## Arabic length stats (no validated Arabic readability formula is used)", "| Message | Words per sentence | Chars per word |", "|---|---|---|"] + [f"| {k} | {a} | {b} |" for k, a, b in ar_stats]
-md += ["\n## Not yet measured\n- Real comprehension (pre/post quiz) needs human participants. Do not simulate it.\n- Counseling uptake and time to referral need a pilot or a clearly labeled simulation.\n- Equity across languages beyond EN/AR."]
+md += ["\n## What a pass means\nA full pass shows the rules behave as specified on the cases the author thought of, including missing consent, uncertain variants, out-of-scope genes, distress and Arabic output. It is not evidence of clinical accuracy or of safety on unseen inputs. Calibration is not applicable: there is no probabilistic model, and the risk figures are fixed inheritance ratios.", "\n## Language lint is a keyword safety net, not a classifier\nOn sentences written separately from the app text, the first lint caught 1 of 8 unsafe sentences. After a patch it caught 6 of 8 on a fresh set, then both sets became regression tests. Both sets were written by the author, so real recall on unseen phrasing is likely lower. Human and native-speaker review are still needed.", "\n## Not yet measured\n- Real comprehension (pre/post quiz) needs human participants. Do not simulate it.\n- Counseling uptake and time to referral need a pilot or a clearly labeled simulation.\n- Equity across languages beyond EN/AR."]
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "eval_report.md"), "w").write("\n".join(md)); json.dump(R, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "results.json"), "w"), indent=1, ensure_ascii=False)
 print("\n".join(md)); sys.exit(0 if p == len(R) else 1)

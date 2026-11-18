@@ -93,3 +93,21 @@ def test_family_history_not_sure_option():
     assert mine(cid, 0)[0]["history_reported"]
     s = cl.get(f"/couples/{cid}/handoff", headers=CO).json()["sbar"]; assert "not sure about" in s and "Family history (self-reported)" in s
     assert cl.put(f"/couples/{cid}/history", json={"answers": {"infant_death": "maybe"}}, headers=a).status_code == 422
+def test_distress_is_private_to_the_partner_who_flags():
+    cid, a, b = mk(); res(cid, a); res(cid, b); cons(cid, a, True); cons(cid, b, True)
+    assert cl.put(f"/couples/{cid}/flags", json={"distress": True}, headers=a).status_code == 200
+    vb = view(cid, b); assert not vb["escalate"] and vb["reasons"] == [] and "distress" not in str(vb).lower()
+    va = view(cid, a); assert va["escalate"] and "Distress flagged" in va["reasons"]
+    assert mine(cid, 0)[0]["priority"] == "urgent"
+def test_partner_tokens_hashed_at_rest_and_headers():
+    r = cl.post("/couples", json={}).json(); c = sqlite3.connect(db.path())
+    rows = [x[0] for x in c.execute("select token from tokens")]
+    assert r["token_a"] not in rows and all(len(x) == 64 for x in rows)
+    h = cl.get("/health").headers; assert h["x-content-type-options"] == "nosniff" and h["referrer-policy"] == "no-referrer"
+    assert cl.get("/cases", headers={"X-Token": "wrong"}).status_code == 403
+def test_emergency_wording_stops_the_brief():
+    cid, a, b = mk(); res(cid, a); res(cid, b); cons(cid, a, True); cons(cid, b, True)
+    r = cl.post(f"/couples/{cid}/brief", json={"questions": "I want to die"}, headers=a).json()
+    assert r["urgent"] is True and "emergency" in r["message"].lower() and "reference" not in r
+    ok = cl.post(f"/couples/{cid}/brief", json={"questions": "How long does counseling take?"}, headers=a).json()
+    assert "reference" in ok and not ok.get("urgent")

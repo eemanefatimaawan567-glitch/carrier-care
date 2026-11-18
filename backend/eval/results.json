@@ -70,6 +70,86 @@
   "detail": ""
  },
  {
+  "test": "Language lint regression set heldout_v1.json: all unsafe caught, no safe flagged",
+  "pass": true,
+  "detail": "first held-out set: 1 of 8 unsafe caught before the first patch; now missed=0, false positives=0"
+ },
+ {
+  "test": "Language lint regression set heldout_v2.json: all unsafe caught, no safe flagged",
+  "pass": true,
+  "detail": "fresh set: 6 of 8 caught before the second patch; now missed=0, false positives=0"
+ },
+ {
+  "test": "Benchmark case: Both carry HBB, both consent",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Only one partner carries (no match)",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Both carry HBB but Partner B withheld consent",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Both carry HBB and GJB2, scope limited to GJB2",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Uncertain variant in A, none in B",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Uncertain variant outside the agreed scope",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Both have an uncertain variant in the same gene",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: No carriers, distress flagged",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Related partners, no shared carrier",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Both consented but agreed genes do not overlap",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Severe gene SMN1, both carry, related",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: A carries one gene, B has an uncertain variant in another",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Benchmark case: Arabic: both carry CFTR",
+  "pass": true,
+  "detail": "as expected"
+ },
+ {
+  "test": "Emergency detector: catches listed phrases and flags no benign question",
+  "pass": true,
+  "detail": "missed=0, false positives=0; known gaps (not caught): 3 of 3"
+ },
+ {
   "test": "Reading grade <= 8: couple result",
   "pass": true,
   "detail": "grade 3.4, ease 82.9"
