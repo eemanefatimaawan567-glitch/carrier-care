@@ -714,6 +714,31 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
  const enCrumb=crumbSpan?crumbSpan.textContent:'';
  const enLink=crumbLink?crumbLink.textContent:'';
  let selected='en';
+
+ const contentTranslations={"From screening results to":"من نتائج الفحص إلى","informed choice.":"اختيار واعٍ.","Future Health Digital Innovation Challenge":"تحدي الابتكار الرقمي لصحة المستقبل","Inherited Disease Risk":"مخاطر الأمراض الوراثية","Private carrier matching, plain-language explanations and counselor referral, without stigma.":"مطابقة خاصة لحالات حمل الطفرات الوراثية، وشرح مبسط للنتائج، وإرشاد للاستشارة الوراثية دون وصم.","Prepares you for a visit with a genetic counselor or doctor. Does not replace counseling.":"يساعدك على الاستعداد لزيارة مستشار وراثي أو طبيب، ولا يحل محل الاستشارة المتخصصة.","Start the guided demo →":"ابدأ التجربة الإرشادية ←","Learn in simple words":"تعلّم بكلمات بسيطة","✦ No medical diagnosis · Demo uses fictional people and example results":"✦ لا يقدم تشخيصًا طبيًا · يستخدم العرض أشخاصًا ونتائج افتراضية","Private match":"المطابقة الخاصة","Only shared genes are revealed, and only with both consents.":"لا تظهر إلا الجينات المسموح بمقارنتها بعد موافقة الطرفين.","Culturally sensitive":"مراعٍ للسياق الثقافي","Non-directive support for every family.":"دعم غير توجيهي يحترم قرارات كل أسرة.","Traceable care":"متابعة قابلة للتتبع","Result to counselor to testing, all logged.":"تُوثَّق خطوات الانتقال من النتيجة إلى الاستشارة والفحوص اللازمة.","Consent 2 of 2":"موافقتان من أصل اثنتين","Shared: matching genes only":"المشاركة: الجينات المتطابقة المصرح بها فقط","Synthetic data":"بيانات اصطناعية","Respectful, private and actionable.":"احترام للخصوصية وخطوات واضحة.","Consent-led design":"تصميم قائم على الموافقة","English + Arabic explanations":"شروحات بالإنجليزية والعربية","Human counselor pathway":"مسار للاستشارة الوراثية البشرية","Synthetic demonstration only":"عرض توضيحي ببيانات اصطناعية فقط","01 / Interactive demonstration":"٠١ / تجربة تفاعلية","See consent-first care in action.":"جرّب خطوات الرعاية القائمة على الموافقة.","Select a synthetic scenario to explore the complete workflow.":"اختر حالة افتراضية لاستكشاف سير العمل خطوة بخطوة.","Select a demonstration case":"اختر حالة تجريبية","YOUR PRIVATE MATCHING DEMO":"تجربة المطابقة الخاصة","Understand a shared result, at your pace.":"افهم نتيجة المقارنة بالوتيرة المناسبة لك.","These fictional examples demonstrate matching and permission decisions. Select one to populate the existing partner controls below.":"توضح هذه الأمثلة الافتراضية قرارات المطابقة والموافقة. اختر مثالًا لعرضه في أدوات الشريكين أدناه.","This page is an educational client-side demo; the backend enforces its own consent rules.":"هذه تجربة تعليمية على واجهة المستخدم؛ ويتحقق الخادم بشكل مستقل من قواعد الموافقة.","Both partners consent":"موافقة الطرفين","One partner declines":"رفض أحد الطرفين","Uncertain result":"نتيجة غير مؤكدة","Each partner decides what is shared.":"يقرر كل طرف المعلومات التي يوافق على مشاركتها.","Related partners":"شريكان بينهما قرابة","Partner A feels distressed (not an emergency alert)":"يشعر الطرف أ بضيق نفسي (ليس تنبيه طوارئ)","View as Partner A":"العرض بصفتك الطرف أ","View as Partner B":"العرض بصفتك الطرف ب","Result":"النتيجة","Listen":"استمع","Punnett view":"مربع بانت","Two carriers: what each pregnancy could look like.":"مثال توضيحي للاحتمالات الوراثية في كل حمل عندما يكون الطرفان حاملين للطفرّة نفسها.","Learn":"تعلّم","Pick the level that suits you, then check your understanding.":"اختر المستوى المناسب لك، ثم اختبر فهمك.","Your options":"خياراتك","Every option is your choice. A counselor can explain each one.":"القرار لك، ويمكن للمستشار الوراثي شرح كل خيار.","Natural conception":"الحمل الطبيعي","With informed follow-up and early newborn care.":"مع المتابعة المستنيرة ورعاية المولود المبكرة.","Prenatal testing":"الفحوص أثناء الحمل","Testing early in pregnancy, such as CVS or amniocentesis.":"فحوص مبكرة أثناء الحمل مثل أخذ عينة من الزغابات المشيمية أو بزل السلى.","Embryo testing (PGT-M)":"فحص الأجنة الوراثي (PGT-M)","Testing embryos during IVF for a known change.":"فحص الأجنة أثناء الإخصاب المخبري لتحرّي تغير وراثي معروف.","Early newborn care":"الرعاية المبكرة للمولود","Some conditions can be managed or treated from birth.":"يمكن التعامل مع بعض الحالات أو علاجها منذ الولادة.","Some people also talk with family or a trusted adviser. The choice is yours. Availability and cost vary. Confirm with a service.":"قد يختار البعض التحدث مع الأسرة أو مستشار موثوق. القرار لك. يختلف توفر الخدمات وتكلفتها؛ تحقّق من مقدم الخدمة.","Risk curve":"منحنى المخاطر","How relatedness changes the chance, before any screening result.":"كيف يمكن للقرابة أن تؤثر في الاحتمال التقريبي قبل توفر نتائج الفحص.","Unrelated":"لا توجد قرابة","Second cousins":"أبناء عمومة من الدرجة الثانية","First cousins":"أبناء عمومة من الدرجة الأولى","Double first cousins":"أبناء عمومة من الطرفين","Chance a child is affected, before screening":"الاحتمال التقريبي لتأثر الطفل قبل الفحص","Relatedness F =":"معامل القرابة F =","Allele frequency q =":"تواتر الأليل q =","Illustrative values, not population data. Screening replaces this estimate with the couple’s actual result.":"قيم توضيحية وليست بيانات سكانية. لا تُغني هذه التقديرات عن تفسير نتائج الفحص الفعلية لدى المختص.","My privacy":"خصوصيتي","See your consent history, withdraw, or delete your data.":"راجع سجل موافقتك، أو اسحبها، أو احذف بياناتك.","Staff":"مساحة الموظفين","Counselors and coordinators sign in here. Each role sees only what it needs.":"يسجّل المستشارون والمنسقون الدخول هنا. ولكل دور صلاحيات محددة.","Live backend":"الخادم المباشر","The same case, checked by the real API. Works when the backend is running.":"فحص الحالة نفسها عبر واجهة البرمجة الحقيقية عند تشغيل الخادم.","Independent API consent checks":"فحوص مستقلة للموافقة عبر واجهة البرمجة","Run consent safety checks":"تشغيل فحوص سلامة الموافقة"};
+ const reverseTranslations=Object.fromEntries(Object.entries(contentTranslations).map(([en,ar])=>[ar,en]));
+ const CONTENT_AREAS=['#p-overview','#p-match','#p-punnett','#p-learn','#p-options','#p-risk','#p-privacy','#p-staff','#p-server'];
+ let translationBusy=false;
+ function translateContent(lang){
+  if(translationBusy)return; translationBusy=true;
+  try{
+   const from=lang==='ar'?contentTranslations:reverseTranslations;
+   for(const sel of CONTENT_AREAS){
+    const area=document.querySelector(sel);if(!area)continue;
+    area.setAttribute('lang',lang);
+    // Keep data visualizations and technical role-based content layout unchanged.
+    if(sel==='#p-overview'||sel==='#p-options')area.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+    const walker=document.createTreeWalker(area,NodeFilter.SHOW_TEXT);
+    const texts=[];while(walker.nextNode())texts.push(walker.currentNode);
+    for(const node of texts){
+     if(node.parentElement?.closest('script,style,pre,code,textarea,svg'))continue;
+     const original=node.nodeValue||'', trimmed=original.trim();
+     if(!Object.prototype.hasOwnProperty.call(from,trimmed))continue;
+     node.nodeValue=original.replace(trimmed,from[trimmed]);
+    }
+   }
+  }finally{translationBusy=false}
+ }
  function update(lang,changeGuide){
   if(lang!=='en'&&lang!=='ar')return;
   selected=lang;
@@ -730,6 +755,7 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
   const current=document.getElementById('workspace-current');
   if(current)current.textContent=active?active.textContent.trim():(lang==='ar'?'نظرة عامة':'Dashboard');
   if(changeGuide&&typeof switchPatientLang==='function')switchPatientLang(lang);
+  translateContent(lang);
  }
  document.addEventListener('click',event=>{
   const b=event.target.closest('[data-ws-lang]');
@@ -737,6 +763,9 @@ document.addEventListener('click',function(e){if(drawer.open&&!drawer.contains(e
   const g=event.target.closest('[data-plang]');
   if(g)update(g.dataset.plang,false);
  });
+ // Reapply translations if an educational section renders new content after navigation.
+ const contentObserver=new MutationObserver(()=>{if(!translationBusy&&selected==='ar')translateContent('ar')});
+ document.querySelectorAll(CONTENT_AREAS.join(',')).forEach(el=>contentObserver.observe(el,{childList:true,subtree:true,characterData:true}));
  // Preserve selection after changing sections. Only navigation is translated;
  // deeper research/staff screens remain in English and are not clinically certified.
  update('en',false);
