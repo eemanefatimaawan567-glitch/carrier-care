@@ -430,6 +430,17 @@ const AR_DYNAMIC={"Explanation level":"مستوى الشرح","Simple":"مبسّ
 function UI(text){return S.lang==="ar"?(AR_DYNAMIC[text]||text):text}
 Object.assign(AR_DYNAMIC,{"Gene · ":"الجين · ","Illustration only":"رسم توضيحي فقط","Two carriers of the same gene":"شخصان حاملان لتغيّرين مرتبطين بالمرض المتنحي نفسه","Partner A: A":"الطرف أ: A","Partner A: a":"الطرف أ: a","Partner B: A":"الطرف ب: A","Partner B: a":"الطرف ب: a","Neither":"غير مصاب وغير حامل","Carrier":"حامل للتغيّر","Affected":"مصاب","Neither change":"لا يحمل التغيّر","Carrier child":"طفل حامل للتغيّر","Affected child":"طفل مصاب","Per pregnancy":"في كل حمل","3 in 4 chance a child will not have the condition.":"احتمال ثلاثة من أربعة ألا يُصاب الطفل بالمرض في كل حمل.","Shared with consent":"مشاركة بموافقة الطرفين","No shared carrier finding":"لا توجد نتيجة حمل مشتركة","Comparison locked until both partners consent.":"المقارنة مقفلة حتى يوافق الطرفان.","A chance, not a diagnosis":"احتمال وليس تشخيصًا","Relatedness does not change these odds":"القرابة لا تغير هذه الاحتمالات عندما يكون الطرفان حاملين للتغيّرات المسببة للمرض نفسه","Why: ":"سبب الإحالة: ","Both carriers: ":"كلا الطرفين حاملان للتغيّر: "," (severe)":" (حالة قد تكون خطيرة)","Uncertain variant":"تغيّر غير مؤكد الدلالة","Distress flagged":"تم الإبلاغ عن ضيق نفسي","No referral needed yet.":"لا توجد حاجة لإحالة في هذه المرحلة."});
 const LOC={HBB:"11p15.4",GJB2:"13q12.11",SMN1:"5q13.2",CFTR:"7q31.2"};
+Object.assign(AR_DYNAMIC,{
+ "Pathway complete":"اكتمل المسار",
+ "Case unavailable for referral progression":"الحالة غير متاحة لتقدم الإحالة",
+ "Showing recent events: ":"أحدث أحداث السجل: ",
+ "View full audit history":"عرض سجل التدقيق الكامل",
+ "older events":"أحداث أقدم",
+ "Referral could not be advanced: ":"تعذر تقدم الإحالة: ",
+ "Shared: matching genes only":"المشاركة: الجينات المتطابقة المصرح بها فقط",
+ "Nothing shared":"لم تتم مشاركة شيء",
+ "Copy family message":"نسخ رسالة للأسرة"
+});
 const MATCH_AR={
   no:"لم يُعثر على تغيّر",carrier:"حامل لتغيّر وراثي",uncertain:"تغيّر غير مؤكّد الأثر",
   profile:"ملف شخصي افتراضي",panel:"فحص حمل التغيرات الوراثية للفرد",recessive:"وراثة جسمية متنحية",
@@ -461,7 +472,7 @@ function out(){if(LIVE&&SV)return outLive();const L=S.lang,t=T[L],sc=PANEL.filte
  if(S.dist)r.push("Distress flagged");
  S.esc=r.length>0;S.why=r;
  if(S.esc)h+='<div class="warn">'+t.esc+"</div>";
- h+='<span class="tag">🔒 '+(both?"Shared: matching genes only":"Nothing shared")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">Copy family message</button>';
+ h+='<span class="tag">🔒 '+UI(both?"Shared: matching genes only":"Nothing shared")+'</span> <button class="gh" data-fam="1" style="margin-top:12px">'+UI("Copy family message")+'</button>';
  $("out").innerHTML=h;$("out").dir=L=="ar"?"rtl":"ltr"}
 function tri(){
  const tr=UI;
@@ -617,13 +628,33 @@ async function staff(msg){const e=$("stf"), seq=++STAFF_RENDER_SEQ, active=STF,t
   if(seq!==STAFF_RENDER_SEQ || STF!==active)return;
   let h='<div class="ph"><i class="av">'+(co?"C":"K")+'</i><div><b>'+t(co?"Counselor":"Coordinator")+'</b><div class="mono" style="color:var(--mut)">'+t("Case ")+esc(CP.id)+'</div></div><button class="gh" data-logout="1" style="margin-inline-start:auto">'+t("Sign out")+'</button></div>';
   if(co){const hf=await api("/couples/"+CP.id+"/handoff",{},active.tok);if(seq!==STAFF_RENDER_SEQ || STF!==active)return;h+='<p><b>'+t("Counselor handoff (SBAR)")+'</b></p><pre class="sb">'+esc(hf.sbar)+"</pre>"}
-  else h+='<p><b>'+t("Referral stage:")+'</b> '+esc(t(STAGES[Math.min(S.stage,4)]))+'</p><button class="pri" data-advance="1">'+t("Advance stage")+'</button>';
-  h+=queueHtml(q,m)+'<p><b>'+t("Audit ledger")+'</b> <span class="tag">'+t(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p><ol style="font-size:13px;padding-inline-start:18px">'+au.events.map(x=>"<li>"+esc(x.actor)+" · "+esc(x.event)+"</li>").join("")+"</ol>";if(seq===STAFF_RENDER_SEQ && STF===active)e.innerHTML=h}
+  else {
+   const liveCase=q.cases.find(c=>c.case===CP.id);
+   const currentStage=liveCase?liveCase.stage:null;
+   const finished=currentStage===STAGES[STAGES.length-1];
+   h+='<p><b>'+t("Referral stage:")+'</b> '+esc(currentStage?t(currentStage):t("Case unavailable for referral progression"))+'</p>';
+   h+=finished?'<button class="pri" type="button" disabled>'+t("Pathway complete")+'</button>':(currentStage?'<button class="pri" type="button" data-advance="1">'+t("Advance stage")+'</button>':'');
+  }
+  const allEvents=au.events||[];
+  const showLatest=allEvents.slice(-10).reverse();
+  const olderEvents=allEvents.slice(0,-10).reverse();
+  const auditRows=events=>events.map((x,i)=>'<li>'+esc(x.actor)+' · '+esc(x.event)+'</li>').join('');
+  h+=queueHtml(q,m)+'<p><b>'+t("Audit ledger")+'</b> <span class="tag">'+t(au.chain_valid?"Chain valid ✓":"Chain BROKEN")+'</span></p>';
+  h+='<p class="small2">'+t("Showing recent events: ")+showLatest.length+' / '+allEvents.length+'</p>';
+  h+='<ol style="font-size:13px;padding-inline-start:18px">'+auditRows(showLatest)+'</ol>';
+  if(olderEvents.length)h+='<details class="audit-history"><summary>'+t("View full audit history")+' ('+olderEvents.length+' '+t("older events")+')</summary><ol style="font-size:13px;padding-inline-start:18px" reversed start="'+olderEvents.length+'">'+auditRows(olderEvents)+'</ol></details>';
+  if(seq===STAFF_RENDER_SEQ && STF===active)e.innerHTML=h}
  catch(x){if(seq!==STAFF_RENDER_SEQ || STF!==active)return;STF=null;staff(x.message||t("Access denied or case not ready."))}}
 document.addEventListener("click",async e=>{const t=e.target.closest("[data-login],[data-logout],[data-advance]");if(!t)return;
  if(t.dataset.logout!==undefined){STF=null;return staff()}
  if(t.dataset.login!==undefined){const choice=$("srole").value, token=$("stok").value.trim();if(!choice){$("srole").focus();return}if(!token){$("stok").focus();return}STF={role:choice,tok:token};return staff()}
- if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
+ if(CP&&t.dataset.advance!==undefined){
+  const button=t; if(button.disabled||!STF||STF.role!=="coordinator")return;
+  button.disabled=true;
+  try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok);await push();await staff()}
+  catch(err){button.disabled=false;const box=$("stf");const notice=document.createElement("p");notice.className="warn";notice.textContent=UI("Referral could not be advanced: ")+(err.message||"Unknown error");box.prepend(notice);await staff()}
+ }});
+
 const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives",current_pregnancy:"I or my partner is currently pregnant and have a genetic screening concern",known_diagnosis:"I or my partner has a diagnosed inherited genetic condition"};
 function fh(){
  const k=S.as==="B"?"B":"A",a=S.hist[k],ar=S.lang==="ar";
