@@ -111,3 +111,17 @@ def test_emergency_wording_stops_the_brief():
     assert r["urgent"] is True and "emergency" in r["message"].lower() and "reference" not in r
     ok = cl.post(f"/couples/{cid}/brief", json={"questions": "How long does counseling take?"}, headers=a).json()
     assert "reference" in ok and not ok.get("urgent")
+
+def test_new_referral_prompts_prioritize_without_partner_disclosure():
+    for key in ("current_pregnancy", "known_diagnosis"):
+        cid, a, b = mk()
+        res(cid, a); res(cid, b)
+        cons(cid, a, False); cons(cid, b, False)
+        response = cl.put(f"/couples/{cid}/history", json={"answers": {key: "yes"}}, headers=a)
+        assert response.status_code == 200
+        queue = cl.get("/cases", headers=CO)
+        assert queue.status_code == 200
+        case = next(x for x in queue.json()["cases"] if x["case"] == cid)
+        assert case["priority"] == "high"
+        assert "locked" in view(cid, b)["text"]
+        assert cl.get(f"/couples/{cid}/me", headers=b).json()["own_review"] is False
