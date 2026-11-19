@@ -109,7 +109,7 @@ def case_info(c, cid):
     hist = any(any(v == "yes" for v in json.loads(r["answers"]).values()) for r in c.execute("select answers from history where couple_id=?", (cid,)))
     req = c.execute("select 1 from ledger where couple_id=? and event='counseling_requested'", (cid,)).fetchone() is not None
     severe = any(E.GENES[g][0] for g in v["genes_shown"])
-    pr = "urgent" if distress_for(c, cid, None) else "high" if severe else "standard" if (v["escalate"] or hist) else None
+    pr = "urgent" if distress_for(c, cid, None) else "high" if (severe or any(any(a.get(k) == "yes" for k in ("current_pregnancy", "known_diagnosis")) for a in (json.loads(row["answers"]) for row in c.execute("select answers from history where couple_id=?", (cid,)))) else "standard" if (v["escalate"] or hist) else None
     if pr is None: return None
     return {"case": cid, "priority": pr, "stage": STAGES[min(db.stage(c, cid), 4)], "history_reported": hist, "counseling_requested": req}
 @app.put("/couples/{cid}/history")
