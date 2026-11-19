@@ -19,7 +19,7 @@ AR = {"sh": lambda g: f"كلاكما يحمل تغيّرًا جينيًا مرت
 LEVELS = {"Simple": "Think of two keys. A carrier has one working key and one that does not, and the door still opens. Trouble only happens if a child gets the non-working key from both parents.",
           "Standard": "A carrier has one changed copy of a gene and one working copy. Carriers usually have no symptoms. A child is affected only if both parents pass on a changed copy.",
           "Clinical": "Autosomal recessive inheritance. Two heterozygous carriers have a 25% recurrence risk per pregnancy, independent of earlier outcomes. Variants of uncertain significance (ACMG/AMP) are not used for risk counseling."}
-FAM = {"en": "I had a genetic test. Silent gene changes are common. Nobody is to blame. If a disease-causing genetic variant has been identified in the family, relatives can ask a genetics professional whether targeted testing could help."}
+FAM = {"en": "I had a genetic test. Some people carry gene changes and feel well. No one is to blame. If a gene change known to cause disease runs in your family, ask a genetics expert if a test may help."}
 
 def risk(a, b):
     """Per-pregnancy outcome for one gene. a,b in {'0','1'}. Relatedness is NOT an input by design."""
