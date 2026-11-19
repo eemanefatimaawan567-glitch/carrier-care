@@ -19,7 +19,7 @@ AR = {"sh": lambda g: f"كلاكما يحمل تغيّرًا جينيًا مرت
 LEVELS = {"Simple": "Think of two keys. A carrier has one working key and one that does not, and the door still opens. Trouble only happens if a child gets the non-working key from both parents.",
           "Standard": "A carrier has one changed copy of a gene and one working copy. Carriers usually have no symptoms. A child is affected only if both parents pass on a changed copy.",
           "Clinical": "Autosomal recessive inheritance. Two heterozygous carriers have a 25% recurrence risk per pregnancy, independent of earlier outcomes. Variants of uncertain significance (ACMG/AMP) are not used for risk counseling."}
-FAM = {"en": "I had a genetic test. Silent gene changes are common. Nobody is to blame. If a relative has an inherited condition, they can ask a genetic counselor or doctor about testing."}
+FAM = {"en": "I had a genetic test. Silent gene changes are common. Nobody is to blame. If a disease-causing genetic variant has been identified in the family, relatives can ask a genetics professional whether targeted testing could help."}
 
 def risk(a, b):
     """Per-pregnancy outcome for one gene. a,b in {'0','1'}. Relatedness is NOT an input by design."""
@@ -57,7 +57,9 @@ def sbar(view, related, both):
 HISTORY = {"sibling_condition": "A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",
            "infant_death": "A child or sibling died in infancy from an unknown cause",
            "hearing_or_blood": "Early hearing loss or a blood disorder runs in the family",
-           "relatives_married": "Our families have several marriages between relatives"}
+           "relatives_married": "Our families have several marriages between relatives",
+           "current_pregnancy": "I or my partner is currently pregnant and have a genetic screening concern",
+           "known_diagnosis": "I or my partner has a diagnosed inherited genetic condition"}
 
 import re as _re
 URGENT = _re.compile(r"suicid|kill myself|end(ing)? my (own )?life|want to die|hurt myself|self[- ]?harm|emergency|can'?t breathe|chest pain|bleeding heavily|انتحار|أقتل نفسي|أريد أن أموت|طوارئ|نزيف", _re.I)
