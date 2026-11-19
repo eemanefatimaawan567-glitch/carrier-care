@@ -418,7 +418,7 @@ const PANEL=[{id:"HBB",sev:1,en:"Hemoglobin disorders (HBB)",ar:"اضطرابا�
 const ST=[["0","No change found"],["1","Carrier"],["2","Uncertain variant"]];
 const T={en:{sh:g=>"You both carry a change linked to "+g+". Each pregnancy: 1 in 4 chance of an affected child. A chance, not a diagnosis.",none:"No shared carrier finding. The panel is limited, so risk is lowered, not removed.",rel:"Related partners may share changes this panel misses. A genetic counselor or doctor can help.",vus:"One uncertain variant. Its meaning is unknown, so no risk figure is shown. Understanding can change over time. Ask a genetic counselor or doctor about re-checking it.",lock:"Comparison locked until both partners consent.",esc:"Review by a genetic counselor or doctor is recommended.",o:["Affected","Carrier","Neither"]},
 ar:{sh:g=>"كلاكما يحمل تغيّرًا جينيًا مرتبطًا بـ"+g+". في كل حمل احتمال واحد من أربعة لإصابة الطفل. هذا احتمال وليس تشخيصًا.",none:"لا يوجد تغيّر جيني مشترك بينكما. وبما أن نطاق الفحص محدود، فالاحتمال أقل لكنه لا يزول.",rel:"إذا كان بينكما قرابة، فقد تتشاركان تغيّرات جينية لا يغطيها هذا الفحص. يمكن للمستشار الوراثي أو الطبيب مساعدتكما.",vus:"وُجد تغيّر جيني غير مؤكد الأثر. معناه غير معروف حتى الآن، لذا لا تُعرض نسبة خطر. قد يتغيّر الفهم العلمي مع الوقت، فيمكنك سؤال مستشار وراثي أو طبيب عن إعادة فحصه.",lock:"المقارنة مقفلة حتى يوافق الشريكان.",esc:"يُنصح بمراجعة مستشار وراثي أو طبيب مختص بالوراثة.",o:["مصاب","حامل للتغيّر","غير مصاب ولا حامل"]}};
-const FAM={en:"I had a genetic test. Silent gene changes are common. Nobody is to blame. If a relative has an inherited condition, they can ask a genetic counselor or doctor about testing.",ar:"أجريت فحصًا وراثيًا. التغيّرات الجينية الصامتة شائعة، ولا يتحمل أحد اللوم عنها. إذا كان لدى أحد الأقارب حالة وراثية، فيمكنه استشارة طبيب أو مستشار وراثي بشأن الفحص."};
+const FAM={en:"I had a genetic test. Silent gene changes are common. Nobody is to blame. If a disease-causing genetic variant has been identified in the family, relatives can ask a genetics professional whether targeted testing could help.",ar:"أجريت فحصًا وراثيًا. التغيّرات الجينية الصامتة شائعة، ولا يتحمل أحد اللوم عنها. إذا تم تحديد تغيّر وراثي مسبب للمرض في العائلة، يمكن للأقارب سؤال مختص وراثة عمّا إذا كان الفحص الموجّه مناسبًا لهم."};
 const STAGES=["Result issued","Counselor notified","Counseling completed","Confirmatory testing","Reproductive-genomics service (if chosen)"];
 const CASES=[{t:"Carrier couple",d:"Both carry HBB. Both consent.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:1,r:1},{t:"One carrier",d:"Only Partner A carries. No match.",a:{HBB:"1"},b:{},cA:1,cB:1,r:0},{t:"Uncertain variant",d:"GJB2 variant of unknown meaning.",a:{GJB2:"2"},b:{},cA:1,cB:1,r:0},{t:"Consent withheld",d:"Both carry HBB. Partner B declines.",a:{HBB:"1"},b:{HBB:"1"},cA:1,cB:0,r:1}];
 const S={A:{},B:{},cA:0,cB:0,rel:0,dist:0,lang:"en",stage:0,log:[],esc:false,why:[],hist:{A:{},B:{}},gA:PANEL.map(g=>g.id),gB:PANEL.map(g=>g.id)};
@@ -442,7 +442,7 @@ const MATCH_AR={
   sibling:"أحد إخوتي أو أقاربي المقربين لديه ثلاسيميا أو ضمور عضلات شوكي أو تليف كيسي أو حالة وراثية أخرى",
   infant:"توفي طفل أو أحد الإخوة في سن الرضاعة بسبب غير معروف",
   hearing:"توجد حالات فقدان سمع مبكر أو اضطراب دم وراثي في العائلة",
-  relatives:"توجد عدة حالات زواج بين الأقارب في عائلتنا"
+  relatives:"توجد عدة حالات زواج بين الأقارب في عائلتنا",pregnancy:"أنا أو شريكي في حمل حالي ولدينا استفسار متعلق بالفحص الوراثي",diagnosis:"لديّ أو لدى شريكي تشخيص لحالة وراثية"
 };
 function partner(k){
  const ar=S.lang==="ar", trans=(en,arabic)=>ar?arabic:en;
@@ -624,15 +624,16 @@ document.addEventListener("click",async e=>{const t=e.target.closest("[data-logi
  if(t.dataset.logout!==undefined){STF=null;return staff()}
  if(t.dataset.login!==undefined){const choice=$("srole").value, token=$("stok").value.trim();if(!choice){$("srole").focus();return}if(!token){$("stok").focus();return}STF={role:choice,tok:token};return staff()}
  if(CP){try{await api("/couples/"+CP.id+"/referral/advance",{method:"POST"},STF.tok)}catch(x){}await push();staff()}});
-const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives"};
+const HI={sibling_condition:"A sibling or close relative has thalassemia, SMA, cystic fibrosis or another inherited condition",infant_death:"A child or sibling died in infancy from an unknown cause",hearing_or_blood:"Early hearing loss or a blood disorder runs in the family",relatives_married:"Our families have several marriages between relatives",current_pregnancy:"I or my partner is currently pregnant and have a genetic screening concern",known_diagnosis:"I or my partner has a diagnosed inherited genetic condition"};
 function fh(){
  const k=S.as==="B"?"B":"A",a=S.hist[k],ar=S.lang==="ar";
  const t=(en,arabic)=>ar?arabic:en;
- const labels={sibling_condition:MATCH_AR.sibling,infant_death:MATCH_AR.infant,hearing_or_blood:MATCH_AR.hearing,relatives_married:MATCH_AR.relatives};
+ const labels={sibling_condition:MATCH_AR.sibling,infant_death:MATCH_AR.infant,hearing_or_blood:MATCH_AR.hearing,relatives_married:MATCH_AR.relatives,current_pregnancy:MATCH_AR.pregnancy,known_diagnosis:MATCH_AR.diagnosis};
  const choices=[["no",t("No",MATCH_AR.noOpt)],["yes",t("Yes",MATCH_AR.yes)],["unsure",t("Not sure",MATCH_AR.unsureOpt)]];
  $("fh").innerHTML='<b>'+t("Family history (private to Partner ",MATCH_AR.history)+k+')</b><p class="small2" style="margin:4px 0 8px">'+t("Only you and a counselor can see your answers. Your partner cannot.",MATCH_AR.privacy)+'</p>'+
  Object.keys(HI).map(i=>'<div class="row"><span>'+t(HI[i],labels[i])+'</span><select data-h="'+i+'" aria-label="'+t(HI[i],labels[i])+'">'+choices.map(o=>'<option value="'+o[0]+'"'+((a[i]||"no")===o[0]?" selected":"")+'>'+o[1]+'</option>').join("")+'</select></div>').join("")+
  (Object.values(a).includes("yes")?'<div class="warn">'+t("A counselor will review the family history you shared.",MATCH_AR.review)+'</div>':"")+
+ (a.current_pregnancy==="yes"||a.known_diagnosis==="yes"?'<div class="warn">'+t("If there is an ongoing pregnancy or a known genetic diagnosis, seek prompt professional advice; this demo cannot assess timing or individual risk.","إذا كان هناك حمل حالي أو تشخيص وراثي معروف، تواصل مع مختص في أقرب وقت؛ لا يستطيع هذا العرض تقييم توقيت الفحوص أو المخاطر الفردية.")+'</div>':"")+
  '<p><button class="gh" data-req="1">'+t("Request a counseling visit",MATCH_AR.request)+'</button></p>';
  $("fh").setAttribute("dir",ar?"rtl":"ltr");
 }
