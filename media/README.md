@@ -1,11 +1,14 @@
-# Amanah Genomics — full narrated demo
+# Amanah Genomics — Competition demo video
 
-The synchronized Janet-narrated 2:04 video is ready for hackathon submission, but this large binary file is **not** included in the GitHub repository yet.
+The final edited and narrated Amanah Genomics demonstration is ready for upload, but the video file is not yet stored in this GitHub repository.
 
-**To add the exact final video** (4.8 MB): open the `media/` folder on GitHub, select **Add file → Upload files**, and upload `Amanah_Genomics_Janet_Synced_Demo.mp4`. Commit the change. Avoid uploading an older or robotic narration version.
+## Upload the final MP4
 
-The complete downloadable project snapshot is also supplied separately as `Amanah_Genomics_GitHub_Complete_Release.zip`, containing a copy of the final narrated video under `media/Amanah_Genomics_Demo.mp4`.
+1. Download `Amanah_Genomics_Final_Competition_Demo.mp4` from the ChatGPT conversation.
+2. In this GitHub repository, open the `media/` folder.
+3. Choose **Add file → Upload files**, select the MP4, and commit it to `main`.
+4. Once uploaded, copy the GitHub link or use a public video host with direct playback for judges.
 
-For the competition form, use a publicly accessible hosted video link once uploaded; GitHub's repository page is primarily a code and documentation showcase.
+The final file contains Janet's narration, a bilingual English/Arabic demonstration, consent-first matching, risk education, counselor pathway, backend evidence, and a single closing card.
 
-This is a fictional educational demonstration, not a clinically validated healthcare service.
+This is a synthetic-data educational prototype, **not** a clinically validated healthcare service. Never upload patient data or staff access tokens.
