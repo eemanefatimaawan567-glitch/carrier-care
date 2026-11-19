@@ -144,6 +144,10 @@ Not included: Urdu (needs clinical and language review), an offline app, and any
 - **[Demonstration only]** Guided patient onboarding, simulated partner permissions, counselor queue, referral stages, and synthetic pilot metrics. The guided homepage is not equivalent to the backend-enforced permission workflow.
 - **[Planned / unconfirmed]** Real provider deployment, independent clinical safety validation, independent native-Arabic medical review, FHIR conformance validation, production authentication, database hardening, and integration with UAE Pass, Malaffi or clinical systems. None is scheduled or contracted unless separately confirmed in writing.
 
+## Independent academic input (November 19, 2026)
+
+A PhD academic working in human genetics/gene therapy provided **genuine written educational feedback** on five questions about inheritance risk, referral criteria, VUS, privacy and consent, and counselor-intake information. The response was **informal and literature-informed**; the reviewer asked that the suggestions be double-checked. Their name and original correspondence are not published here without attribution permission. This is **not** completed clinical validation or product endorsement. See [feedback summary and action items](docs/INDEPENDENT_ACADEMIC_FEEDBACK_2026-11-19.md).
+
 ## Evidence and review status
 - Every clinical statement is listed with a published source in an evidence map (see the submission documents).
 - A molecular geneticist checked five key statements for facts and clarity. This was not a clinical review or an endorsement.
