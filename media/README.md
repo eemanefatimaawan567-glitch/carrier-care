@@ -1,14 +1,19 @@
-# Amanah Genomics — Competition demo video
+# Amanah Genomics — final competition walkthrough
 
-The final edited and narrated Amanah Genomics demonstration is ready for upload, but the video file is not yet stored in this GitHub repository.
+**Video status:** The final narrated MP4 exists as a finished file in the conversation, but the binary **has not yet been added to this GitHub repository**. The links below will work once it has been uploaded.
 
-## Upload the final MP4
+## Final video (2 min 4 sec)
 
-1. Download `Amanah_Genomics_Final_Competition_Demo.mp4` from the ChatGPT conversation.
-2. In this GitHub repository, open the `media/` folder.
-3. Choose **Add file → Upload files**, select the MP4, and commit it to `main`.
-4. Once uploaded, copy the GitHub link or use a public video host with direct playback for judges.
+- **Required filename:** `Amanah_Genomics_Final_Competition_Demo.mp4`
+- **Expected GitHub video:** [Watch/download the competition demo](Amanah_Genomics_Final_Competition_Demo.mp4)
+- [Live synthetic app](https://amanah-genomics-demo.onrender.com/)
+- [External feedback and acknowledgments](../docs/EXTERNAL_FEEDBACK_AND_ACKNOWLEDGMENTS.md)
 
-The final file contains Janet's narration, a bilingual English/Arabic demonstration, consent-first matching, risk education, counselor pathway, backend evidence, and a single closing card.
+### One remaining GitHub upload action
 
-This is a synthetic-data educational prototype, **not** a clinically validated healthcare service. Never upload patient data or staff access tokens.
+1. Download the final MP4 from the ChatGPT conversation.
+2. Open the [GitHub media directory](https://github.com/eemanefatimaawan567-glitch/carrier-care/tree/main/media).
+3. Select **Add file → Upload files**, choose `Amanah_Genomics_Final_Competition_Demo.mp4` and click **Commit changes**.
+4. Reload this README and use the video link above. **Do not upload a previous unsynchronized video.**
+
+The film demonstrates actual synthetic-data patient education, consent-controlled matching, inheritance explanations, staff workflow, and an Arabic RTL walkthrough. It is not a clinical endorsement or validation. Do not upload patient data or staff access tokens.
