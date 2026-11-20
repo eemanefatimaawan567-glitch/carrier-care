@@ -5,7 +5,7 @@
 
 A bilingual English/Arabic, consent-first carrier-screening **education and demonstration platform** built for the Abu Dhabi Future Health Digital Innovation Challenge, Fertility Challenge 03.
 
-[Live synthetic demo](https://amanah-genomics-demo.onrender.com/) · [Demo video instructions](media/README.md) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
+[Live synthetic demo](https://amanah-genomics-demo.onrender.com/) · [Final video upload status](media/README.md) · [External feedback & acknowledgments](docs/EXTERNAL_FEEDBACK_AND_ACKNOWLEDGMENTS.md) · [Architecture](docs/ARCHITECTURE.md) · [Security limits](docs/THREAT_MODEL.md) · [Claims and evidence](docs/SUBMISSION_CLAIMS_ALIGNMENT.md)
 
 ![Amanah Genomics guided demo](assets/screenshots/01-introduction.jpg)
 
@@ -147,6 +147,14 @@ Not included: Urdu (needs clinical and language review), an offline app, and any
 ## Independent academic input (November 19, 2026)
 
 A PhD academic working in human genetics/gene therapy provided **genuine written educational feedback** on five questions about inheritance risk, referral criteria, VUS, privacy and consent, and counselor-intake information. The response was **informal and literature-informed**; the reviewer asked that the suggestions be double-checked. Their name and original correspondence are not published here without attribution permission. This is **not** completed clinical validation or product endorsement. See [feedback summary and action items](docs/INDEPENDENT_ACADEMIC_FEEDBACK_2026-11-19.md).
+
+## External contributions — appropriately scoped
+
+- **Asif Jamal (named with permission):** limited five-statement fact/clarity check (October 20, 2026) covering recessive carrier explanations, the illustrative 25/50/25 inheritance pattern, consanguinity context, uncertain results, and patient-friendly communication. **Not a clinical validation, formal software review, or endorsement.**
+- **Anonymous counseling-related contributor:** informal observations highlighted family history, trust, confidentiality, the time needed for sensitive discussions, and people's right not to share genetic results. **Acknowledged anonymously in accordance with the contributor's preference; not a certified genetic-counselor review or market study.**
+- **Additional academic correspondence:** separate November 19 genetics-oriented educational feedback is documented with limitations; pending outreach does not count as a completed review.
+
+See [External feedback and acknowledgments](docs/EXTERNAL_FEEDBACK_AND_ACKNOWLEDGMENTS.md) for the specific topics, permissions, evidence boundaries, and review status.
 
 ## Evidence and review status
 - Every clinical statement is listed with a published source in an evidence map (see the submission documents).
