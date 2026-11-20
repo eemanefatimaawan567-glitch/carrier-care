@@ -5,7 +5,7 @@
 ## Final video (2 min 4 sec)
 
 - **Required filename:** `Amanah_Genomics_Final_Competition_Demo.mp4`
-- **Expected GitHub video:** [Watch/download the competition demo](Amanah_Genomics_Final_Competition_Demo.mp4)
+- **Expected GitHub video:** [Watch/download the competition demo](https://drive.google.com/file/d/1oaRLMqLwbqG5Pe2MxH4szeZa143swAyL/view?usp=drive_link)
 - [Live synthetic app](https://amanah-genomics-demo.onrender.com/)
 - [External feedback and acknowledgments](../docs/EXTERNAL_FEEDBACK_AND_ACKNOWLEDGMENTS.md)
 
